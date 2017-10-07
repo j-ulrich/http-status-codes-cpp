@@ -1,4 +1,4 @@
-# HTTP Status Codes and Reason Phrases for C/C++ #
+# HTTP Status Codes and Reason Phrases for C, C++ and Qt #
 
 This repository provides the HTTP status codes and reason phrases in different variants for C/C++.
 
