@@ -1,8 +1,12 @@
 /*! \file
  *
+ * HTTP Status Codes - C++ Variant
+ *
+ * https://github.com/j-ulrich/http-status-codes-cpp
+ *
  * \date Created on 06.10.2017
- * \author jochen.ulrich
- * \copyright © 2017 Jochen Ulrich - Licensed under the Unlicense.
+ * \author Jochen Ulrich <jochenulrich@t-online.de>
+ * \copyright Licensed under Creative Commons CC0 (http://creativecommons.org/publicdomain/zero/1.0/)
  */
 
 #ifndef HTTPSTATUSCODES_CPP_H_

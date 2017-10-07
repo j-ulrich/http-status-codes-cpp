@@ -18,6 +18,5 @@ Data has been taken from [for-GET/know-your-http-well](https://github.com/for-GE
 
 
 ## License ##
-Copyright © 2017 Jochen Ulrich
-
-This project is licensed under the [Unlicense](LICENSE).
+[![CC0](https://licensebuttons.net/p/zero/1.0/80x15.png)](http://creativecommons.org/publicdomain/zero/1.0/)    
+This project is licensed under [Creative Commons CC0](LICENSE).
