@@ -9,8 +9,8 @@
  * \copyright Licensed under Creative Commons CC0 (http://creativecommons.org/publicdomain/zero/1.0/)
  */
 
-#ifndef HTTPSTATUSCODES_QT_H_
-#define HTTPSTATUSCODES_QT_H_
+#ifndef HTTPSTATUSCODES_QT5_8_H_
+#define HTTPSTATUSCODES_QT5_8_H_
 
 #include <QString>
 
@@ -215,4 +215,4 @@ inline QString reasonPhrase(Code code)
 
 } // namespace HttpStatus
 
-#endif /* HTTPSTATUSCODES_QT_H_ */
+#endif /* HTTPSTATUSCODES_QT5_8_H_ */
