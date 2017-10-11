@@ -107,14 +107,14 @@ enum class Code
 };
 
 inline bool isInformational(int code) { return (code >= 100 && code < 200); } //!< \returns \c true if the given \p code is an informational code.
-inline bool isSucessful(int code)     { return (code >= 200 && code < 300); } //!< \returns \c true if the given \p code is a successful code.
+inline bool isSuccessful(int code)    { return (code >= 200 && code < 300); } //!< \returns \c true if the given \p code is a successful code.
 inline bool isRedirection(int code)   { return (code >= 300 && code < 400); } //!< \returns \c true if the given \p code is a redirectional code.
 inline bool isClientError(int code)   { return (code >= 400 && code < 500); } //!< \returns \c true if the given \p code is a client error code.
 inline bool isServerError(int code)   { return (code >= 500 && code < 600); } //!< \returns \c true if the given \p code is a server error code.
 inline bool isError(int code)         { return (code >= 400); }               //!< \returns \c true if the given \p code is any type of error code.
 
 inline bool isInformational(Code code) { return isInformational(static_cast<int>(code)); } //!< \overload
-inline bool isSucessful(Code code)     { return isSucessful(static_cast<int>(code)); }     //!< \overload
+inline bool isSuccessful(Code code)    { return isSuccessful(static_cast<int>(code)); }    //!< \overload
 inline bool isRedirection(Code code)   { return isRedirection(static_cast<int>(code)); }   //!< \overload
 inline bool isClientError(Code code)   { return isClientError(static_cast<int>(code)); }   //!< \overload
 inline bool isServerError(Code code)   { return isServerError(static_cast<int>(code)); }   //!< \overload
