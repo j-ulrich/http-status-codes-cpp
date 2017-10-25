@@ -29,7 +29,7 @@ void printReplyStatus(MyHttpReplyClass reply)
 	if (reply.status == HttpStatus::OK)
 		std::cout << "Success!";
 	else
-		std:cerr << reply.status << " " << HttpStatus::reasonPhrase(reply.status);
+		std::cerr << reply.status << " " << HttpStatus::reasonPhrase(reply.status);
 }
 ```
 
