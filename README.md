@@ -20,10 +20,17 @@ Data has been taken from [for-GET/know-your-http-well](https://github.com/for-GE
 ## Example ##
 
 ```c++
-if (reply.status == HttpStatus::OK)
-	std::cout << "Success!";
-else
-	std:cerr << reply.status << " " << HttpStatus::reasonPhrase(reply.status);
+#include "MyHttpReplyClass.h"
+#include "HttpStatusCodes_C++.h"
+#include <iostream>
+
+void printReplyStatus(MyHttpReplyClass reply)
+{
+	if (reply.status == HttpStatus::OK)
+		std::cout << "Success!";
+	else
+		std:cerr << reply.status << " " << HttpStatus::reasonPhrase(reply.status);
+}
 ```
 
 ## License ##
