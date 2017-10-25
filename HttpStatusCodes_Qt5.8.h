@@ -114,13 +114,6 @@ inline bool isClientError(int code)   { return (code >= 400 && code < 500); } //
 inline bool isServerError(int code)   { return (code >= 500 && code < 600); } //!< \returns \c true if the given \p code is a server error code.
 inline bool isError(int code)         { return (code >= 400); }               //!< \returns \c true if the given \p code is any type of error code.
 
-inline bool isInformational(Code code) { return isInformational(static_cast<int>(code)); } //!< \overload
-inline bool isSuccessful(Code code)    { return isSuccessful(static_cast<int>(code)); }    //!< \overload
-inline bool isRedirection(Code code)   { return isRedirection(static_cast<int>(code)); }   //!< \overload
-inline bool isClientError(Code code)   { return isClientError(static_cast<int>(code)); }   //!< \overload
-inline bool isServerError(Code code)   { return isServerError(static_cast<int>(code)); }   //!< \overload
-inline bool isError(Code code)         { return isError(static_cast<int>(code)); }         //!< \overload
-
 
 /*! Returns the standard HTTP reason phrase for a HTTP status code.
  * \param code An HTTP status code.
@@ -202,16 +195,6 @@ inline QString reasonPhrase(int code)
 	}
 }
 
-/*! \overload
- *
- * \param code An HttpStatus::Code.
- * \return The standard HTTP reason phrase for the given \p code or a null \c QString()
- * if no standard phrase for the given \p code is known.
- */
-inline QString reasonPhrase(Code code)
-{
-	return reasonPhrase(static_cast<int>(code));
-}
 
 } // namespace HttpStatus
 
