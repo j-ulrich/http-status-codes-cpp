@@ -13,6 +13,8 @@
 #define HTTPSTATUSCODES_QT5_8_H_
 
 #include <QString>
+#include <QObject>
+
 
 /*! Namespace for HTTP status codes and reason phrases.
  */
@@ -195,7 +197,18 @@ inline QString reasonPhrase(int code)
 	}
 }
 
+#ifdef THIS_IS_A_TRICK_TO_FORCE_CMAKE_QMAKE_AND_SIMILAR_TOOLS_TO_RUN_MOC_ON_THIS_FILE
+namespace {
+class DummyQGadget
+{
+	Q_GADGET
+};
+}
+#endif
+
 
 } // namespace HttpStatus
+
+
 
 #endif /* HTTPSTATUSCODES_QT5_8_H_ */
