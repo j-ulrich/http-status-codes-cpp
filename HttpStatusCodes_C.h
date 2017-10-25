@@ -111,7 +111,7 @@ inline int HttpStatus_isError(int code)         { return (code >= 400); }       
  * \return The standard HTTP reason phrase for the given \p code or \c NULL if no standard
  * phrase for the given \p code is known.
  */
-const char* HttpStatus_reasonPhrase(int code)
+inline const char* HttpStatus_reasonPhrase(int code)
 {
 	switch (code)
 	{
@@ -182,7 +182,7 @@ const char* HttpStatus_reasonPhrase(int code)
 	case 507: return "Insufficient Storage";
 	case 511: return "Network Authentication Required";
 
-	default: return NULL;
+	default: return 0;
 	}
 
 }

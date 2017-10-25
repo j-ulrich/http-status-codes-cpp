@@ -125,7 +125,7 @@ inline bool isError(Code code)         { return isError(static_cast<int>(code));
  * \return The standard HTTP reason phrase for the given \p code or an empty \c std::string()
  * if no standard phrase for the given \p code is known.
  */
-std::string reasonPhrase(int code)
+inline std::string reasonPhrase(int code)
 {
 	switch (code)
 	{

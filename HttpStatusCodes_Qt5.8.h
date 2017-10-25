@@ -127,7 +127,7 @@ inline bool isError(Code code)         { return isError(static_cast<int>(code));
  * \return The standard HTTP reason phrase for the given \p code or a null \c QString()
  * if no standard phrase for the given \p code is known.
  */
-QString reasonPhrase(int code)
+inline QString reasonPhrase(int code)
 {
 	switch (code)
 	{
