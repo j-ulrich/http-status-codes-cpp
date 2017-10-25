@@ -8,9 +8,9 @@ namespace CppVariantTests
 
 TEST(EnumTest, testEnumValues)
 {
-	ASSERT_EQ(static_cast<int>(HttpStatus::OK),                  200);
-	ASSERT_EQ(static_cast<int>(HttpStatus::NotFound),            404);
-	ASSERT_EQ(static_cast<int>(HttpStatus::InternalServerError), 500);
+	ASSERT_EQ(HttpStatus::OK,                  200);
+	ASSERT_EQ(HttpStatus::NotFound,            404);
+	ASSERT_EQ(HttpStatus::InternalServerError, 500);
 }
 
 TEST(ReasonPhraseTest, testEnumParameter)
