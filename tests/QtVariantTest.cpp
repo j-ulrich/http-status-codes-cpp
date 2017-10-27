@@ -29,6 +29,22 @@ TEST(ReasonPhraseTest, testIntegerParameter)
 
 struct CategoryTesterParams
 {
+	CategoryTesterParams(HttpStatus::Code code,
+		                     bool isInformational,
+		                     bool isSuccessful,
+		                     bool isRedirection,
+		                     bool isClientError,
+		                     bool isServerError,
+		                     bool isError)
+			: code(code)
+			, isInformational(isInformational)
+			, isSuccessful(isSuccessful)
+			, isRedirection(isRedirection)
+			, isClientError(isClientError)
+			, isServerError(isServerError)
+			, isError(isError)
+		{ }
+
 	HttpStatus::Code code;
 	bool isInformational;
 	bool isSuccessful;
@@ -71,11 +87,11 @@ TEST_P(CategoryTesterTest, testIntegerParameter)
 
 INSTANTIATE_TEST_CASE_P(DefaultInstance, CategoryTesterTest, ::testing::Values(
 //                   // code                          // info // success // redir // clientErr // serverErr // error
-CategoryTesterParams{HttpStatus::SwitchingProtocols,  true,   false,     false,   false,       false,       false},
-CategoryTesterParams{HttpStatus::NoContent,           false,  true,      false,   false,       false,       false},
-CategoryTesterParams{HttpStatus::SeeOther,            false,  false,     true,    false,       false,       false},
-CategoryTesterParams{HttpStatus::Forbidden,           false,  false,     false,   true,        false,       true},
-CategoryTesterParams{HttpStatus::NotImplemented,      false,  false,     false,   false,       true,        true}
+CategoryTesterParams(HttpStatus::SwitchingProtocols,  true,   false,     false,   false,       false,       false),
+CategoryTesterParams(HttpStatus::NoContent,           false,  true,      false,   false,       false,       false),
+CategoryTesterParams(HttpStatus::SeeOther,            false,  false,     true,    false,       false,       false),
+CategoryTesterParams(HttpStatus::Forbidden,           false,  false,     false,   true,        false,       true),
+CategoryTesterParams(HttpStatus::NotImplemented,      false,  false,     false,   false,       true,        true)
 ));
 
 
