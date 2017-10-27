@@ -15,14 +15,14 @@ TEST(EnumTest, testEnumValues)
 	ASSERT_EQ(static_cast<int>(HttpStatus::InternalServerError), 500);
 }
 
-TEST(ReasonPhraseTest, testEnumOverload)
+TEST(ReasonPhraseTest, testEnumParameter)
 {
 	ASSERT_EQ(HttpStatus::reasonPhrase(HttpStatus::OK),                  QString("OK"));
 	ASSERT_EQ(HttpStatus::reasonPhrase(HttpStatus::NotFound),            QString("Not Found"));
 	ASSERT_EQ(HttpStatus::reasonPhrase(HttpStatus::InternalServerError), QString("Internal Server Error"));
 }
 
-TEST(ReasonPhraseTest, testIntegerOverload)
+TEST(ReasonPhraseTest, testIntegerParameter)
 {
 	ASSERT_EQ(HttpStatus::reasonPhrase(static_cast<int>(HttpStatus::Created)),        QString("Created"));
 	ASSERT_EQ(HttpStatus::reasonPhrase(static_cast<int>(HttpStatus::Unauthorized)),   QString("Unauthorized"));
@@ -46,7 +46,7 @@ class CategoryTesterTest : public ::testing::TestWithParam<CategoryTesterParams>
 
 };
 
-TEST_P(CategoryTesterTest, testEnumOverload)
+TEST_P(CategoryTesterTest, testEnumParameter)
 {
 	auto params = GetParam();
 
@@ -58,7 +58,7 @@ TEST_P(CategoryTesterTest, testEnumOverload)
 	ASSERT_EQ(HttpStatus::isError(params.code),         params.isError);
 }
 
-TEST_P(CategoryTesterTest, testIntegerOverload)
+TEST_P(CategoryTesterTest, testIntegerParameter)
 {
 	auto params = GetParam();
 
