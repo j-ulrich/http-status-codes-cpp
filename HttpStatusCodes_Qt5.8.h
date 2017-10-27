@@ -15,6 +15,10 @@
 #include <QString>
 #include <QObject>
 
+#ifdef QT_NETWORK_LIB
+#	include <QNetworkReply>
+#endif // QT_NETWORK_LIB
+
 
 /*! Namespace for HTTP status codes and reason phrases.
  */
@@ -196,6 +200,91 @@ inline QString reasonPhrase(int code)
 	default: return QString();
 	}
 }
+
+#ifdef QT_NETWORK_LIB
+
+/*! Returns a Code corresponding to a given NetworkError.
+ *
+ * \param error The NetworkError whose HTTP status code should be returned.
+ * \return The HTTP status code corresponding to the given \p error if there is one.
+ * If no matching status code exists, an invalid status code (`-1`) is returned.
+ *
+ * \sa [statusCodeFromHttp() in qhttpthreaddelegate.cpp](http://code.qt.io/cgit/qt/qtbase.git/tree/src/network/access/qhttpthreaddelegate.cpp#n57)
+ */
+inline Code networkErrorToStatusCode(QNetworkReply::NetworkError error)
+{
+	switch (error)
+	{
+	// Exact matches
+	case QNetworkReply::AuthenticationRequiredError:       return Unauthorized;                // 401
+	case QNetworkReply::ContentAccessDenied:               return Forbidden;                   // 403
+	case QNetworkReply::ContentNotFoundError:              return NotFound;                    // 404
+	case QNetworkReply::ContentOperationNotPermittedError: return MethodNotAllowed;            // 405
+	case QNetworkReply::ProxyAuthenticationRequiredError:  return ProxyAuthenticationRequired; // 407
+	case QNetworkReply::ContentConflictError:              return Conflict;                    // 409
+	case QNetworkReply::ContentGoneError:                  return Gone;                        // 410
+	case QNetworkReply::InternalServerError:               return InternalServerError;         // 500
+	case QNetworkReply::OperationNotImplementedError:      return NotImplemented;              // 501
+	case QNetworkReply::ServiceUnavailableError:           return ServiceUnavailable;          // 503
+
+	// Mapping error codes matching multiple HTTP status codes to a best matching "base" code
+	case QNetworkReply::NoError:                           return OK;                          // 200
+	case QNetworkReply::ProtocolInvalidOperationError:     return BadRequest;                  // 400
+	case QNetworkReply::UnknownContentError:               return BadRequest;                  // 400
+	case QNetworkReply::UnknownServerError:                return InternalServerError;         // 500
+
+	/* Other errors do not match any HTTP status code.
+	 * Therefore, we return an invalid code.
+	 */
+	default:
+		return static_cast<Code>(-1);
+	}
+}
+
+/*! Returns a NetworkError corresponding to a given Code.
+ *
+ * \param code The HTTP status code whose NetworkError should be returned.
+ * \return The QNetworkReply::NetworkError corresponding to the given \p code.
+ * Note that some NetworkErrors are used for multiple HTTP status codes.
+ *
+ * \sa [statusCodeFromHttp() in qhttpthreaddelegate.cpp](http://code.qt.io/cgit/qt/qtbase.git/tree/src/network/access/qhttpthreaddelegate.cpp#n57)
+ */
+inline QNetworkReply::NetworkError statusCodeToNetworkError(Code code)
+{
+	// below 400
+	if (!isError(code))
+		return QNetworkReply::NoError;
+
+	// Specific error status codes
+	switch (code)
+	{
+	case BadRequest:                  return QNetworkReply::ProtocolInvalidOperationError;     // 400
+	case Unauthorized:                return QNetworkReply::AuthenticationRequiredError;       // 401
+	case Forbidden:                   return QNetworkReply::ContentAccessDenied;               // 403
+	case NotFound:                    return QNetworkReply::ContentNotFoundError;              // 404
+	case MethodNotAllowed:            return QNetworkReply::ContentOperationNotPermittedError; // 405
+	case ProxyAuthenticationRequired: return QNetworkReply::ProxyAuthenticationRequiredError;  // 407
+	case Conflict:                    return QNetworkReply::ContentConflictError;              // 409
+	case Gone:                        return QNetworkReply::ContentGoneError;                  // 410
+	case ImATeapot:                   return QNetworkReply::ProtocolInvalidOperationError;     // 418
+	case InternalServerError:         return QNetworkReply::InternalServerError;               // 500
+	case NotImplemented:              return QNetworkReply::OperationNotImplementedError;      // 501
+	case ServiceUnavailable:          return QNetworkReply::ServiceUnavailableError;           // 503
+
+	default:
+		break;
+	}
+
+	if (isClientError(code))  // 4xx
+		return QNetworkReply::UnknownContentError;
+	if (isServerError(code))  // 5xx
+		return QNetworkReply::UnknownServerError;
+
+	// 600 or above
+	return QNetworkReply::ProtocolFailure;
+}
+
+#endif // QT_NETWORK_LIB
 
 #ifdef THIS_IS_A_TRICK_TO_FORCE_CMAKE_QMAKE_AND_SIMILAR_TOOLS_TO_RUN_MOC_ON_THIS_FILE
 namespace {
