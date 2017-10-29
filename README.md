@@ -33,6 +33,133 @@ void printReplyStatus(MyHttpReplyClass reply)
 }
 ```
 
+## Documentation ##
+
+> **Note:** The header files contain more detailed Doxygen documentation for all types and functions.
+
+### Status Codes Enum ###
+
+For the complete list of defined enums, see one of the header files.
+
+#### C Variant ####
+```c
+enum HttpStatus_Code
+{
+	HttpStatus_OK       = 200,
+	HttpStatus_NotFound = 404 
+	// ...
+};
+```
+
+#### C++11 Variant ####
+```c++
+namespace HttpStatus {
+enum class Code
+{
+	OK        = 200,
+	Forbidden = 404
+	// ...
+};
+}
+```
+
+#### Other Variants ####
+```c++
+namespace HttpStatus {
+enum Code
+{
+	OK        = 200,
+	Forbidden = 404
+	// ...
+};
+}
+```
+
+
+### Category/Class Tests ###
+
+#### C Variant ####
+```c
+int HttpStatus_isInformational(int code)
+int HttpStatus_isSuccessful(int code)
+int HttpStatus_isRedirection(int code)
+int HttpStatus_isClientError(int code)
+int HttpStatus_isServerError(int code)
+```
+Return `1` if the given _code_ belongs to the corresponding class of status codes (see [RFC7231](https://tools.ietf.org/html/rfc7231#section-6)).
+Return `0` otherwise.
+
+```c
+int HttpStatus_isError(int code)
+```
+Returns `1` if the given _code_ is either a client error, a server error or any non-standard error code.
+Non-standard error codes are status codes with a value of 600 or higher.
+Returns `0` otherwise.
+
+#### Other Variants ####
+> **Note:** The C++11 variant also provides overloads for `HttpStatus::Code`. So there is no need to cast.
+
+```c++
+bool HttpStatus::isInformational(int code)
+bool HttpStatus::isSuccessful(int code)
+bool HttpStatus::isRedirection(int code)
+bool HttpStatus::isClientError(int code)
+bool HttpStatus::isServerError(int code)
+```
+Return `true` if the given _code_ belongs to the corresponding class of status codes (see [RFC7231](https://tools.ietf.org/html/rfc7231#section-6)).
+Return `false` otherwise.
+
+
+
+```c++
+bool HttpStatus::isError(int code)
+```
+Returns `true` if the given _code_ is either a client error, a server error or any non-standard error code.
+Non-standard error codes are status codes with a value of 600 or higher.
+Returns `false` otherwise.
+
+
+### Reason Phrases ###
+
+#### C Variant ####
+```c
+const char* HttpStatus_reasonPhrase(int code)
+```
+Returns the HTTP reason phrase string corresponding to the given _code_.
+
+#### C++/C++11 Variants ####
+```c++
+std::string HttpStatus::reasonPhrase(int code)
+```
+Returns the HTTP reason phrase string corresponding to the given _code_.
+
+#### Qt/Qt5.8 Variants ####
+```c++
+QString HttpStatus::reasonPhrase(int code)
+```
+Returns the HTTP reason phrase string corresponding to the given _code_.
+
+
+### QNetworkReply::NetworkError Mapping ###
+
+> **Note:** Qt and Qt5.8 variants only
+
+#### Qt/Qt5.8 Variants ####
+```c++
+int HttpStatus::networkErrorToStatusCode(QNetworkReply::NetworkError error)
+```
+Returns the HTTP status code corresponding to the given _error_ if there is one.
+Otherwise, `-1` is returned.
+
+```c++
+QNetworkReply::NetworkError HttpStatus::statusCodeToNetworkError(int code)
+```
+Returns the `QNetworkReply::NetworkError` corresponding to the given _code_ if there is one.
+For codes where there is no exact match, the best matchnig "catch all" code (`QNetworkReply::NoError`,
+`QNetworkReply::UnknownContentError`, `QNetworkReply::UnknownServerError` or `QNetworkReply::ProtocolFailure`)
+is returned.
+
+
 ## License ##
 [![CC0](https://licensebuttons.net/p/zero/1.0/80x15.png)](http://creativecommons.org/publicdomain/zero/1.0/)    
 This project is licensed under [Creative Commons CC0](LICENSE).
