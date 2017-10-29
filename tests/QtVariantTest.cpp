@@ -3,6 +3,10 @@
 #include "HttpStatusCodes_Qt.h"
 #include "tests/CategoryTesterTest.h"
 
+#if (QT_VERSION >= 0x050800)
+#	include <QMetaEnum>
+#endif
+
 namespace QtVariantTests
 {
 
@@ -14,6 +18,16 @@ TEST(EnumTest, testEnumValues)
 	ASSERT_EQ(static_cast<int>(HttpStatus::InternalServerError), 500);
 }
 
+#if (QT_VERSION >= 0x050800)
+
+//####### MetaEnum Test #######
+TEST(MetaEnumTest, testKeyToValue)
+{
+	ASSERT_TRUE(QMetaEnum::fromType<HttpStatus::Code>().isValid());
+	ASSERT_EQ(QMetaEnum::fromType<HttpStatus::Code>().keyToValue("RangeNotSatisfiable"), HttpStatus::RangeNotSatisfiable);
+}
+
+#endif // Qt >= 5.8.0
 
 //####### Reason Phrase Test #######
 TEST(ReasonPhraseTest, testEnumParameter)

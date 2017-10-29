@@ -9,20 +9,25 @@
  * \copyright Licensed under Creative Commons CC0 (http://creativecommons.org/publicdomain/zero/1.0/)
  */
 
-#ifndef HTTPSTATUSCODES_QT_H_
-#define HTTPSTATUSCODES_QT_H_
+#ifndef HTTPSTATUSCODES_QT5_H_
+#define HTTPSTATUSCODES_QT5_H_
 
 #include <QString>
+#include <QObject>
 
 #ifdef QT_NETWORK_LIB
 #	include <QNetworkReply>
 #endif // QT_NETWORK_LIB
+
 
 /*! Namespace for HTTP status codes and reason phrases.
  */
 namespace HttpStatus
 {
 
+#if (QT_VERSION >= 0x050800)
+	Q_NAMESPACE
+#endif // Qt >= 5.8.0
 
 /*! Enum for the HTTP status codes.
  */
@@ -109,6 +114,9 @@ enum Code
 	InsufficientStorage           = 507, //!< Means the method could not be performed on the resource because the server is unable to store the representation needed to successfully complete the request.
 	NetworkAuthenticationRequired = 511  //!< Indicates that the client needs to authenticate to gain network access.
 };
+#if (QT_VERSION >= 0x050800)
+Q_ENUM_NS(Code)
+#endif // Qt >= 5.8.0
 
 inline bool isInformational(int code) { return (code >= 100 && code < 200); } //!< \returns \c true if the given \p code is an informational code.
 inline bool isSuccessful(int code)    { return (code >= 200 && code < 300); } //!< \returns \c true if the given \p code is a successful code.
@@ -116,6 +124,7 @@ inline bool isRedirection(int code)   { return (code >= 300 && code < 400); } //
 inline bool isClientError(int code)   { return (code >= 400 && code < 500); } //!< \returns \c true if the given \p code is a client error code.
 inline bool isServerError(int code)   { return (code >= 500 && code < 600); } //!< \returns \c true if the given \p code is a server error code.
 inline bool isError(int code)         { return (code >= 400); }               //!< \returns \c true if the given \p code is any type of error code.
+
 
 /*! Returns the standard HTTP reason phrase for a HTTP status code.
  * \param code An HTTP status code.
@@ -291,6 +300,18 @@ inline QNetworkReply::NetworkError statusCodeToNetworkError(int code)
 
 #endif // QT_NETWORK_LIB
 
+#ifdef THIS_IS_A_TRICK_TO_FORCE_CMAKE_QMAKE_AND_SIMILAR_TOOLS_TO_RUN_MOC_ON_THIS_FILE
+namespace {
+class DummyQGadget
+{
+	Q_GADGET
+};
+}
+#endif
+
+
 } // namespace HttpStatus
 
-#endif /* HTTPSTATUSCODES_QT_H_ */
+
+
+#endif /* HTTPSTATUSCODES_QT5_8_H_ */

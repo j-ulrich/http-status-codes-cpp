@@ -21,13 +21,12 @@ Data has been taken from [for-GET/know-your-http-well](https://github.com/for-GE
 
 ## Variants ##
 
-| Variant                                    | Scoping                | Status Codes                                                       | Reason Phrases |
-|--------------------------------------------|------------------------|--------------------------------------------------------------------|----------------|
-| [C](HttpStatusCodes_C.h)                   | Prefix `HttpStatus_`   | `enum HttpStatus_Code`                                             | `const char*`  |
-| [C++](HttpStatusCodes_C++.h)               | Namespace `HttpStatus` | `enum Code`                                                        | `std::string`  |
-| [C++11](HttpStatusCodes_C++11.h)           | Namespace `HttpStatus` | `enum class Code`                                                  | `std::string`  |
-| [Qt](HttpStatusCodes_Qt.h)                 | Namespace `HttpStatus` | `enum Code`                                                        | `QString`      |
-| [Qt 5.8 or later](HttpStatusCodes_Qt5.8.h) | Namespace `HttpStatus` | `enum Code`<br>Registered in meta type system using `Q_ENUM_NS()`  | `QString`      |
+| Variant                          | Scoping                | Status Codes                                                                                   | Reason Phrases |
+|----------------------------------|------------------------|------------------------------------------------------------------------------------------------|----------------|
+| [C](HttpStatusCodes_C.h)         | Prefix `HttpStatus_`   | `enum HttpStatus_Code`                                                                         | `const char*`  |
+| [C++](HttpStatusCodes_C++.h)     | Namespace `HttpStatus` | `enum Code`                                                                                    | `std::string`  |
+| [C++11](HttpStatusCodes_C++11.h) | Namespace `HttpStatus` | `enum class Code`                                                                              | `std::string`  |
+| [Qt](HttpStatusCodes_Qt.h)       | Namespace `HttpStatus` | `enum Code`<br>When using Qt 5.8 or later: registered in meta type system using `Q_ENUM_NS()`  | `QString`      |
 
 
 
@@ -150,7 +149,7 @@ std::string HttpStatus::reasonPhrase(int code);
 ```
 Returns the HTTP reason phrase string corresponding to the given _code_.
 
-#### Qt/Qt5.8 Variants ####
+#### Qt Variant ####
 ```c++
 QString HttpStatus::reasonPhrase(int code);
 ```
@@ -159,9 +158,9 @@ Returns the HTTP reason phrase string corresponding to the given _code_.
 
 ### QNetworkReply::NetworkError Mapping ###
 
-> **Note:** Available only in the Qt and Qt5.8 variants and if the Qt::Network module is available.
+> **Note:** Available only in the Qt variant and if the Qt::Network module is available.
 
-#### Qt/Qt5.8 Variants ####
+#### Qt Variant ####
 ```c++
 int HttpStatus::networkErrorToStatusCode(QNetworkReply::NetworkError error);
 ```

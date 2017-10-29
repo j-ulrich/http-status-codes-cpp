@@ -77,13 +77,7 @@ endif()
 
 
 if (QTCORE_LIB)
-	add_executable(QtVariantTest QtVariantTest.cpp)
+	add_executable(QtVariantTest QtVariantTest.cpp "${PROJECT_SOURCE_DIR}/../HttpStatusCodes_Qt.h")
 	target_link_libraries(QtVariantTest GTest::main ${QTCORE_LIB} ${QTNETWORK_LIB})
 	add_test(NAME QtVariantTest COMMAND QtVariantTest)
-endif()
-
-if (Qt5_VERSION_MINOR GREATER_EQUAL "8")
-	add_executable(Qt5.8VariantTest Qt5.8VariantTest.cpp "${PROJECT_SOURCE_DIR}/../HttpStatusCodes_Qt5.8.h")
-	target_link_libraries(Qt5.8VariantTest GTest::main ${QTCORE_LIB} ${QTNETWORK_LIB})
-	add_test(NAME Qt5.8VariantTest COMMAND Qt5.8VariantTest)
 endif()
