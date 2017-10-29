@@ -39,13 +39,23 @@ set_target_properties(C++VariantTest PROPERTIES
 	CXX_STANDARD_REQUIRED ON
 )
 
-add_executable(C++11VariantTest C++11VariantTest.cpp)
-target_link_libraries(C++11VariantTest GTest::main)
-add_test(NAME C++11VariantTest COMMAND C++11VariantTest)
-set_target_properties(C++11VariantTest PROPERTIES
-	CXX_STANDARD 11
-	CXX_STANDARD_REQUIRED ON
-)
+
+list(FIND CMAKE_CXX_COMPILE_FEATURES "cxx_strong_enums" CXX_SUPPORTS_STRONG_ENUMS)
+if (CXX_SUPPORTS_STRONG_ENUMS GREATER -1)
+	set(CXX_SUPPORTS_STRONG_ENUMS ON)
+else()
+	set(CXX_SUPPORTS_STRONG_ENUMS OFF)
+endif()
+
+if(CXX_SUPPORTS_STRONG_ENUMS)
+	add_executable(C++11VariantTest C++11VariantTest.cpp)
+	target_link_libraries(C++11VariantTest GTest::main)
+	add_test(NAME C++11VariantTest COMMAND C++11VariantTest)
+	set_target_properties(C++11VariantTest PROPERTIES
+		CXX_STANDARD 11
+		CXX_STANDARD_REQUIRED ON
+	)
+endif()
 
 set(CMAKE_AUTOMOC ON)
 find_package(Qt5 COMPONENTS Core OPTIONAL_COMPONENTS Network)
