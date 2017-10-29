@@ -144,6 +144,7 @@ const char* HttpStatus_reasonPhrase(int code)
 Returns the HTTP reason phrase string corresponding to the given _code_.
 
 #### C++/C++11 Variants ####
+> **Note:** The C++11 variant also provides an overload for `HttpStatus::Code`. So there is no need to cast.
 ```c++
 std::string HttpStatus::reasonPhrase(int code)
 ```
