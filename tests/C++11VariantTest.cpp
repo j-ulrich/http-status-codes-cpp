@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "HttpStatusCodes_C++11.h"
-#include "tests/CategoryTesterTest.h"
+#include "CategoryTesterTest.h"
 
 namespace Cpp11VariantTests
 {

@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
 
 #include "HttpStatusCodes_Qt.h"
-#include "tests/CategoryTesterTest.h"
+#include "CategoryTesterTest.h"
 
 #if (QT_VERSION >= 0x050800)
 #	include <QMetaEnum>

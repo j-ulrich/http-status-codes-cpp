@@ -46,7 +46,7 @@ class CategoryTesterTest : public ::testing::TestWithParam<CategoryTesterParams>
 
 TEST_P(CategoryTesterTest, testEnumParameter)
 {
-	auto params = GetParam();
+	CategoryTesterParams params = GetParam();
 
 	ASSERT_EQ(HttpStatus::isInformational(params.code), params.isInformational);
 	ASSERT_EQ(HttpStatus::isSuccessful(params.code),    params.isSuccessful);
@@ -58,7 +58,7 @@ TEST_P(CategoryTesterTest, testEnumParameter)
 
 TEST_P(CategoryTesterTest, testIntegerParameter)
 {
-	auto params = GetParam();
+	CategoryTesterParams params = GetParam();
 
 	ASSERT_EQ(HttpStatus::isInformational(static_cast<int>(params.code)), params.isInformational);
 	ASSERT_EQ(HttpStatus::isSuccessful(static_cast<int>(params.code)),    params.isSuccessful);
