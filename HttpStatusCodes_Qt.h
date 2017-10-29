@@ -202,8 +202,13 @@ inline QString reasonPhrase(int code)
 /*! Returns a Code corresponding to a given NetworkError.
  *
  * \param error The NetworkError whose HTTP status code should be returned.
- * \return The HTTP status code corresponding to the given \p error if there is one.
+ * \return The HTTP status code corresponding to the given \p error if there is one.\n
+ * If there is no exact matching status code, the first code from the best matching status
+ * code class is returned (`200`, `400` or `500`).\n
  * If no matching status code exists, an invalid status code (`-1`) is returned.
+ * This is typically the case for errors concerning the OSI layers below HTTP.
+ *
+ * \sa [statusCodeFromHttp() in qhttpthreaddelegate.cpp](http://code.qt.io/cgit/qt/qtbase.git/tree/src/network/access/qhttpthreaddelegate.cpp#n57)
  */
 inline int networkErrorToStatusCode(QNetworkReply::NetworkError error)
 {
@@ -238,8 +243,16 @@ inline int networkErrorToStatusCode(QNetworkReply::NetworkError error)
 /*! Returns a NetworkError corresponding to a given Code.
  *
  * \param code The HTTP status code whose NetworkError should be returned.
- * \return The QNetworkReply::NetworkError corresponding to the given \p code.
- * Note that some NetworkErrors are used for multiple HTTP status codes.
+ * \return The QNetworkReply::NetworkError corresponding to the given \p code.\n
+ * Note that some NetworkErrors are used for multiple HTTP status codes:\n
+ * For status codes which do not represent errors, QNetworkReply::NoError is returned.\n
+ * For client error status codes which do not have an exact matching NetworkError,
+ * QNetworkReply::UnknownContentError is returned.\n
+ * For server error status codes which do not have an exact matching NetworkError,
+ * QNetworkReply::UnknownServerError is returned.\n
+ * For status codes 600 or higher, QNetworkReply::ProtocolFailure is returned.
+ *
+ * \sa [statusCodeFromHttp() in qhttpthreaddelegate.cpp](http://code.qt.io/cgit/qt/qtbase.git/tree/src/network/access/qhttpthreaddelegate.cpp#n57)
  */
 inline QNetworkReply::NetworkError statusCodeToNetworkError(int code)
 {
