@@ -6,6 +6,19 @@ Simply take the variant that fits your needs and copy/use/modify it.
 
 Data has been taken from [for-GET/know-your-http-well](https://github.com/for-GET/know-your-http-well).
 
+### Table of Contents ###
+
+> - [Variants](#variants)
+> - [Example](#example)
+> - [Documentation](#examples)
+>   - [Status Codes Enum](#status-codes-enum)
+>   - [Category/Class Tests](#categoryclass-tests)
+>   - [Reason Phrases](#reason-phrases)
+>   - [QNetworkReply::NetworkError Mapping](#qnetworkreplynetworkerror-mapping)
+> - [License](#license)
+
+
+
 ## Variants ##
 
 | Variant                                    | Scoping                | Status Codes                                                       | Reason Phrases |
@@ -15,6 +28,7 @@ Data has been taken from [for-GET/know-your-http-well](https://github.com/for-GE
 | [C++11](HttpStatusCodes_C++11.h)           | Namespace `HttpStatus` | `enum class Code`                                                  | `std::string`  |
 | [Qt](HttpStatusCodes_Qt.h)                 | Namespace `HttpStatus` | `enum Code`                                                        | `QString`      |
 | [Qt 5.8 or later](HttpStatusCodes_Qt5.8.h) | Namespace `HttpStatus` | `enum Code`<br>Registered in meta type system using `Q_ENUM_NS()`  | `QString`      |
+
 
 
 ## Example ##
@@ -32,6 +46,8 @@ void printReplyStatus(MyHttpReplyClass reply)
 		std::cerr << reply.status << " " << HttpStatus::reasonPhrase(reply.status);
 }
 ```
+
+
 
 ## Documentation ##
 
@@ -158,6 +174,7 @@ Returns the `QNetworkReply::NetworkError` corresponding to the given _code_ if t
 For codes where there is no exact match, the best matchnig "catch all" code (`QNetworkReply::NoError`,
 `QNetworkReply::UnknownContentError`, `QNetworkReply::UnknownServerError` or `QNetworkReply::ProtocolFailure`)
 is returned.
+
 
 
 ## License ##
