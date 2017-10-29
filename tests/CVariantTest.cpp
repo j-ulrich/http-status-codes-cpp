@@ -5,7 +5,7 @@
 namespace CVariantTests
 {
 
-
+//####### Enum Test #######
 TEST(EnumTest, testEnumValues)
 {
 	ASSERT_EQ(static_cast<int>(HttpStatus_OK),                  200);
@@ -13,6 +13,8 @@ TEST(EnumTest, testEnumValues)
 	ASSERT_EQ(static_cast<int>(HttpStatus_InternalServerError), 500);
 }
 
+
+//####### Reason Phrase Test #######
 TEST(ReasonPhraseTest, testReasonPhrase)
 {
 	ASSERT_STREQ(HttpStatus_reasonPhrase(HttpStatus_OK),                  "OK");
@@ -20,6 +22,8 @@ TEST(ReasonPhraseTest, testReasonPhrase)
 	ASSERT_STREQ(HttpStatus_reasonPhrase(HttpStatus_InternalServerError), "Internal Server Error");
 }
 
+
+//####### Category Tester Test #######
 struct CategoryTesterParams
 {
 	HttpStatus_Code code;
@@ -29,7 +33,6 @@ struct CategoryTesterParams
 	int isClientError;
 	int isServerError;
 	int isError;
-
 };
 
 class CategoryTesterTest : public ::testing::TestWithParam<CategoryTesterParams>
