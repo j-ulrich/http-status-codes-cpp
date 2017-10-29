@@ -205,7 +205,7 @@ inline QString reasonPhrase(int code)
  * \return The HTTP status code corresponding to the given \p error if there is one.
  * If no matching status code exists, an invalid status code (`-1`) is returned.
  */
-inline Code networkErrorToStatusCode(QNetworkReply::NetworkError error)
+inline int networkErrorToStatusCode(QNetworkReply::NetworkError error)
 {
 	switch (error)
 	{
@@ -231,7 +231,7 @@ inline Code networkErrorToStatusCode(QNetworkReply::NetworkError error)
 	 * Therefore, we return an invalid code.
 	 */
 	default:
-		return static_cast<Code>(-1);
+		return -1;
 	}
 }
 
@@ -241,7 +241,7 @@ inline Code networkErrorToStatusCode(QNetworkReply::NetworkError error)
  * \return The QNetworkReply::NetworkError corresponding to the given \p code.
  * Note that some NetworkErrors are used for multiple HTTP status codes.
  */
-inline QNetworkReply::NetworkError statusCodeToNetworkError(Code code)
+inline QNetworkReply::NetworkError statusCodeToNetworkError(int code)
 {
 	// below 400
 	if (!isError(code))

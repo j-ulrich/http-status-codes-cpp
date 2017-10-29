@@ -208,10 +208,8 @@ inline QString reasonPhrase(int code)
  * \param error The NetworkError whose HTTP status code should be returned.
  * \return The HTTP status code corresponding to the given \p error if there is one.
  * If no matching status code exists, an invalid status code (`-1`) is returned.
- *
- * \sa [statusCodeFromHttp() in qhttpthreaddelegate.cpp](http://code.qt.io/cgit/qt/qtbase.git/tree/src/network/access/qhttpthreaddelegate.cpp#n57)
  */
-inline Code networkErrorToStatusCode(QNetworkReply::NetworkError error)
+inline int networkErrorToStatusCode(QNetworkReply::NetworkError error)
 {
 	switch (error)
 	{
@@ -237,7 +235,7 @@ inline Code networkErrorToStatusCode(QNetworkReply::NetworkError error)
 	 * Therefore, we return an invalid code.
 	 */
 	default:
-		return static_cast<Code>(-1);
+		return -1;
 	}
 }
 
@@ -246,10 +244,8 @@ inline Code networkErrorToStatusCode(QNetworkReply::NetworkError error)
  * \param code The HTTP status code whose NetworkError should be returned.
  * \return The QNetworkReply::NetworkError corresponding to the given \p code.
  * Note that some NetworkErrors are used for multiple HTTP status codes.
- *
- * \sa [statusCodeFromHttp() in qhttpthreaddelegate.cpp](http://code.qt.io/cgit/qt/qtbase.git/tree/src/network/access/qhttpthreaddelegate.cpp#n57)
  */
-inline QNetworkReply::NetworkError statusCodeToNetworkError(Code code)
+inline QNetworkReply::NetworkError statusCodeToNetworkError(int code)
 {
 	// below 400
 	if (!isError(code))
@@ -283,7 +279,6 @@ inline QNetworkReply::NetworkError statusCodeToNetworkError(Code code)
 	// 600 or above
 	return QNetworkReply::ProtocolFailure;
 }
-
 #endif // QT_NETWORK_LIB
 
 #ifdef THIS_IS_A_TRICK_TO_FORCE_CMAKE_QMAKE_AND_SIMILAR_TOOLS_TO_RUN_MOC_ON_THIS_FILE
