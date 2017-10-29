@@ -159,7 +159,7 @@ Returns the HTTP reason phrase string corresponding to the given _code_.
 
 ### QNetworkReply::NetworkError Mapping ###
 
-> **Note:** Qt and Qt5.8 variants only
+> **Note:** Available only in the Qt and Qt5.8 variants and if the Qt::Network module is available.
 
 #### Qt/Qt5.8 Variants ####
 ```c++
