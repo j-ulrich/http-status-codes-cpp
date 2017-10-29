@@ -16,6 +16,14 @@ TEST(EnumTest, testEnumValues)
 }
 
 
+//####### MetaEnum Test #######
+TEST(MetaEnumTest, testKeyToValue)
+{
+	ASSERT_TRUE(QMetaEnum::fromType<HttpStatus::Code>().isValid());
+	ASSERT_EQ(QMetaEnum::fromType<HttpStatus::Code>().keyToValue("RangeNotSatisfiable"), HttpStatus::RangeNotSatisfiable);
+}
+
+
 //####### Reason Phrase Test #######
 TEST(ReasonPhraseTest, testEnumParameter)
 {
@@ -43,11 +51,25 @@ CategoryTesterParams(HttpStatus::NotImplemented,      false,  false,     false, 
 ));
 
 
-TEST(MetaEnumTest, testKeyToValue)
+//####### NetworkError Mapping Test #######
+TEST(NetworkErrorMappingTest, testNetworkErrorToStatusCode)
 {
-	ASSERT_TRUE(QMetaEnum::fromType<HttpStatus::Code>().isValid());
-	ASSERT_EQ(QMetaEnum::fromType<HttpStatus::Code>().keyToValue("RangeNotSatisfiable"), HttpStatus::RangeNotSatisfiable);
+	ASSERT_EQ(HttpStatus::networkErrorToStatusCode(QNetworkReply::ContentNotFoundError), HttpStatus::NotFound);
+	ASSERT_EQ(HttpStatus::networkErrorToStatusCode(QNetworkReply::NoError),              HttpStatus::OK);
+	ASSERT_EQ(HttpStatus::networkErrorToStatusCode(QNetworkReply::UnknownContentError),  HttpStatus::BadRequest);
+	ASSERT_EQ(HttpStatus::networkErrorToStatusCode(QNetworkReply::UnknownServerError),   HttpStatus::InternalServerError);
+	ASSERT_EQ(HttpStatus::networkErrorToStatusCode(QNetworkReply::ProtocolFailure),      -1);
 }
+
+TEST(NetworkErrorMappingTest, testStatusCodeToNetworkError)
+{
+	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(HttpStatus::Unauthorized),        QNetworkReply::AuthenticationRequiredError);
+	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(HttpStatus::OK),                  QNetworkReply::NoError);
+	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(HttpStatus::URITooLong),          QNetworkReply::UnknownContentError);
+	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(HttpStatus::InsufficientStorage), QNetworkReply::UnknownServerError);
+	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(601),                             QNetworkReply::ProtocolFailure);
+}
+
 
 
 } // namespace QtVariantTests
