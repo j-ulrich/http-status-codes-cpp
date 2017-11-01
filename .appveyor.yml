@@ -14,4 +14,4 @@ build:
 
 
 test_script:
-    - msbuild tests\_build\RUN_TESTS.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+    - msbuild "%APPVEYOR_BUILD_FOLDER%\tests\_build\RUN_TESTS.vcxproj" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
