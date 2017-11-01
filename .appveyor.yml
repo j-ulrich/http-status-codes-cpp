@@ -1,7 +1,7 @@
 version: "{build}"
 
 environment:
-    - CTEST_OUTPUT_ON_FAILURE: '1'
+    CTEST_OUTPUT_ON_FAILURE: '1'
     matrix:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
           VCVARS_COMMANDLINE: '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86'
