@@ -8,7 +8,7 @@ HunterGate(
 	SHA1 "ad19af382dfc285a255b91c713b651216e6feff2"
 )
 
-project(HttpStatusCodes)
+project(HttpStatusCodesTests)
 
 set (CMAKE_CXX_STANDARD 11)
 
