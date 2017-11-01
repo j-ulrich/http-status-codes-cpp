@@ -1,0 +1,17 @@
+version: 1.0.{build}
+
+image: Visual Studio 2015
+
+before_build:
+    - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
+    - cd tests
+    - mkdir _build
+    - cd _build
+    - cmake -G "Visual Studio 14 2015" ..
+
+build:
+    project: tests\_build\ALL_BUILD.vcxproj
+
+
+test_script:
+    - msbuild tests\_build\RUN_TESTS.vcxproj /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
