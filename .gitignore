@@ -1,5 +1,6 @@
 .*
 !.gitignore
+!.appveyor.yml
 build/
 .build/
 _build/

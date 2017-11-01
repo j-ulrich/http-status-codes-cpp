@@ -1,5 +1,8 @@
 # HTTP Status Codes and Reason Phrases for C, C++ and Qt #
 
+[![Build status](https://ci.appveyor.com/api/projects/status/ijp196mjo0vsover/branch/master?svg=true)](https://ci.appveyor.com/project/j-ulrich/http-status-codes-cpp/branch/master)
+
+
 This repository provides the HTTP status codes and reason phrases in different variants for C/C++.
 
 Simply take the variant that fits your needs and copy/use/modify it.
