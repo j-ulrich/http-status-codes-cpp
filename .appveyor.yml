@@ -1,6 +1,7 @@
 version: "{build}"
 
 environment:
+    - CTEST_OUTPUT_ON_FAILURE: '1'
     matrix:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
           VCVARS_COMMANDLINE: '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" x86'
@@ -14,6 +15,7 @@ environment:
 before_build:
     - call %VCVARS_COMMANDLINE%
     - set Path=%QT_DIR%;%Path%
+    - set QT_QPA_PLATFORM_PLUGIN_PATH=%QT_DIR%\plugins
     - cd tests
     - mkdir _build
     - cd _build
