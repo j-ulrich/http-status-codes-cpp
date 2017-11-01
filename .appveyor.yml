@@ -14,7 +14,7 @@ environment:
 
 before_build:
     - call %VCVARS_COMMANDLINE%
-    - set Path=%QT_DIR%;%Path%
+    - set Path=%QT_DIR%\bin;%Path%
     - set QT_QPA_PLATFORM_PLUGIN_PATH=%QT_DIR%\plugins
     - cd tests
     - mkdir _build
