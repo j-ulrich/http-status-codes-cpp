@@ -56,6 +56,7 @@ CategoryTesterParams(HttpStatus::NotImplemented,      false,  false,     false, 
 ));
 
 
+#ifdef QT_NETWORK_LIB
 //####### NetworkError Mapping Test #######
 TEST(NetworkErrorMappingTest, testNetworkErrorToStatusCode)
 {
@@ -74,7 +75,7 @@ TEST(NetworkErrorMappingTest, testStatusCodeToNetworkError)
 	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(HttpStatus::InsufficientStorage), QNetworkReply::UnknownServerError);
 	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(601),                             QNetworkReply::ProtocolFailure);
 }
-
+#endif // QT_NETWORK_LIB
 
 
 } // namespace QtVariantTests
