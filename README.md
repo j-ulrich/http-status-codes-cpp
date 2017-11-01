@@ -98,17 +98,17 @@ enum Code
 
 #### C Variant ####
 ```c
-int HttpStatus_isInformational(int code);
-int HttpStatus_isSuccessful(int code);
-int HttpStatus_isRedirection(int code);
-int HttpStatus_isClientError(int code);
-int HttpStatus_isServerError(int code);
+char HttpStatus_isInformational(int code);
+char HttpStatus_isSuccessful(int code);
+char HttpStatus_isRedirection(int code);
+char HttpStatus_isClientError(int code);
+char HttpStatus_isServerError(int code);
 ```
 Return `1` if the given _code_ belongs to the corresponding class of status codes (see [RFC7231](https://tools.ietf.org/html/rfc7231#section-6)).
 Return `0` otherwise.
 
 ```c
-int HttpStatus_isError(int code);
+char HttpStatus_isError(int code);
 ```
 Returns `1` if the given _code_ is either a client error, a server error or any non-standard error code.
 Non-standard error codes are status codes with a value of 600 or higher.
