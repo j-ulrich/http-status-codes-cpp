@@ -1,6 +1,7 @@
 .*
 !.gitignore
 !.appveyor.yml
+!.travis.yml
 build/
 .build/
 _build/
