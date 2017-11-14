@@ -1,6 +1,7 @@
 # HTTP Status Codes and Reason Phrases for C, C++ and Qt #
 
-[![Build status](https://ci.appveyor.com/api/projects/status/ijp196mjo0vsover/branch/master?svg=true)](https://ci.appveyor.com/project/j-ulrich/http-status-codes-cpp/branch/master)
+[![Linux build status](https://travis-ci.org/j-ulrich/http-status-codes-cpp.svg?branch=master)](https://travis-ci.org/j-ulrich/http-status-codes-cpp)
+[![Windows build status](https://ci.appveyor.com/api/projects/status/ijp196mjo0vsover/branch/master?svg=true)](https://ci.appveyor.com/project/j-ulrich/http-status-codes-cpp/branch/master)
 
 
 This repository provides the HTTP status codes and reason phrases in different variants for C/C++.
@@ -13,7 +14,7 @@ Data has been taken from [for-GET/know-your-http-well](https://github.com/for-GE
 
 > - [Variants](#variants)
 > - [Example](#example)
-> - [Documentation](#examples)
+> - [Documentation](#documentation)
 >   - [Status Codes Enum](#status-codes-enum)
 >   - [Category/Class Tests](#categoryclass-tests)
 >   - [Reason Phrases](#reason-phrases)
