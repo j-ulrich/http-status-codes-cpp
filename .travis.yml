@@ -9,7 +9,7 @@ before_script:
 
 script:
   - > 
-    docker run j-ulrich/http-status-codes /bin/bash
+    docker run j-ulrich/http-status-codes /bin/bash -c "
     g++ --version
     && qmake --version
     && cd tests
@@ -18,3 +18,4 @@ script:
     && cmake -DCMAKE_BUILD_TYPE=Release ..
     && make all
     && ctest --ouput-on-failure
+    "
