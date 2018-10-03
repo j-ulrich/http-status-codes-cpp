@@ -25,6 +25,7 @@ enum HttpStatus_Code
 	HttpStatus_Continue           = 100, /*!< Indicates that the initial part of a request has been received and has not yet been rejected by the server. */                                                                                                                                                                                                    //!< HttpStatus_Continue
 	HttpStatus_SwitchingProtocols = 101, /*!< Indicates that the server understands and is willing to comply with the client's request, via the Upgrade header field, for a change in the application protocol being used on this connection. */                                                                                                                //!< HttpStatus_SwitchingProtocols
 	HttpStatus_Processing         = 102, /*!< Is an interim response used to inform the client that the server has accepted the complete request, but has not yet completed it. */                                                                                                                                                                              //!< HttpStatus_Processing
+	HttpStatus_EarlyHints         = 103, /*!< Used to return some response headers before final HTTP message.*/
 
 	/*####### 2xx - Successful #######*/
 	/* Indicates that the client's request was successfully received,
@@ -49,7 +50,7 @@ enum HttpStatus_Code
 	HttpStatus_Found             = 302, /*!< Indicates that the target resource resides temporarily under a different URI. */                                                                                                                                                                                                                                   //!< HttpStatus_Found
 	HttpStatus_SeeOther          = 303, /*!< Indicates that the server is redirecting the user agent to a different resource, as indicated by a URI in the Location header field, that is intended to provide an indirect response to the original request. */                                                                                                  //!< HttpStatus_SeeOther
 	HttpStatus_NotModified       = 304, /*!< Indicates that a conditional GET request has been received and would have resulted in a 200 (OK) response if it were not for the fact that the condition has evaluated to false. */                                                                                                                                //!< HttpStatus_NotModified
-	HttpStatus_UseProxy          = 305, /*!< \deprecated */                                                                                                                                                                                                                                                                                                     //!< HttpStatus_UseProxy
+	HttpStatus_UseProxy          = 305, /*!< The requested resource is available only through a proxy, the address for which is provided in the response. Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status code, primarily for security reasons. */                                                                                                                                                                                                                                                                                                     //!< HttpStatus_UseProxy
 	HttpStatus_TemporaryRedirect = 307, /*!< Indicates that the target resource resides temporarily under a different URI and the user agent MUST NOT change the request method if it performs an automatic redirection to that URI. */                                                                                                                         //!< HttpStatus_TemporaryRedirect
 	HttpStatus_PermanentRedirect = 308, /*!< The target resource has been assigned a new permanent URI and any future references to this resource outght to use one of the enclosed URIs. [...] This status code is similar to 301 Moved Permanently (Section 7.3.2 of rfc7231), except that it does not allow rewriting the request method from POST to GET. *///!< HttpStatus_PermanentRedirect
 
@@ -96,6 +97,8 @@ enum HttpStatus_Code
 	HttpStatus_HTTPVersionNotSupported       = 505, /*!< Indicates that the server does not support, or refuses to support, the protocol version that was used in the request message. */                                                                                                                                                                       //!< HttpStatus_HTTPVersionNotSupported
 	HttpStatus_VariantAlsoNegotiates         = 506, /*!< Indicates that the server has an internal configuration error: the chosen variant resource is configured to engage in transparent content negotiation itself, and is therefore not a proper end point in the negotiation process. */                                                                   //!< HttpStatus_VariantAlsoNegotiates
 	HttpStatus_InsufficientStorage           = 507, /*!< Means the method could not be performed on the resource because the server is unable to store the representation needed to successfully complete the request. */                                                                                                                                       //!< HttpStatus_InsufficientStorage
+	HttpStatus_LoopDetected                  = 508, /*!< The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported). [WebDAV; RFC 5842] */
+	HttpStatus_NotExtended                   = 510, /*!< Further extensions to the request are required for the server to fulfill it. [RFC 2774] */
 	HttpStatus_NetworkAuthenticationRequired = 511  /*!< Indicates that the client needs to authenticate to gain network access. */                                                                                                                                                                                                                             //!< HttpStatus_NetworkAuthenticationRequired
 };
 
@@ -120,6 +123,7 @@ static const char* HttpStatus_reasonPhrase(int code)
 	case 100: return "Continue";
 	case 101: return "Switching Protocols";
 	case 102: return "Processing";
+	case 103: return "Early Hints";
 
 	/*####### 2xx - Successful #######*/
 	case 200: return "OK";
@@ -139,6 +143,7 @@ static const char* HttpStatus_reasonPhrase(int code)
 	case 303: return "See Other";
 	case 304: return "Not Modified";
 	case 305: return "Use Proxy";
+	case 306: return "Switch Proxy";
 	case 307: return "Temporary Redirect";
 	case 308: return "Permanent Redirect";
 
@@ -180,11 +185,96 @@ static const char* HttpStatus_reasonPhrase(int code)
 	case 505: return "HTTP Version Not Supported";
 	case 506: return "Variant Also Negotiates";
 	case 507: return "Insufficient Storage";
+	case 508: return "Loop Detected";
+	case 510: return "Not Extended";
 	case 511: return "Network Authentication Required";
 
 	default: return 0;
 	}
 
+}
+
+/*! Returns an extended human-readable description for a HTTP status code.
+ * \param code An HTTP status code.
+ * \return Extended human-readable description for the given \p code or an empty \c std::string()
+ * if no standard phrase for the given \p code is known.
+ */
+static const char* HttpStatus_reasonPhraseExtended(int code)
+{
+	switch (code)
+	{
+	/*####### 1xx - Informational #######*/
+	case 100: return "The server has received the request headers and the client should proceed to send the request body (in the case of a request for which a body needs to be sent; for example, a POST request).";
+	case 101: return "The requester has asked the server to switch protocols and the server has agreed to do so.";
+	case 102: return "An interim response used to inform the client that the server has accepted the complete request, but has not yet completed it.";
+	case 103: return "Used to return some response headers before final HTTP message.";
+
+	/*####### 2xx - Successful #######*/
+	case 200: return "Indicates that the request has succeeded.";
+	case 201: return "Indicates that the request has been fulfilled and has resulted in one or more new resources being created.";
+	case 202: return "Indicates that the request has been accepted for processing, but the processing has not been completed.";
+	case 203: return "Indicates that the request was successful but the enclosed payload has been modified from that of the origin server's 200 (OK) response by a transforming proxy.";
+	case 204: return "Indicates that the server has successfully fulfilled the request and that there is no additional content to send in the response payload body.";
+	case 205: return "Indicates that the server has fulfilled the request and desires that the user agent reset the \"document view\", which caused the request to be sent, to its original state as received from the origin server.";
+	case 206: return "Indicates that the server is successfully fulfilling a range request for the target resource by transferring one or more parts of the selected representation that correspond to the satisfiable ranges found in the requests's Range header field.";
+	case 207: return "Provides status for multiple independent operations.";
+	case 226: return "The server has fulfilled a GET request for the resource, and the response is a representation of the result of one or more instance-manipulations applied to the current instance.";
+
+	/*####### 3xx - Redirection #######*/
+	case 300: return "Indicates that the target resource has more than one representation, each with its own more specific identifier, and information about the alternatives is being provided so that the user (or user agent) can select a preferred representation by redirecting its request to one or more of those identifiers.";
+	case 301: return "Indicates that the target resource has been assigned a new permanent URI and any future references to this resource ought to use one of the enclosed URIs.";
+	case 302: return "Indicates that the target resource resides temporarily under a different URI.";
+	case 303: return "Indicates that the server is redirecting the user agent to a different resource, as indicated by a URI in the Location header field, that is intended to provide an indirect response to the original request.";
+	case 304: return "Indicates that a conditional GET request has been received and would have resulted in a 200 (OK) response if it were not for the fact that the condition has evaluated to false.";
+	case 305: return "The requested resource is available only through a proxy, the address for which is provided in the response. Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status code, primarily for security reasons.";
+	case 306: return "No longer used. Originally meant \"Subsequent requests should use the specified proxy.\"";
+	case 307: return "Indicates that the target resource resides temporarily under a different URI and the user agent MUST NOT change the request method if it performs an automatic redirection to that URI.";
+	case 308: return "The target resource has been assigned a new permanent URI and any future references to this resource outght to use one of the enclosed URIs. [...] This status code is similar to 301 Moved Permanently (Section 7.3.2 of rfc7231), except that it does not allow rewriting the request method from POST to GET.";
+
+	/*####### 4xx - Client Error #######*/
+	case 400: return "Indicates that the server cannot or will not process the request because the received syntax is invalid, nonsensical, or exceeds some limitation on what the server is willing to process.";
+	case 401: return "Indicates that the request has not been applied because it lacks valid authentication credentials for the target resource.";
+	case 402: return "Reserved for future use. The original intention was that this code might be used as part of some form of digital cash or micropayment scheme";
+	case 403: return "Indicates that the server understood the request but refuses to authorize it.";
+	case 404: return "Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists.";
+	case 405: return "Indicates that the method specified in the request-line is known by the origin server but not supported by the target resource.";
+	case 406: return "Indicates that the target resource does not have a current representation that would be acceptable to the user agent, according to the proactive negotiation header fields received in the request, and the server is unwilling to supply a default representation.";
+	case 407: return "Is similar to 401 (Unauthorized), but indicates that the client needs to authenticate itself in order to use a proxy.";
+	case 408: return "Indicates that the server did not receive a complete request message within the time that it was prepared to wait.";
+	case 409: return "Indicates that the request could not be completed due to a conflict with the current state of the resource.";
+	case 410: return "Indicates that access to the target resource is no longer available at the origin server and that this condition is likely to be permanent.";
+	case 411: return "Indicates that the server refuses to accept the request without a defined Content-Length.";
+	case 412: return "Indicates that one or more preconditions given in the request header fields evaluated to false when tested on the server.";
+	case 413: return "Indicates that the server is refusing to process a request because the request payload is larger than the server is willing or able to process.";
+	case 414: return "Indicates that the server is refusing to service the request because the request-target is longer than the server is willing to interpret.";
+	case 415: return "Indicates that the origin server is refusing to service the request because the payload is in a format not supported by the target resource for this method.";
+	case 416: return "Indicates that none of the ranges in the request's Range header field overlap the current extent of the selected resource or that the set of ranges requested has been rejected due to invalid ranges or an excessive request of small or overlapping ranges.";
+	case 417: return "Indicates that the expectation given in the request's Expect header field could not be met by at least one of the inbound servers.";
+	case 418: return "This code was defined in 1998 as one of the traditional IETF April Fools' jokes, in RFC 2324, Hyper Text Coffee Pot Control Protocol, and is not expected to be implemented by actual HTTP servers. The RFC specifies this code should be returned by teapots requested to brew coffee.";
+	case 422: return "The request was well-formed but was unable to be followed due to semantic errors.";
+	case 423: return "Means the source or destination resource of a method is locked.";
+	case 424: return "Means that the method could not be performed on the resource because the requested action depended on another action and that action failed.";
+	case 426: return "Indicates that the server refuses to perform the request using the current protocol but might be willing to do so after the client upgrades to a different protocol.";
+	case 428: return "Indicates that the origin server requires the request to be conditional.";
+	case 429: return "The user has sent too many requests in a given amount of time. Intended for use with rate-limiting schemes.";
+	case 431: return "The server is unwilling to process the request because either an individual header field, or all the header fields collectively, are too large.";
+	case 451: return "A server operator has received a legal demand to deny access to a resource or to a set of resources that includes the requested resource.";
+
+	/*####### 5xx - Server Error #######*/
+	case 500: return "A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.";
+	case 501: return "The server either does not recognize the request method, or it lacks the ability to fulfil the request.";
+	case 502: return "Indicates that the server, while acting as a gateway or proxy, received an invalid response from an inbound server it accessed while attempting to fulfill the request.";
+	case 503: return "Indicates that the server is currently unable to handle the request due to a temporary overload or scheduled maintenance, which will likely be alleviated after some delay.";
+	case 504: return "Indicates that the server, while acting as a gateway or proxy, did not receive a timely response from an upstream server it needed to access in order to complete the request.";
+	case 505: return "Indicates that the server does not support, or refuses to support, the protocol version that was used in the request message.";
+	case 506: return "Indicates that the server has an internal configuration error: the chosen variant resource is configured to engage in transparent content negotiation itself, and is therefore not a proper end point in the negotiation process.";
+	case 507: return "The server is unable to store the representation needed to complete the request [WebDAV; RFC 4918].";
+	case 508: return "The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported). [WebDAV; RFC 5842]";
+	case 510: return "Further extensions to the request are required for the server to fulfill it. [RFC 2774]";
+	case 511: return "Indicates that the client needs to authenticate to gain network access.";
+
+	default: return 0;
+	}
 }
 
 

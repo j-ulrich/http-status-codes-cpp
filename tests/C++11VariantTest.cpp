@@ -30,6 +30,25 @@ TEST(ReasonPhraseTest, testIntegerOverload)
 	ASSERT_EQ(HttpStatus::reasonPhrase(static_cast<int>(HttpStatus::Code::ServiceUnavailable)), std::string("Service Unavailable"));
 }
 
+TEST(ReasonPhraseTest, testEnumOverloadExtended)
+{
+	ASSERT_EQ(HttpStatus::reasonPhraseExtended(HttpStatus::Code::OK),
+		std::string("Indicates that the request has succeeded."));
+	ASSERT_EQ(HttpStatus::reasonPhraseExtended(HttpStatus::Code::NotFound),
+		std::string("Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists."));
+	ASSERT_EQ(HttpStatus::reasonPhraseExtended(HttpStatus::Code::InternalServerError),
+		std::string("A generic error message, given when an unexpected condition was encountered and no more specific message is suitable."));
+}
+
+TEST(ReasonPhraseTest, testIntegerOverloadExtended)
+{
+	ASSERT_EQ(HttpStatus::reasonPhraseExtended(static_cast<int>(HttpStatus::Code::Accepted)),
+		std::string("Indicates that the request has been accepted for processing, but the processing has not been completed."));
+	ASSERT_EQ(HttpStatus::reasonPhraseExtended(static_cast<int>(HttpStatus::Code::MethodNotAllowed)),
+		std::string("Indicates that the method specified in the request-line is known by the origin server but not supported by the target resource."));
+	ASSERT_EQ(HttpStatus::reasonPhraseExtended(static_cast<int>(HttpStatus::Code::ServiceUnavailable)),
+		std::string("Indicates that the server is currently unable to handle the request due to a temporary overload or scheduled maintenance, which will likely be alleviated after some delay."));
+}
 
 //####### Category Tester Test #######
 
