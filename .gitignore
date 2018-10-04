@@ -5,3 +5,5 @@
 build/
 .build/
 _build/
+build_*/
+CMakeLists.txt.user
