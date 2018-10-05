@@ -30,24 +30,18 @@ TEST(ReasonPhraseTest, testIntegerParameter)
 	ASSERT_EQ(HttpStatus::reasonPhrase(static_cast<int>(HttpStatus::GatewayTimeout)), std::string("Gateway Time-out"));
 }
 
-TEST(ReasonPhraseTest, testEnumParameterExtended)
+TEST(ReasonPhraseTest, testEnumParameterEx)
 {
-	ASSERT_EQ(HttpStatus::reasonPhraseExtended(HttpStatus::OK),
-		std::string("Indicates that the request has succeeded."));
-	ASSERT_EQ(HttpStatus::reasonPhraseExtended(HttpStatus::NotFound),
-		std::string("Indicates that the origin server did not find a current representation for the target resource or is not willing to disclose that one exists."));
-	ASSERT_EQ(HttpStatus::reasonPhraseExtended(HttpStatus::InternalServerError),
-		std::string("A generic error message, given when an unexpected condition was encountered and no more specific message is suitable."));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(HttpStatus::OK),                  std::string("OK"));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(HttpStatus::NotFound),            std::string("Not Found"));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(HttpStatus::InternalServerError), std::string("Internal Server Error"));
 }
 
-TEST(ReasonPhraseTest, testIntegerParameterExtended)
+TEST(ReasonPhraseTest, testIntegerParameterEx)
 {
-	ASSERT_EQ(HttpStatus::reasonPhraseExtended(static_cast<int>(HttpStatus::Accepted)),
-		std::string("Indicates that the request has been accepted for processing, but the processing has not been completed."));
-	ASSERT_EQ(HttpStatus::reasonPhraseExtended(static_cast<int>(HttpStatus::MethodNotAllowed)),
-		std::string("Indicates that the method specified in the request-line is known by the origin server but not supported by the target resource."));
-	ASSERT_EQ(HttpStatus::reasonPhraseExtended(static_cast<int>(HttpStatus::ServiceUnavailable)),
-		std::string("Indicates that the server is currently unable to handle the request due to a temporary overload or scheduled maintenance, which will likely be alleviated after some delay."));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(static_cast<int>(HttpStatus::Created)),        std::string("Created"));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(static_cast<int>(HttpStatus::Unauthorized)),   std::string("Unauthorized"));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(static_cast<int>(HttpStatus::GatewayTimeout)), std::string("Gateway Time-out"));
 }
 
 //####### Category Tester Test #######
