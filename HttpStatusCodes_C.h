@@ -25,6 +25,7 @@ enum HttpStatus_Code
 	HttpStatus_Continue           = 100, /*!< Indicates that the initial part of a request has been received and has not yet been rejected by the server. */                                                                                                                                                                                                    //!< HttpStatus_Continue
 	HttpStatus_SwitchingProtocols = 101, /*!< Indicates that the server understands and is willing to comply with the client's request, via the Upgrade header field, for a change in the application protocol being used on this connection. */                                                                                                                //!< HttpStatus_SwitchingProtocols
 	HttpStatus_Processing         = 102, /*!< Is an interim response used to inform the client that the server has accepted the complete request, but has not yet completed it. */                                                                                                                                                                              //!< HttpStatus_Processing
+	HttpStatus_EarlyHints         = 103, /*!< Used to return some response headers before final HTTP message.*/
 
 	/*####### 2xx - Successful #######*/
 	/* Indicates that the client's request was successfully received,
@@ -49,7 +50,7 @@ enum HttpStatus_Code
 	HttpStatus_Found             = 302, /*!< Indicates that the target resource resides temporarily under a different URI. */                                                                                                                                                                                                                                   //!< HttpStatus_Found
 	HttpStatus_SeeOther          = 303, /*!< Indicates that the server is redirecting the user agent to a different resource, as indicated by a URI in the Location header field, that is intended to provide an indirect response to the original request. */                                                                                                  //!< HttpStatus_SeeOther
 	HttpStatus_NotModified       = 304, /*!< Indicates that a conditional GET request has been received and would have resulted in a 200 (OK) response if it were not for the fact that the condition has evaluated to false. */                                                                                                                                //!< HttpStatus_NotModified
-	HttpStatus_UseProxy          = 305, /*!< \deprecated */                                                                                                                                                                                                                                                                                                     //!< HttpStatus_UseProxy
+	HttpStatus_UseProxy          = 305, /*!< The requested resource is available only through a proxy, the address for which is provided in the response. Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status code, primarily for security reasons. */                                                                                                                                                                                                                                                                                                     //!< HttpStatus_UseProxy
 	HttpStatus_TemporaryRedirect = 307, /*!< Indicates that the target resource resides temporarily under a different URI and the user agent MUST NOT change the request method if it performs an automatic redirection to that URI. */                                                                                                                         //!< HttpStatus_TemporaryRedirect
 	HttpStatus_PermanentRedirect = 308, /*!< The target resource has been assigned a new permanent URI and any future references to this resource outght to use one of the enclosed URIs. [...] This status code is similar to 301 Moved Permanently (Section 7.3.2 of rfc7231), except that it does not allow rewriting the request method from POST to GET. *///!< HttpStatus_PermanentRedirect
 
@@ -96,6 +97,8 @@ enum HttpStatus_Code
 	HttpStatus_HTTPVersionNotSupported       = 505, /*!< Indicates that the server does not support, or refuses to support, the protocol version that was used in the request message. */                                                                                                                                                                       //!< HttpStatus_HTTPVersionNotSupported
 	HttpStatus_VariantAlsoNegotiates         = 506, /*!< Indicates that the server has an internal configuration error: the chosen variant resource is configured to engage in transparent content negotiation itself, and is therefore not a proper end point in the negotiation process. */                                                                   //!< HttpStatus_VariantAlsoNegotiates
 	HttpStatus_InsufficientStorage           = 507, /*!< Means the method could not be performed on the resource because the server is unable to store the representation needed to successfully complete the request. */                                                                                                                                       //!< HttpStatus_InsufficientStorage
+	HttpStatus_LoopDetected                  = 508, /*!< The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported). [WebDAV; RFC 5842] */
+	HttpStatus_NotExtended                   = 510, /*!< Further extensions to the request are required for the server to fulfill it. [RFC 2774] */
 	HttpStatus_NetworkAuthenticationRequired = 511  /*!< Indicates that the client needs to authenticate to gain network access. */                                                                                                                                                                                                                             //!< HttpStatus_NetworkAuthenticationRequired
 };
 
@@ -120,6 +123,7 @@ static const char* HttpStatus_reasonPhrase(int code)
 	case 100: return "Continue";
 	case 101: return "Switching Protocols";
 	case 102: return "Processing";
+	case 103: return "Early Hints";
 
 	/*####### 2xx - Successful #######*/
 	case 200: return "OK";
@@ -139,6 +143,7 @@ static const char* HttpStatus_reasonPhrase(int code)
 	case 303: return "See Other";
 	case 304: return "Not Modified";
 	case 305: return "Use Proxy";
+	case 306: return "Switch Proxy";
 	case 307: return "Temporary Redirect";
 	case 308: return "Permanent Redirect";
 
@@ -180,11 +185,12 @@ static const char* HttpStatus_reasonPhrase(int code)
 	case 505: return "HTTP Version Not Supported";
 	case 506: return "Variant Also Negotiates";
 	case 507: return "Insufficient Storage";
+	case 508: return "Loop Detected";
+	case 510: return "Not Extended";
 	case 511: return "Network Authentication Required";
 
 	default: return 0;
 	}
-
 }
 
 

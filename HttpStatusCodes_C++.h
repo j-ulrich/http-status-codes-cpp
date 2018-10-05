@@ -13,6 +13,7 @@
 #define HTTPSTATUSCODES_CPP_H_
 
 #include <string>
+#include <sstream>
 
 /*! Namespace for HTTP status codes and reason phrases.
  */
@@ -31,6 +32,7 @@ enum Code
 	Continue           = 100, //!< Indicates that the initial part of a request has been received and has not yet been rejected by the server.
 	SwitchingProtocols = 101, //!< Indicates that the server understands and is willing to comply with the client's request, via the Upgrade header field, for a change in the application protocol being used on this connection.
 	Processing         = 102, //!< Is an interim response used to inform the client that the server has accepted the complete request, but has not yet completed it.
+	EarlyHints         = 103, //!< Used to return some response headers before final HTTP message.
 
 	/*####### 2xx - Successful #######*/
 	/* Indicates that the client's request was successfully received,
@@ -55,7 +57,7 @@ enum Code
 	Found             = 302, //!< Indicates that the target resource resides temporarily under a different URI.
 	SeeOther          = 303, //!< Indicates that the server is redirecting the user agent to a different resource, as indicated by a URI in the Location header field, that is intended to provide an indirect response to the original request.
 	NotModified       = 304, //!< Indicates that a conditional GET request has been received and would have resulted in a 200 (OK) response if it were not for the fact that the condition has evaluated to false.
-	UseProxy          = 305, //!< \deprecated
+	UseProxy          = 305, //!< The requested resource is available only through a proxy, the address for which is provided in the response. Many HTTP clients (such as Mozilla and Internet Explorer) do not correctly handle responses with this status code, primarily for security reasons.
 	TemporaryRedirect = 307, //!< Indicates that the target resource resides temporarily under a different URI and the user agent MUST NOT change the request method if it performs an automatic redirection to that URI.
 	PermanentRedirect = 308, //!< The target resource has been assigned a new permanent URI and any future references to this resource outght to use one of the enclosed URIs. [...] This status code is similar to 301 Moved Permanently (Section 7.3.2 of rfc7231), except that it does not allow rewriting the request method from POST to GET.
 
@@ -102,6 +104,8 @@ enum Code
 	HTTPVersionNotSupported       = 505, //!< Indicates that the server does not support, or refuses to support, the protocol version that was used in the request message.
 	VariantAlsoNegotiates         = 506, //!< Indicates that the server has an internal configuration error: the chosen variant resource is configured to engage in transparent content negotiation itself, and is therefore not a proper end point in the negotiation process.
 	InsufficientStorage           = 507, //!< Means the method could not be performed on the resource because the server is unable to store the representation needed to successfully complete the request.
+	LoopDetected                  = 508, //!< The server detected an infinite loop while processing the request (sent in lieu of 208 Already Reported). [WebDAV; RFC 5842]
+	NotExtended                   = 510, //!< Further extensions to the request are required for the server to fulfill it. [RFC 2774]
 	NetworkAuthenticationRequired = 511  //!< Indicates that the client needs to authenticate to gain network access.
 };
 
@@ -126,6 +130,7 @@ inline std::string reasonPhrase(int code)
 	case 100: return "Continue";
 	case 101: return "Switching Protocols";
 	case 102: return "Processing";
+	case 103: return "Early Hints";
 
 	//####### 2xx - Successful #######
 	case 200: return "OK";
@@ -145,6 +150,7 @@ inline std::string reasonPhrase(int code)
 	case 303: return "See Other";
 	case 304: return "Not Modified";
 	case 305: return "Use Proxy";
+	case 306: return "Switch Proxy";
 	case 307: return "Temporary Redirect";
 	case 308: return "Permanent Redirect";
 
@@ -186,10 +192,30 @@ inline std::string reasonPhrase(int code)
 	case 505: return "HTTP Version Not Supported";
 	case 506: return "Variant Also Negotiates";
 	case 507: return "Insufficient Storage";
+	case 508: return "Loop Detected";
+	case 510: return "Not Extended";
 	case 511: return "Network Authentication Required";
 
 	default: return std::string();
 	}
+}
+
+/*! Returns the code + standard HTTP reason phrase for a HTTP status code in the format "HTTP <code>: <phrase>"
+ * \param code An HTTP status code.
+ * \return The code plus standard HTTP reason phrase for the given \p code in the format "HTTP <code>: <phrase>" or "HTTP <code>"
+ * if no standard phrase for the given \p code is known.
+ */
+inline std::string reasonPhraseEx(int code)
+{
+	std::stringstream ss;
+
+	const std::string phrase = reasonPhrase(code);
+	if (phrase.empty())
+		ss << "HTTP " << code;
+	else
+		ss << "HTTP " << code << ": " << phrase;
+	
+	return ss.str();
 }
 
 } // namespace HttpStatus

@@ -30,6 +30,20 @@ TEST(ReasonPhraseTest, testIntegerParameter)
 	ASSERT_EQ(HttpStatus::reasonPhrase(static_cast<int>(HttpStatus::GatewayTimeout)), std::string("Gateway Time-out"));
 }
 
+TEST(ReasonPhraseTest, testEnumParameterEx)
+{
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(HttpStatus::OK),                  std::string("HTTP 200: OK"));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(HttpStatus::NotFound),            std::string("HTTP 404: Not Found"));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(HttpStatus::InternalServerError), std::string("HTTP 500: Internal Server Error"));
+}
+
+TEST(ReasonPhraseTest, testIntegerParameterEx)
+{
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(static_cast<int>(HttpStatus::Created)),        std::string("HTTP 201: Created"));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(static_cast<int>(HttpStatus::Unauthorized)),   std::string("HTTP 401: Unauthorized"));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(static_cast<int>(HttpStatus::GatewayTimeout)), std::string("HTTP 504: Gateway Time-out"));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(999), std::string("HTTP 999"));
+}
 
 //####### Category Tester Test #######
 INSTANTIATE_TEST_CASE_P(DefaultInstance, CategoryTesterTest, ::testing::Values(

@@ -30,6 +30,19 @@ TEST(ReasonPhraseTest, testIntegerOverload)
 	ASSERT_EQ(HttpStatus::reasonPhrase(static_cast<int>(HttpStatus::Code::ServiceUnavailable)), std::string("Service Unavailable"));
 }
 
+TEST(ReasonPhraseTest, testEnumOverloadEx)
+{
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(HttpStatus::Code::OK),                  std::string("HTTP 200: OK"));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(HttpStatus::Code::NotFound),            std::string("HTTP 404: Not Found"));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(HttpStatus::Code::InternalServerError), std::string("HTTP 500: Internal Server Error"));
+}
+
+TEST(ReasonPhraseTest, testIntegerOverloadEx)
+{
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(static_cast<int>(HttpStatus::Code::Accepted)),           std::string("HTTP 202: Accepted"));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(static_cast<int>(HttpStatus::Code::MethodNotAllowed)),   std::string("HTTP 405: Method Not Allowed"));
+	ASSERT_EQ(HttpStatus::reasonPhraseEx(static_cast<int>(HttpStatus::Code::ServiceUnavailable)), std::string("HTTP 503: Service Unavailable"));
+}
 
 //####### Category Tester Test #######
 
