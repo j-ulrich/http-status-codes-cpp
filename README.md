@@ -8,7 +8,8 @@ This repository provides the HTTP status codes and reason phrases in different v
 
 Simply take the variant that fits your needs and copy/use/modify it.
 
-Data has been taken from [for-GET/know-your-http-well](https://github.com/for-GET/know-your-http-well).
+Data has initially been taken from [for-GET/know-your-http-well](https://github.com/for-GET/know-your-http-well).
+It covers all status codes [registered with the IANA](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml).
 
 ### Table of Contents ###
 
@@ -65,7 +66,7 @@ For the complete list of defined enums, see one of the header files.
 enum HttpStatus_Code
 {
 	HttpStatus_OK       = 200,
-	HttpStatus_NotFound = 404 
+	HttpStatus_NotFound = 404
 	// ...
 };
 ```
@@ -182,5 +183,5 @@ is returned.
 
 
 ## License ##
-[![CC0](https://licensebuttons.net/p/zero/1.0/80x15.png)](http://creativecommons.org/publicdomain/zero/1.0/)    
+[![CC0](https://licensebuttons.net/p/zero/1.0/80x15.png)](http://creativecommons.org/publicdomain/zero/1.0/)
 This project is licensed under [Creative Commons CC0](LICENSE).

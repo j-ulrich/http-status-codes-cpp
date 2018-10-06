@@ -4,7 +4,7 @@
  *
  * https://github.com/j-ulrich/http-status-codes-cpp
  *
- * \date Created on 06.10.2017
+ * \version 1.1.0
  * \author Jochen Ulrich <jochenulrich@t-online.de>
  * \copyright Licensed under Creative Commons CC0 (http://creativecommons.org/publicdomain/zero/1.0/)
  */
@@ -32,6 +32,7 @@ enum class Code
 	Continue           = 100, //!< Indicates that the initial part of a request has been received and has not yet been rejected by the server.
 	SwitchingProtocols = 101, //!< Indicates that the server understands and is willing to comply with the client's request, via the Upgrade header field, for a change in the application protocol being used on this connection.
 	Processing         = 102, //!< Is an interim response used to inform the client that the server has accepted the complete request, but has not yet completed it.
+	EarlyHints         = 103, //!< Indicates to the client that the server is likely to send a final response with the header fields included in the informational response.
 
 	/*####### 2xx - Successful #######*/
 	/* Indicates that the client's request was successfully received,
@@ -45,6 +46,7 @@ enum class Code
 	ResetContent                = 205, //!< Indicates that the server has fulfilled the request and desires that the user agent reset the \"document view\", which caused the request to be sent, to its original state as received from the origin server.
 	PartialContent              = 206, //!< Indicates that the server is successfully fulfilling a range request for the target resource by transferring one or more parts of the selected representation that correspond to the satisfiable ranges found in the requests's Range header field.
 	MultiStatus                 = 207, //!< Provides status for multiple independent operations.
+	AlreadyReported             = 208, //!< Used inside a DAV:propstat response element to avoid enumerating the internal members of multiple bindings to the same collection repeatedly. [RFC 5842]
 	IMUsed                      = 226, //!< The server has fulfilled a GET request for the resource, and the response is a representation of the result of one or more instance-manipulations applied to the current instance.
 
 	/*####### 3xx - Redirection #######*/
@@ -56,7 +58,8 @@ enum class Code
 	Found             = 302, //!< Indicates that the target resource resides temporarily under a different URI.
 	SeeOther          = 303, //!< Indicates that the server is redirecting the user agent to a different resource, as indicated by a URI in the Location header field, that is intended to provide an indirect response to the original request.
 	NotModified       = 304, //!< Indicates that a conditional GET request has been received and would have resulted in a 200 (OK) response if it were not for the fact that the condition has evaluated to false.
-	UseProxy          = 305, //!< \deprecated
+	UseProxy          = 305, //!< \deprecated \parblock Due to security concerns regarding in-band configuration of a proxy. \endparblock
+	                         //!< The requested resource MUST be accessed through the proxy given by the Location field.
 	TemporaryRedirect = 307, //!< Indicates that the target resource resides temporarily under a different URI and the user agent MUST NOT change the request method if it performs an automatic redirection to that URI.
 	PermanentRedirect = 308, //!< The target resource has been assigned a new permanent URI and any future references to this resource outght to use one of the enclosed URIs. [...] This status code is similar to 301 Moved Permanently (Section 7.3.2 of rfc7231), except that it does not allow rewriting the request method from POST to GET.
 
@@ -103,6 +106,8 @@ enum class Code
 	HTTPVersionNotSupported       = 505, //!< Indicates that the server does not support, or refuses to support, the protocol version that was used in the request message.
 	VariantAlsoNegotiates         = 506, //!< Indicates that the server has an internal configuration error: the chosen variant resource is configured to engage in transparent content negotiation itself, and is therefore not a proper end point in the negotiation process.
 	InsufficientStorage           = 507, //!< Means the method could not be performed on the resource because the server is unable to store the representation needed to successfully complete the request.
+	LoopDetected                  = 508, //!< Indicates that the server terminated an operation because it encountered an infinite loop while processing a request with "Depth: infinity". [RFC 5842]
+	NotExtended                   = 510, //!< The policy for accessing the resource has not been met in the request. [RFC 2774]
 	NetworkAuthenticationRequired = 511  //!< Indicates that the client needs to authenticate to gain network access.
 };
 
@@ -134,6 +139,7 @@ inline std::string reasonPhrase(int code)
 	case 100: return "Continue";
 	case 101: return "Switching Protocols";
 	case 102: return "Processing";
+	case 103: return "Early Hints";
 
 	//####### 2xx - Successful #######
 	case 200: return "OK";
@@ -144,6 +150,7 @@ inline std::string reasonPhrase(int code)
 	case 205: return "Reset Content";
 	case 206: return "Partial Content";
 	case 207: return "Multi-Status";
+	case 208: return "Already Reported";
 	case 226: return "IM Used";
 
 	//####### 3xx - Redirection #######
@@ -194,6 +201,8 @@ inline std::string reasonPhrase(int code)
 	case 505: return "HTTP Version Not Supported";
 	case 506: return "Variant Also Negotiates";
 	case 507: return "Insufficient Storage";
+	case 508: return "Loop Detected";
+	case 510: return "Not Extended";
 	case 511: return "Network Authentication Required";
 
 	default: return std::string();
