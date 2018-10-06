@@ -9,7 +9,7 @@ This repository provides the HTTP status codes and reason phrases in different v
 Simply take the variant that fits your needs and copy/use/modify it.
 
 Data has initially been taken from [for-GET/know-your-http-well](https://github.com/for-GET/know-your-http-well).
-It should cover all status codes [registered with the IANA](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml).
+It covers all status codes [registered with the IANA](https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml).
 
 ### Table of Contents ###
 

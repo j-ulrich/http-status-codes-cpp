@@ -10,6 +10,7 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 ---
 
 ## [1.1.0] - 2018-10-06 ##
+Adds missing status codes from the IANA registry.
 
 ### Added ###
 - Status codes 103 Early Hints, 208 Already Reported, 508 Loop Detected and 510 Not Extended
@@ -36,4 +37,4 @@ Initial (actually unversioned) release.
 ---
 
 
-[1.1.0]: https://
+[1.1.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.1.0
