@@ -63,7 +63,9 @@ TEST(NetworkErrorMappingTest, testNetworkErrorToStatusCode)
 	ASSERT_EQ(HttpStatus::networkErrorToStatusCode(QNetworkReply::ContentNotFoundError), HttpStatus::NotFound);
 	ASSERT_EQ(HttpStatus::networkErrorToStatusCode(QNetworkReply::NoError),              HttpStatus::OK);
 	ASSERT_EQ(HttpStatus::networkErrorToStatusCode(QNetworkReply::UnknownContentError),  HttpStatus::BadRequest);
+#if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
 	ASSERT_EQ(HttpStatus::networkErrorToStatusCode(QNetworkReply::UnknownServerError),   HttpStatus::InternalServerError);
+#endif // Qt >= 5.3.0
 	ASSERT_EQ(HttpStatus::networkErrorToStatusCode(QNetworkReply::ProtocolFailure),      -1);
 }
 
@@ -72,7 +74,9 @@ TEST(NetworkErrorMappingTest, testStatusCodeToNetworkError)
 	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(HttpStatus::Unauthorized),        QNetworkReply::AuthenticationRequiredError);
 	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(HttpStatus::OK),                  QNetworkReply::NoError);
 	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(HttpStatus::URITooLong),          QNetworkReply::UnknownContentError);
+#if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
 	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(HttpStatus::InsufficientStorage), QNetworkReply::UnknownServerError);
+#endif // Qt >= 5.3.0
 	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(601),                             QNetworkReply::ProtocolFailure);
 }
 #endif // QT_NETWORK_LIB

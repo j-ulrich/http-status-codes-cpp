@@ -4,7 +4,7 @@
  *
  * https://github.com/j-ulrich/http-status-codes-cpp
  *
- * \version 1.1.0
+ * \version 1.1.1
  * \author Jochen Ulrich <jochenulrich@t-online.de>
  * \copyright Licensed under Creative Commons CC0 (http://creativecommons.org/publicdomain/zero/1.0/)
  */

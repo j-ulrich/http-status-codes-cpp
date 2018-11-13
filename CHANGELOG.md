@@ -9,6 +9,15 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 
 ---
 
+
+## [1.1.1]  - 2018-11-14 ##
+
+### Fixed ###
+- Some QNetworkReply::NetworkError codes were not available in Qt before 5.3.
+
+
+---
+
 ## [1.1.0] - 2018-10-06 ##
 Adds missing status codes from the IANA registry.
 
@@ -37,4 +46,5 @@ Initial (actually unversioned) release.
 ---
 
 
+[1.1.1]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.1.1
 [1.1.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.1.0

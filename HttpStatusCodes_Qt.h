@@ -4,7 +4,7 @@
  *
  * https://github.com/j-ulrich/http-status-codes-cpp
  *
- * \version 1.1.0
+ * \version 1.1.1
  * \author Jochen Ulrich <jochenulrich@t-online.de>
  * \copyright Licensed under Creative Commons CC0 (http://creativecommons.org/publicdomain/zero/1.0/)
  */
@@ -25,7 +25,7 @@
 namespace HttpStatus
 {
 
-#if (QT_VERSION >= 0x050800)
+#if (QT_VERSION >= QT_VERSION_CHECK(5,8,0))
 	Q_NAMESPACE
 #endif // Qt >= 5.8.0
 
@@ -119,7 +119,7 @@ enum Code
 	NotExtended                   = 510, //!< The policy for accessing the resource has not been met in the request. [RFC 2774]
 	NetworkAuthenticationRequired = 511  //!< Indicates that the client needs to authenticate to gain network access.
 };
-#if (QT_VERSION >= 0x050800)
+#if (QT_VERSION >= QT_VERSION_CHECK(5,8,0))
 Q_ENUM_NS(Code)
 #endif // Qt >= 5.8.0
 
@@ -238,17 +238,21 @@ inline int networkErrorToStatusCode(QNetworkReply::NetworkError error)
 	case QNetworkReply::ContentNotFoundError:              return NotFound;                    // 404
 	case QNetworkReply::ContentOperationNotPermittedError: return MethodNotAllowed;            // 405
 	case QNetworkReply::ProxyAuthenticationRequiredError:  return ProxyAuthenticationRequired; // 407
+#if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
 	case QNetworkReply::ContentConflictError:              return Conflict;                    // 409
 	case QNetworkReply::ContentGoneError:                  return Gone;                        // 410
 	case QNetworkReply::InternalServerError:               return InternalServerError;         // 500
 	case QNetworkReply::OperationNotImplementedError:      return NotImplemented;              // 501
 	case QNetworkReply::ServiceUnavailableError:           return ServiceUnavailable;          // 503
+#endif // Qt >= 5.3.0
 
 	// Mapping error codes matching multiple HTTP status codes to a best matching "base" code
 	case QNetworkReply::NoError:                           return OK;                          // 200
 	case QNetworkReply::ProtocolInvalidOperationError:     return BadRequest;                  // 400
 	case QNetworkReply::UnknownContentError:               return BadRequest;                  // 400
+#if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
 	case QNetworkReply::UnknownServerError:                return InternalServerError;         // 500
+#endif // Qt >= 5.3.0
 
 	/* Other errors do not match any HTTP status code.
 	 * Therefore, we return an invalid code.
@@ -287,12 +291,16 @@ inline QNetworkReply::NetworkError statusCodeToNetworkError(int code)
 	case NotFound:                    return QNetworkReply::ContentNotFoundError;              // 404
 	case MethodNotAllowed:            return QNetworkReply::ContentOperationNotPermittedError; // 405
 	case ProxyAuthenticationRequired: return QNetworkReply::ProxyAuthenticationRequiredError;  // 407
+#if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
 	case Conflict:                    return QNetworkReply::ContentConflictError;              // 409
 	case Gone:                        return QNetworkReply::ContentGoneError;                  // 410
+#endif // Qt >= 5.3.0
 	case ImATeapot:                   return QNetworkReply::ProtocolInvalidOperationError;     // 418
+#if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
 	case InternalServerError:         return QNetworkReply::InternalServerError;               // 500
 	case NotImplemented:              return QNetworkReply::OperationNotImplementedError;      // 501
 	case ServiceUnavailable:          return QNetworkReply::ServiceUnavailableError;           // 503
+#endif // Qt >= 5.3.0
 
 	default:
 		break;
@@ -300,8 +308,10 @@ inline QNetworkReply::NetworkError statusCodeToNetworkError(int code)
 
 	if (isClientError(code))  // 4xx
 		return QNetworkReply::UnknownContentError;
+#if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
 	if (isServerError(code))  // 5xx
 		return QNetworkReply::UnknownServerError;
+#endif // Qt >= 5.3.0
 
 	// 600 or above
 	return QNetworkReply::ProtocolFailure;
