@@ -35,6 +35,9 @@ Initially, the data was taken from [for-GET/know-your-http-well](https://github.
 | [Qt](HttpStatusCodes_Qt.h)       | Namespace `HttpStatus` | `enum Code`<br>When using Qt 5.8 or later: registered in meta type system using `Q_ENUM_NS()`  | `QString`      |
 
 
+> Note regarding Qt variant: Oldest tested Qt version was Qt 5.2.0 with MinGW 4.8. However, should be working with any Qt 5.x version.
+Might also be working with Qt 4 versions but this has not been tested.
+
 
 ## Example ##
 
