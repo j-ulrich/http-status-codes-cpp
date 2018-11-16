@@ -111,6 +111,13 @@ enum class Code
 	NetworkAuthenticationRequired = 511  //!< Indicates that the client needs to authenticate to gain network access.
 };
 
+/*! Explicitly converts code to int
+ */
+int toInt(Code code)
+{
+    return static_cast<int>(code);
+}
+
 inline bool isInformational(int code) { return (code >= 100 && code < 200); } //!< \returns \c true if the given \p code is an informational code.
 inline bool isSuccessful(int code)    { return (code >= 200 && code < 300); } //!< \returns \c true if the given \p code is a successful code.
 inline bool isRedirection(int code)   { return (code >= 300 && code < 400); } //!< \returns \c true if the given \p code is a redirectional code.
