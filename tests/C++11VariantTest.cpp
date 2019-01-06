@@ -43,5 +43,14 @@ CategoryTesterParams(HttpStatus::Code::HTTPVersionNotSupported,     false,  fals
 ));
 
 
+//####### Conversion Function Test #######
+
+TEST(ConversionFunctionTest, testToInt)
+{
+	ASSERT_EQ(HttpStatus::toInt(HttpStatus::Code::SwitchingProtocols), static_cast<int>(HttpStatus::Code::SwitchingProtocols));
+	ASSERT_EQ(HttpStatus::toInt(HttpStatus::Code::OK),                 static_cast<int>(HttpStatus::Code::OK));
+	ASSERT_EQ(HttpStatus::toInt(HttpStatus::Code::NotExtended),        static_cast<int>(HttpStatus::Code::NotExtended));
+}
+
 
 } // namespace Cpp11VariantTests
