@@ -10,10 +10,19 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 ---
 
 
-## [1.1.1]  - 2018-11-14 ##
+## [1.2.0] - 2019-01-06 ##
+
+### Added ###
+- [#5]{C++11} `toInt()` conversion function.
+
+
+---
+
+
+## [1.1.1] - 2018-11-14 ##
 
 ### Fixed ###
-- Some QNetworkReply::NetworkError codes were not available in Qt before 5.3.
+- {Qt} Some QNetworkReply::NetworkError codes were not available in Qt before 5.3.
 
 
 ---
@@ -26,7 +35,7 @@ Adds missing status codes from the IANA registry.
 
 
 ### Fixed ###
-- Removed redundant "HttpStatus_XXX" documentation comments in C variant.
+- {C} Removed redundant "HttpStatus_XXX" documentation comments.
 
 
 ---
@@ -40,11 +49,12 @@ Initial (actually unversioned) release.
 - Status codes
 - Category/class tests (`isXXX()` functions)
 - Reason phrases
-- `QNetworkReply::NetworkError` mapping
+- {Qt} `QNetworkReply::NetworkError` mapping
 
 
 ---
 
 
+[1.2.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.2.0
 [1.1.1]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.1.1
 [1.1.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.1.0

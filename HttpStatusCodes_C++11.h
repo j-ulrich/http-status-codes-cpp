@@ -4,7 +4,7 @@
  *
  * https://github.com/j-ulrich/http-status-codes-cpp
  *
- * \version 1.1.1
+ * \version 1.2.0
  * \author Jochen Ulrich <jochenulrich@t-online.de>
  * \copyright Licensed under Creative Commons CC0 (http://creativecommons.org/publicdomain/zero/1.0/)
  */
@@ -110,6 +110,16 @@ enum class Code
 	NotExtended                   = 510, //!< The policy for accessing the resource has not been met in the request. [RFC 2774]
 	NetworkAuthenticationRequired = 511  //!< Indicates that the client needs to authenticate to gain network access.
 };
+
+/*! Converts a Code to its corresponding integer value.
+ * \param code The code to be converted.
+ * \return The numeric value of \p code.
+ * \since 1.2.0
+ */
+inline int toInt(Code code)
+{
+	return static_cast<int>(code);
+}
 
 inline bool isInformational(int code) { return (code >= 100 && code < 200); } //!< \returns \c true if the given \p code is an informational code.
 inline bool isSuccessful(int code)    { return (code >= 200 && code < 300); } //!< \returns \c true if the given \p code is a successful code.

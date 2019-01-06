@@ -20,7 +20,7 @@ Initially, the data was taken from [for-GET/know-your-http-well](https://github.
 >   - [Status Codes Enum](#status-codes-enum)
 >   - [Category/Class Tests](#categoryclass-tests)
 >   - [Reason Phrases](#reason-phrases)
->   - [QNetworkReply::NetworkError Mapping](#qnetworkreplynetworkerror-mapping)
+>   - [Conversion Functions](#conversion-functions)
 > - [License](#license)
 
 
@@ -65,7 +65,7 @@ void printReplyStatus(MyHttpReplyClass reply)
 
 For the complete list of defined enums, see one of the header files.
 
-#### C Variant ####
+##### C Variant #####
 ```c
 enum HttpStatus_Code
 {
@@ -75,7 +75,7 @@ enum HttpStatus_Code
 };
 ```
 
-#### C++11 Variant ####
+##### C++11 Variant #####
 ```c++
 namespace HttpStatus {
 enum class Code
@@ -87,7 +87,7 @@ enum class Code
 }
 ```
 
-#### Other Variants ####
+##### Other Variants #####
 ```c++
 namespace HttpStatus {
 enum Code
@@ -102,7 +102,7 @@ enum Code
 
 ### Category/Class Tests ###
 
-#### C Variant ####
+##### C Variant #####
 ```c
 char HttpStatus_isInformational(int code);
 char HttpStatus_isSuccessful(int code);
@@ -120,7 +120,7 @@ Returns `1` if the given _code_ is either a client error, a server error or any 
 Non-standard error codes are status codes with a value of 600 or higher.
 Returns `0` otherwise.
 
-#### Other Variants ####
+##### Other Variants #####
 > **Note:** The C++11 variant also provides overloads for `HttpStatus::Code`. So there is no need to cast.
 
 ```c++
@@ -145,31 +145,36 @@ Returns `false` otherwise.
 
 ### Reason Phrases ###
 
-#### C Variant ####
+##### C Variant #####
 ```c
 const char* HttpStatus_reasonPhrase(int code);
 ```
 Returns the HTTP reason phrase string corresponding to the given _code_.
 
-#### C++/C++11 Variants ####
+##### C++/C++11 Variants #####
 > **Note:** The C++11 variant also provides an overload for `HttpStatus::Code`. So there is no need to cast.
 ```c++
 std::string HttpStatus::reasonPhrase(int code);
 ```
 Returns the HTTP reason phrase string corresponding to the given _code_.
 
-#### Qt Variant ####
+##### Qt Variant #####
 ```c++
 QString HttpStatus::reasonPhrase(int code);
 ```
 Returns the HTTP reason phrase string corresponding to the given _code_.
 
 
-### QNetworkReply::NetworkError Mapping ###
+### Conversion Functions ###
 
-> **Note:** Available only in the Qt variant and if the Qt::Network module is available.
+##### C++11 Variant #####
+```c++
+int HttpStatus::toInt(HttpStatus::Code code);
+```
+Returns the integer value corresponding to a given a _code_.
+This is a convenience function as replacement for a `static_cast<int>()`.
 
-#### Qt Variant ####
+##### Qt Variant #####
 ```c++
 int HttpStatus::networkErrorToStatusCode(QNetworkReply::NetworkError error);
 ```
@@ -180,7 +185,7 @@ Otherwise, `-1` is returned.
 QNetworkReply::NetworkError HttpStatus::statusCodeToNetworkError(int code);
 ```
 Returns the `QNetworkReply::NetworkError` corresponding to the given _code_ if there is one.
-For codes where there is no exact match, the best matchnig "catch all" code (`QNetworkReply::NoError`,
+For codes where there is no exact match, the best matching "catch all" code (`QNetworkReply::NoError`,
 `QNetworkReply::UnknownContentError`, `QNetworkReply::UnknownServerError` or `QNetworkReply::ProtocolFailure`)
 is returned.
 
