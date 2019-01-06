@@ -20,6 +20,9 @@ environment:
           APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2013
           VCVARS_COMMANDLINE: '"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat" x86'
 
+cache:
+    - C:\.hunter -> .appveyor.yml, **\CMakeLists.txt, **\*.cmake
+
 before_build:
     - call %VCVARS_COMMANDLINE%
     - set Path=%QT_DIR%\bin;%Path%
