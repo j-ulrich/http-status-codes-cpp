@@ -10,6 +10,15 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 ---
 
 
+## [1.3.0] - 2019-02-21 ##
+
+### Added ###
+- Support for custom (error) codes by ensuring the enums can hold values up to 1023.
+
+
+---
+
+
 ## [1.2.0] - 2019-01-06 ##
 
 ### Added ###
