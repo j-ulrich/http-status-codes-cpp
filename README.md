@@ -27,12 +27,12 @@ Initially, the data was taken from [for-GET/know-your-http-well](https://github.
 
 ## Variants ##
 
-| Variant                          | Scoping                | Status Codes                                                                                   | Reason Phrases |
-|----------------------------------|------------------------|------------------------------------------------------------------------------------------------|----------------|
-| [C](HttpStatusCodes_C.h)         | Prefix `HttpStatus_`   | `enum HttpStatus_Code`                                                                         | `const char*`  |
-| [C++](HttpStatusCodes_C++.h)     | Namespace `HttpStatus` | `enum Code`                                                                                    | `std::string`  |
-| [C++11](HttpStatusCodes_C++11.h) | Namespace `HttpStatus` | `enum class Code`                                                                              | `std::string`  |
-| [Qt](HttpStatusCodes_Qt.h)       | Namespace `HttpStatus` | `enum Code`<br>When using Qt 5.8 or later: registered in meta type system using `Q_ENUM_NS()`  | `QString`      |
+| Variant                          | Name Scoping           | Status Codes Type                                                                              | Reason Phrases Type |
+|----------------------------------|------------------------|------------------------------------------------------------------------------------------------|---------------------|
+| [C](HttpStatusCodes_C.h)         | Prefix `HttpStatus_`   | `enum HttpStatus_Code`                                                                         | `const char*`       |
+| [C++](HttpStatusCodes_C++.h)     | Namespace `HttpStatus` | `enum Code`                                                                                    | `std::string`       |
+| [C++11](HttpStatusCodes_C++11.h) | Namespace `HttpStatus` | `enum class Code`                                                                              | `std::string`       |
+| [Qt](HttpStatusCodes_Qt.h)       | Namespace `HttpStatus` | `enum Code`<br>When using Qt 5.8 or later: registered in meta type system using `Q_ENUM_NS()`  | `QString`           |
 
 
 > Note regarding Qt variant: Oldest tested Qt version was Qt 5.2.0 with MinGW 4.8. However, should be working with any Qt 5.x version.
@@ -64,6 +64,9 @@ void printReplyStatus(MyHttpReplyClass reply)
 ### Status Codes Enum ###
 
 For the complete list of defined enums, see one of the header files.
+
+> **Note:** The maximum supported value for the enums is `1023`. Trying to convert bigger values to the enum types
+might be undefined behavior.
 
 ##### C Variant #####
 ```c

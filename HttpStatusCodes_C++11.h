@@ -108,7 +108,7 @@ enum class Code
 	InsufficientStorage           = 507, //!< Means the method could not be performed on the resource because the server is unable to store the representation needed to successfully complete the request.
 	LoopDetected                  = 508, //!< Indicates that the server terminated an operation because it encountered an infinite loop while processing a request with "Depth: infinity". [RFC 5842]
 	NotExtended                   = 510, //!< The policy for accessing the resource has not been met in the request. [RFC 2774]
-	NetworkAuthenticationRequired = 511  //!< Indicates that the client needs to authenticate to gain network access.
+	NetworkAuthenticationRequired = 511, //!< Indicates that the client needs to authenticate to gain network access.
 };
 
 /*! Converts a Code to its corresponding integer value.
