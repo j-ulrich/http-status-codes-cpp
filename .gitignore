@@ -8,6 +8,5 @@ build/
 _build/
 build_*/
 CMakeLists.txt.user
-package.json
 package-lock.json
 node_modules/
