@@ -3,29 +3,32 @@ const diff = require( 'diff' );
 const fs = require( 'fs' ).promises;
 const path = require( 'path' );
 
+let log = console;
 
 const httpStatusCodesUrl = 'https://www.iana.org/assignments/http-status-codes/http-status-codes.txt';
 
-const checkForUpdate = async ( { github, core } ) => {
+const checkForUpdate = async ( { github, core, dryRun } ) => {
 	try
 	{
+		log = core;
+
 		const httpStatusCodes = await fetchHttpStatusCodesList();
 		const diffWithLastUsedVersion = await getDiffWithLastUsedVersion( httpStatusCodes.httpStatusCodesList );
 		if ( !diffWithLastUsedVersion ) {
-			core.info( 'HTTP status codes list is still up to date' );
+			log.info( 'HTTP status codes list is still up to date' );
 			return;
 		}
 		const existingGithubIssues = await searchForExistingGithubIssue( httpStatusCodes.lastUpdated, github );
 
 		if ( existingGithubIssues.total_count === 0 ) {
-			const newIssue = await createNewGithubIssue( httpStatusCodes, diffWithLastUsedVersion, github );
-			core.info( `Created issue #${newIssue.number}: ${newIssue.html_url}`);
+			const newIssue = await createNewGithubIssue( { httpStatusCodes, diffWithLastUsedVersion, github, dryRun } );
+			log.info( `Created issue #${newIssue.number}: ${newIssue.html_url}`);
 		}
 		else if ( existingGithubIssues.total_count === 1 ) {
-			core.info( 'HTTP status codes are still up to date.' );
+			log.info( 'HTTP status codes are still up to date.' );
 		}
 		else {
-			core.warning( `Multiple issues exist for the HTTP status code update from ${httpStatusCodes.lastUpdated}` );
+			log.warning( `Multiple issues exist for the HTTP status code update from ${httpStatusCodes.lastUpdated}` );
 		}
 	}
 	catch ( error ) {
@@ -59,9 +62,9 @@ const searchForExistingGithubIssue = async ( lastUpdatedDate, github ) => {
 	return searchResult;
 };
 
-const createNewGithubIssue = async ( httpStatusCodes, diffWithLastUsedVersion, github ) => {
-	
-	return github.issues.create( {
+const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion, github, dryRun } ) => {
+
+	const newIssue = {
 		owner: 'j-ulrich',
 		repo: 'http-status-codes-cpp',
 		title: `${issueTitleBase} ${httpStatusCodes.lastUpdatedDate}`,
@@ -71,7 +74,14 @@ const createNewGithubIssue = async ( httpStatusCodes, diffWithLastUsedVersion, g
 			  '```diff'  + '\n' +
 			  diffWithLastUsedVersion + '\n' +
 			  '```'
-	} );
+	};
+
+	if ( dryRun ) {
+		log.info( 'Would create issue:', newIssue );
+		return { total_count: 1, html_url: 'http://github.com/j-ulrich/http-status-codes-cpp/issues' };
+	}
+	
+	return github.issues.create( newIssue );
 };
 
 const getDiffWithLastUsedVersion = async ( httpStatusCodeList ) => {
@@ -88,14 +98,14 @@ const main = async () => {
 	try
 	{
 		const httpStatusCodes = await fetchHttpStatusCodesList();
-		console.log( httpStatusCodes.lastUpdated );
+		log.log( httpStatusCodes.lastUpdated );
 		const patch = await getDiffWithLastUsedVersion( httpStatusCodes.httpStatusCodesList );
 		if ( patch ) {
-			console.log( patch );
+			log.log( patch );
 		}
 	}
 	catch( reason ) {
-		console.error( reason );
+		log.error( reason );
 		process.exitCode = -1;
 	};
 };
