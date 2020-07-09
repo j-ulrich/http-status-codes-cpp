@@ -12,6 +12,7 @@ const checkForUpdate = async ( { github, core } ) => {
 		const httpStatusCodes = await fetchHttpStatusCodesList();
 		const diffWithLastUsedVersion = await getDiffWithLastUsedVersion( httpStatusCodes.httpStatusCodesList );
 		if ( !diffWithLastUsedVersion ) {
+			core.info( 'HTTP status codes list is still up to date' );
 			return;
 		}
 		const existingGithubIssues = await searchForExistingGithubIssue( httpStatusCodes.lastUpdated, github );
