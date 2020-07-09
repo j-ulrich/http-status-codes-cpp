@@ -2,8 +2,12 @@
 !.gitignore
 !.appveyor.yml
 !.travis.yml
+!.github
 build/
 .build/
 _build/
 build_*/
 CMakeLists.txt.user
+package.json
+package-lock.json
+node_modules/
