@@ -2,7 +2,7 @@
 !.gitignore
 !.appveyor.yml
 !.travis.yml
-!.github
+!.github/
 build/
 .build/
 _build/

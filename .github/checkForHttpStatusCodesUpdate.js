@@ -1,6 +1,6 @@
 const fetch = require( 'node-fetch' );
 const diff = require( 'diff' );
-const fs = require( 'fs/promises' );
+const fs = require( 'fs' ).promises;
 const path = require( 'path' );
 
 

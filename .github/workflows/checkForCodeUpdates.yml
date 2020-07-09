@@ -1,6 +1,7 @@
 name: Check for Code Updates
 
 on:
+    push:
     schedule:
         - cron: '1 * 1 * *'
     workflow_dispatch:
@@ -11,9 +12,10 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
+            - uses: actions/setup-node@v1
+            - run: npm install
             - uses: actions/github-script@v2
               with:
                 script: |
                     const path = require( 'path' );
-                    const scriptPath = path.resolve( './.github/checkForHttpStatusCodesUpdate.js' );
-                    await require( scriptPath )( { github, core } );
+                    require( path.resolve( './.github/checkForHttpStatusCodesUpdate.js' ) )( { github, core } );
