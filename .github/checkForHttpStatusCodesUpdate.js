@@ -71,7 +71,7 @@ const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion,
 		owner: context.repo.owner,
 		repo: context.repo.repo,
 		title: `${issueTitleBase} ${httpStatusCodes.lastUpdatedDate}`,
-		body: `The HTTP status codes list has been updated on ${httpStatusCodes.lastUpdatedDate}.    ` + '\n' +
+		body: `The HTTP status codes list has been updated on ${httpStatusCodes.lastUpdated}.    ` + '\n' +
 		      'See https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml' + '\n\n' +
 		      '## Diff ##'  + '\n' +
 			  '```diff'  + '\n' +
