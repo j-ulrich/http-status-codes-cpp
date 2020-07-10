@@ -58,7 +58,7 @@ const fetchHttpStatusCodesList = async () => {
 const issueTitleBase = 'IANA HTTP Status Code Update';
 
 const searchForExistingGithubIssue = async ( { lastUpdatedDate, github, context } ) => {
-	const query = [ issueTitleBase, lastUpdatedDate, 'in:title', `repo:${context.repo.full_name}`, 'type:issue' ].join( '+' );
+	const query = [ issueTitleBase, lastUpdatedDate, 'in:title', `repo:${context.payload.repository.full_name}`, 'type:issue' ].join( '+' );
 	const searchResult = await github.search.issuesAndPullRequests( {
 		q: query,
 	} );
