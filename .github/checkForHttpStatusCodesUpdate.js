@@ -15,10 +15,12 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 		const httpStatusCodes = await fetchHttpStatusCodesList();
 		const lastUpdatedDate = httpStatusCodes.lastUpdated;
 		const diffWithLastUsedVersion = await getDiffWithLastUsedVersion( httpStatusCodes.httpStatusCodesList );
+		/*
 		if ( !diffWithLastUsedVersion ) {
 			log.info( 'HTTP status codes list is still up to date' );
 			return;
 		}
+		*/
 		const existingGithubIssues = await searchForExistingGithubIssue( { lastUpdatedDate, github, context } );
 
 		if ( existingGithubIssues.total_count === 0 ) {
@@ -88,9 +90,11 @@ const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion,
 const getDiffWithLastUsedVersion = async ( httpStatusCodeList ) => {
 	const pathToLastUsedVersion = path.resolve( './.github/http-status-codes.txt' );
 	const lastUsedVersion = await fs.readFile( pathToLastUsedVersion, { encoding: 'utf-8' } );
+	/*
 	if ( lastUsedVersion === httpStatusCodeList ) {
 		return null;
 	}
+	*/
 	const patch = diff.createPatch( 'http-status-codes.txt', lastUsedVersion, httpStatusCodeList );
 	return patch;
 };
