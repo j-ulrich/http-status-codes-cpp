@@ -31,8 +31,7 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 			log.info( 'HTTP status codes are still up to date.' );
 		}
 		else {
-			log.warning( `Multiple issues exist for the HTTP status code update from ${lastUpdatedDate}` );
-			log.debug( existingGithubIssues );
+			log.warning( `Multiple issues exist for the HTTP status code update from ${lastUpdatedDate}:\n${ JSON.stringify( existingGithubIssues ) }` );
 		}
 	}
 	catch ( error ) {
@@ -72,7 +71,7 @@ const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion,
 		owner: context.repo.owner,
 		repo: context.repo.repo,
 		title: `${issueTitleBase} ${httpStatusCodes.lastUpdatedDate}`,
-		body: `The HTTP status codes list has been updated on ${httpStatusCodes.lastUpdatedDate}.` + '\n' +
+		body: `The HTTP status codes list has been updated on ${httpStatusCodes.lastUpdatedDate}.    ` + '\n' +
 		      'See https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml' + '\n\n' +
 		      '## Diff ##'  + '\n' +
 			  '```diff'  + '\n' +
@@ -81,7 +80,7 @@ const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion,
 	};
 
 	if ( dryRun ) {
-		log.info( 'Would create issue:\n', JSON.stringify( newIssue ) );
+		log.info( `Would create issue:\n${ JSON.stringify( newIssue ) }` );
 		return { total_count: 1, html_url: context.repo.issues_url };
 	}
 
