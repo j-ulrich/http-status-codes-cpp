@@ -31,7 +31,7 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 			log.info( 'HTTP status codes are still up to date.' );
 		}
 		else {
-			log.warning( `Multiple issues exist for the HTTP status code update from ${lastUpdatedDate}:\n${ JSON.stringify( existingGithubIssues ) }` );
+			log.warning( `Multiple issues exist for the HTTP status code update from ${lastUpdatedDate}:\n${ JSON.stringify( existingGithubIssues, undefined, 4 ) }` );
 		}
 	}
 	catch ( error ) {
@@ -80,7 +80,7 @@ const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion,
 	};
 
 	if ( dryRun ) {
-		log.info( `Would create issue:\n${ JSON.stringify( newIssue ) }` );
+		log.info( `Would create issue:\n${ JSON.stringify( newIssue, null, 4 ) }` );
 		return { total_count: 1, html_url: context.repo.issues_url };
 	}
 
