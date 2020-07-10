@@ -7,28 +7,29 @@ let log = console;
 
 const httpStatusCodesUrl = 'https://www.iana.org/assignments/http-status-codes/http-status-codes.txt';
 
-const checkForUpdate = async ( { github, core, dryRun } ) => {
+const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 	try
 	{
 		log = core;
 
 		const httpStatusCodes = await fetchHttpStatusCodesList();
+		const lastUpdatedDate = httpStatusCodes.lastUpdated;
 		const diffWithLastUsedVersion = await getDiffWithLastUsedVersion( httpStatusCodes.httpStatusCodesList );
 		if ( !diffWithLastUsedVersion ) {
 			log.info( 'HTTP status codes list is still up to date' );
 			return;
 		}
-		const existingGithubIssues = await searchForExistingGithubIssue( httpStatusCodes.lastUpdated, github );
+		const existingGithubIssues = await searchForExistingGithubIssue( { lastUpdatedDate, github, context } );
 
 		if ( existingGithubIssues.total_count === 0 ) {
-			const newIssue = await createNewGithubIssue( { httpStatusCodes, diffWithLastUsedVersion, github, dryRun } );
+			const newIssue = await createNewGithubIssue( { httpStatusCodes, diffWithLastUsedVersion, github, context, dryRun } );
 			log.info( `Created issue #${newIssue.number}: ${newIssue.html_url}`);
 		}
 		else if ( existingGithubIssues.total_count === 1 ) {
 			log.info( 'HTTP status codes are still up to date.' );
 		}
 		else {
-			log.warning( `Multiple issues exist for the HTTP status code update from ${httpStatusCodes.lastUpdated}` );
+			log.warning( `Multiple issues exist for the HTTP status code update from ${lastUpdatedDate}` );
 		}
 	}
 	catch ( error ) {
@@ -54,19 +55,19 @@ const fetchHttpStatusCodesList = async () => {
 
 const issueTitleBase = 'IANA HTTP Status Code Update';
 
-const searchForExistingGithubIssue = async ( lastUpdatedDate, github ) => {
-	const query = [ issueTitleBase, lastUpdatedDate, 'in:title', 'repo:j-ulrich/http-status-codes-cpp', 'type:issue' ].join( '+' );
+const searchForExistingGithubIssue = async ( { lastUpdatedDate, github, context } ) => {
+	const query = [ issueTitleBase, lastUpdatedDate, 'in:title', `repo:${context.repository.full_name}`, 'type:issue' ].join( '+' );
 	const searchResult = await github.search.issuesAndPullRequests( {
 		q: query,
 	} );
 	return searchResult;
 };
 
-const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion, github, dryRun } ) => {
+const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion, github, context, dryRun } ) => {
 
 	const newIssue = {
-		owner: 'j-ulrich',
-		repo: 'http-status-codes-cpp',
+		owner: context.repo.owner,
+		repo: context.repo.repo,
 		title: `${issueTitleBase} ${httpStatusCodes.lastUpdatedDate}`,
 		body: `The HTTP status codes list has been updated on ${httpStatusCodes.lastUpdatedDate}.` + '\n' +
 		      'See https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml' + '\n\n' +
@@ -77,10 +78,10 @@ const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion,
 	};
 
 	if ( dryRun ) {
-		log.info( 'Would create issue:', newIssue );
-		return { total_count: 1, html_url: 'http://github.com/j-ulrich/http-status-codes-cpp/issues' };
+		log.info( 'Would create issue:\n', JSON.stringify( newIssue ) );
+		return { total_count: 1, html_url: context.repo.issues_url };
 	}
-	
+
 	return github.issues.create( newIssue );
 };
 

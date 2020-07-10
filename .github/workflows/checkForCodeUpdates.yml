@@ -19,4 +19,4 @@ jobs:
                 script: |
                     const path = require( 'path' );
                     console.log( context );
-                    require( path.resolve( './.github/checkForHttpStatusCodesUpdate.js' ) )( { github, core, dryRun: true } );
+                    require( path.resolve( './.github/checkForHttpStatusCodesUpdate.js' ) )( { github, core, context, dryRun: true } );
