@@ -2,10 +2,12 @@ const fetch = require( 'node-fetch' );
 const diff = require( 'diff' );
 const fs = require( 'fs' ).promises;
 const path = require( 'path' );
+const githubIssues = require( './githubIssues.js' );
 
 let log = console;
 
 const httpStatusCodesUrl = 'https://www.iana.org/assignments/http-status-codes/http-status-codes.txt';
+const issueTitleBase = 'IANA HTTP Status Code Update';
 
 const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 	try
@@ -21,11 +23,10 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 		}
 		log.warning( 'HTTP status codes list is outdated!' );
 
-		const existingGithubIssues = await searchForExistingGithubIssue( { lastUpdatedDate, github, context } );
+		const existingGithubIssues = await githubIssues.searchForExistingGithubIssue( { keywords: [ issueTitleBase, lastUpdatedDate ], github, context } );
 
 		if ( existingGithubIssues.total_count === 0 ) {
-			const newIssue = await createNewGithubIssue( { httpStatusCodes, diffWithLastUsedVersion, github, context, dryRun } );
-			log.info( `Created issue #${newIssue.number}: ${newIssue.html_url}`);
+			createNewGithubIssue( { lastUpdatedDate, diffWithLastUsedVersion, github, context, dryRun } );
 		}
 		else if ( existingGithubIssues.total_count === 1 ) {
 			log.info( 'An issue already exists for this update.' );
@@ -55,39 +56,6 @@ const fetchHttpStatusCodesList = async () => {
 	return { lastUpdated, httpStatusCodesList };
 };
 
-const issueTitleBase = 'IANA HTTP Status Code Update';
-
-const searchForExistingGithubIssue = async ( { lastUpdatedDate, github, context } ) => {
-	const query = [ issueTitleBase, lastUpdatedDate, 'in:title', `repo:${context.payload.repository.full_name}`, 'type:issue' ].join( '+' );
-	const searchResponse = await github.search.issuesAndPullRequests( {
-		q: query,
-	} );
-	return searchResponse.data;
-};
-
-const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion, github, context, dryRun } ) => {
-
-	const newIssue = {
-		owner: context.repo.owner,
-		repo: context.repo.repo,
-		title: `${issueTitleBase} ${httpStatusCodes.lastUpdated}`,
-		body: `The HTTP status codes list has been updated on ${httpStatusCodes.lastUpdated}.    ` + '\n' +
-		      'See https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml' + '\n\n' +
-		      '## Diff ##'  + '\n' +
-			  '```diff'  + '\n' +
-			  diffWithLastUsedVersion + '\n' +
-			  '```'
-	};
-
-	if ( dryRun ) {
-		log.info( `Would create issue:\n${ JSON.stringify( newIssue, null, 4 ) }` );
-		return { number: 0, html_url: context.payload.repository.issues_url };
-	}
-
-	const issueResponse = await github.issues.create( newIssue );
-	return issueResponse.data;
-};
-
 const getDiffWithLastUsedVersion = async ( httpStatusCodeList ) => {
 	const pathToLastUsedVersion = path.resolve( './.github/http-status-codes.txt' );
 	const lastUsedVersion = await fs.readFile( pathToLastUsedVersion, { encoding: 'utf-8' } );
@@ -96,6 +64,24 @@ const getDiffWithLastUsedVersion = async ( httpStatusCodeList ) => {
 	}
 	const patch = diff.createPatch( 'http-status-codes.txt', lastUsedVersion, httpStatusCodeList );
 	return patch;
+};
+
+const createNewGithubIssue = async ( { lastUpdatedDate, diffWithLastUsedVersion, github, context, dryRun } ) => {
+	const title = `${issueTitleBase} ${lastUpdatedDate}`;
+	const body = `The HTTP status codes list has been updated on ${lastUpdatedDate}.    ` + '\n' +
+				 'See https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml' + '\n\n' +
+				 '## Diff ##'  + '\n' +
+				 '```diff'  + '\n' +
+				 diffWithLastUsedVersion + '\n' +
+				 '```';
+	
+	 if ( dryRun ) {
+		log.info( `Would create issue:\n${ JSON.stringify( { title, body }, null, 4 ) }` );
+	}
+	else {
+		const newIssue = await githubIssues.createNewGithubIssue( { title, body, github, context } );
+		log.info( `Created issue #${newIssue.number}: ${newIssue.html_url}`);
+	}
 };
 
 const main = async () => {
