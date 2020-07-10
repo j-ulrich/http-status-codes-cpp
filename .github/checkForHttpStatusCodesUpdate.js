@@ -21,6 +21,8 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 			return;
 		}
 		*/
+		log.warning( 'HTTP status codes list is outdated!' );
+
 		const existingGithubIssues = await searchForExistingGithubIssue( { lastUpdatedDate, github, context } );
 
 		if ( existingGithubIssues.total_count === 0 ) {
@@ -28,7 +30,7 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 			log.info( `Created issue #${newIssue.number}: ${newIssue.html_url}`);
 		}
 		else if ( existingGithubIssues.total_count === 1 ) {
-			log.info( 'HTTP status codes are still up to date.' );
+			log.info( 'An issue already exists for this update.' );
 		}
 		else {
 			log.warning( `Multiple issues exist for the HTTP status code update from ${lastUpdatedDate}:\n${ JSON.stringify( existingGithubIssues, undefined, 4 ) }` );
