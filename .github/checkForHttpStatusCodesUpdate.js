@@ -32,6 +32,7 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 		}
 		else {
 			log.warning( `Multiple issues exist for the HTTP status code update from ${lastUpdatedDate}` );
+			log.debug( existingGithubIssues );
 		}
 	}
 	catch ( error ) {
