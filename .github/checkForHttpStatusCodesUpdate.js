@@ -81,7 +81,7 @@ const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion,
 
 	if ( dryRun ) {
 		log.info( `Would create issue:\n${ JSON.stringify( newIssue, null, 4 ) }` );
-		return { total_count: 1, html_url: context.repo.issues_url };
+		return { number: 0, html_url: context.payload.repository.issues_url };
 	}
 
 	return github.issues.create( newIssue );
