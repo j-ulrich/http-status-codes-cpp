@@ -63,7 +63,7 @@ const searchForExistingGithubIssue = async ( { lastUpdatedDate, github, context 
 	const searchResult = await github.search.issuesAndPullRequests( {
 		q: query,
 	} );
-	return searchResult;
+	return searchResult.data;
 };
 
 const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion, github, context, dryRun } ) => {
