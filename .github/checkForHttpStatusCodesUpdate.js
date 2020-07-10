@@ -59,10 +59,10 @@ const issueTitleBase = 'IANA HTTP Status Code Update';
 
 const searchForExistingGithubIssue = async ( { lastUpdatedDate, github, context } ) => {
 	const query = [ issueTitleBase, lastUpdatedDate, 'in:title', `repo:${context.payload.repository.full_name}`, 'type:issue' ].join( '+' );
-	const searchResult = await github.search.issuesAndPullRequests( {
+	const searchResponse = await github.search.issuesAndPullRequests( {
 		q: query,
 	} );
-	return searchResult.data;
+	return searchResponse.data;
 };
 
 const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion, github, context, dryRun } ) => {
@@ -70,7 +70,7 @@ const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion,
 	const newIssue = {
 		owner: context.repo.owner,
 		repo: context.repo.repo,
-		title: `${issueTitleBase} ${httpStatusCodes.lastUpdatedDate}`,
+		title: `${issueTitleBase} ${httpStatusCodes.lastUpdated}`,
 		body: `The HTTP status codes list has been updated on ${httpStatusCodes.lastUpdated}.    ` + '\n' +
 		      'See https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml' + '\n\n' +
 		      '## Diff ##'  + '\n' +
@@ -84,7 +84,8 @@ const createNewGithubIssue = async ( { httpStatusCodes, diffWithLastUsedVersion,
 		return { number: 0, html_url: context.payload.repository.issues_url };
 	}
 
-	return github.issues.create( newIssue );
+	const issueResponse = await github.issues.create( newIssue );
+	return issueResponse.data;
 };
 
 const getDiffWithLastUsedVersion = async ( httpStatusCodeList ) => {
