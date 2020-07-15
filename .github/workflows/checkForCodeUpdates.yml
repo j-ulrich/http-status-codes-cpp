@@ -1,7 +1,6 @@
 name: Check for Code Updates
 
 on:
-    push:
     schedule:
         - cron: '1 * 1 * *'
     workflow_dispatch:
