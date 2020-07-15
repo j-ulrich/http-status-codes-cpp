@@ -52,9 +52,9 @@ const fetchQNetworkReplyErrorCodeListFromGitHub = async ( github ) => {
 		path: 'src/network/access/qnetworkreply.h',
 		ref: 'dev'
 	} );
-	const commitId = response.sha;
+	const commitId = response.data.sha;
 
-	const qNetworkReplyHeaderSource = decodeRepoContent( response );
+	const qNetworkReplyHeaderSource = decodeRepoContent( response.data );
 	const qNetworkReplyErrorCodes = extractQNetworkReplyErrorCodes( qNetworkReplyHeaderSource );
 
 	return { commitId, qNetworkReplyErrorCodes };
@@ -72,7 +72,6 @@ const fetchQNetworkReplyErrorCodeListFromQt = async () => {
 
 const decodeRepoContent = ( response ) => {
 	try {
-		console.log( response );
 		return Buffer.from( response.content, response.encoding ).toString( 'utf-8' );
 	}
 	catch( e ) {
