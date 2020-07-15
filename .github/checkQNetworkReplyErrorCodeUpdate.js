@@ -1,3 +1,4 @@
+const fetch = require( 'node-fetch' );
 const diff = require( 'diff' );
 const fs = require( 'fs' ).promises;
 const path = require( 'path' );
@@ -5,7 +6,7 @@ const githubIssues = require( './githubIssues.js' );
 
 let log = console;
 
-const qnetworkReplyHeaderUrl = 'https://code.qt.io/cgit/qt/qtbase.git/plain/src/network/access/qnetworkreply.h';
+const qNetworkReplyHeaderUrl = 'https://code.qt.io/cgit/qt/qtbase.git/plain/src/network/access/qnetworkreply.h';
 const issueTitleBase = 'QNetworkReply Error Code Update';
 
 const checkForUpdate = async ( { github, core, context, dryRun } ) => {
@@ -13,25 +14,24 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 	{
 		log = core;
 
-		const qnetworkReplyErrorCodes = await fetchQNetworkReplyErrorCodeList( github );
-		const lastUpdatedDate = httpStatusCodes.lastUpdated;
-		const diffWithLastUsedVersion = await getDiffWithLastUsedVersion( httpStatusCodes.httpStatusCodesList );
+		const { commitId, qNetworkReplyErrorCodes } = await fetchQNetworkReplyErrorCodeListFromGitHub( github );
+		const diffWithLastUsedVersion = await getDiffWithLastUsedVersion( qNetworkReplyErrorCodes );
 		if ( !diffWithLastUsedVersion ) {
-			log.info( 'HTTP status codes list is still up to date' );
+			log.info( 'QNetworkReply error codes list is still up to date' );
 			return;
 		}
-		log.warning( 'HTTP status codes list is outdated!' );
+		log.warning( 'QNetworkReply error codes list is outdated!' );
 
-		const existingGithubIssues = await githubIssues.searchForExistingGithubIssue( { keywords: [ issueTitleBase, lastUpdatedDate ], github, context } );
+		const existingGithubIssues = await githubIssues.searchForExistingGithubIssue( { keywords: [ issueTitleBase, shortenCommitId( commitId ) ], github, context } );
 
 		if ( existingGithubIssues.total_count === 0 ) {
-			createNewGithubIssue( { lastUpdatedDate, diffWithLastUsedVersion, github, context, dryRun } );
+			createNewGithubIssue( { commitId, diffWithLastUsedVersion, github, context, dryRun } );
 		}
 		else if ( existingGithubIssues.total_count === 1 ) {
 			log.info( 'An issue already exists for this update.' );
 		}
 		else {
-			log.warning( `Multiple issues exist for the HTTP status code update from ${lastUpdatedDate}:\n${ JSON.stringify( existingGithubIssues, undefined, 4 ) }` );
+			log.warning( `Multiple issues exist for the QNetworkReply error codes update with id ${commitId}:\n${ JSON.stringify( existingGithubIssues, undefined, 4 ) }` );
 		}
 	}
 	catch ( error ) {
@@ -40,7 +40,11 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 	}
 };
 
-const fetchQNetworkReplyErrorCodeList = async ( github ) => {
+const shortenCommitId = commitId => {
+	return commitId.substring( 0, 6 )
+};
+
+const fetchQNetworkReplyErrorCodeListFromGitHub = async ( github ) => {
 
 	const response = await github.repos.getContent( {
 		owner: 'qt',
@@ -50,11 +54,21 @@ const fetchQNetworkReplyErrorCodeList = async ( github ) => {
 	} );
 	const commitId = response.sha;
 
-	const qnetworkReplyHeaderSource = decodeRepoContent( response );
-	const qnetworkReplyErrorCodes = extractQNetworkReplyErrorCodes( qnetworkReplyHeaderSource );
+	const qNetworkReplyHeaderSource = decodeRepoContent( response );
+	const qNetworkReplyErrorCodes = extractQNetworkReplyErrorCodes( qNetworkReplyHeaderSource );
 
-	return { commitId, qnetworkReplyErrorCodes };
+	return { commitId, qNetworkReplyErrorCodes };
 };
+
+const fetchQNetworkReplyErrorCodeListFromQt = async () => {
+	const response = await fetch( qNetworkReplyHeaderUrl );
+	if ( !response.ok ) {
+		throw Error( `Error fetching QNetworkReply header: ${response.status} ${response.statusText}` );
+	}
+	const qNetworkReplyHeaderSource = await response.text();
+
+	return extractQNetworkReplyErrorCodes( qNetworkReplyHeaderSource );
+}
 
 const decodeRepoContent = ( response ) => {
 	try {
@@ -66,23 +80,29 @@ const decodeRepoContent = ( response ) => {
 };
 
 const extractQNetworkReplyErrorCodes = ( qnetworkReplyHeaderSource ) => {
-	
+	const enumMatch = /enum NetworkError {(.*?)};/s.exec( qnetworkReplyHeaderSource );
+	if ( !enumMatch ) {
+		throw Error( 'Could not extract NetworkError codes from QNetworkReply header' );
+	}
+	const enums = enumMatch[ 1 ].trim().replace( /\/\/.*$|[ \t]+|\n\n+|,/mg, '' );
+	return enums;
 }
 
-const getDiffWithLastUsedVersion = async ( httpStatusCodeList ) => {
-	const pathToLastUsedVersion = path.resolve( './.github/http-status-codes.txt' );
+const getDiffWithLastUsedVersion = async ( qNetworkReplyErrorCodes ) => {
+	const pathToLastUsedVersion = path.resolve( './.github/QNetworkReplyErroCodes.txt' );
 	const lastUsedVersion = await fs.readFile( pathToLastUsedVersion, { encoding: 'utf-8' } );
-	if ( lastUsedVersion === httpStatusCodeList ) {
+	if ( lastUsedVersion === qNetworkReplyErrorCodes ) {
 		return null;
 	}
-	const patch = diff.createPatch( 'http-status-codes.txt', lastUsedVersion, httpStatusCodeList );
+	const patch = diff.createPatch( 'QNetworkReplyErroCodes.txt', lastUsedVersion, qNetworkReplyErrorCodes );
 	return patch;
 };
 
-const createNewGithubIssue = async ( { diffWithLastUsedVersion, github, context, dryRun } ) => {
-	const title = `${issueTitleBase} ${lastUpdatedDate}`;
+const createNewGithubIssue = async ( { commitId, diffWithLastUsedVersion, github, context, dryRun } ) => {
+	const commitIdShort = shortenCommitId( commitId );
+	const title = `${issueTitleBase} ${commitIdShort}`;
 	const body = 'The `QNetworkReply::NetworkError` codes list has been updated.    \n' +
-				 'See https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml' + '\n\n' +
+				 `See [qnetworkreply.h@${commitIdShort}](https://code.qt.io/cgit/qt/qtbase.git/commit/src/network/access/qnetworkreply.h?id=${commitId})` + '\n\n' +
 				 '## Diff ##'  + '\n' +
 				 '```diff'  + '\n' +
 				 diffWithLastUsedVersion + '\n' +
@@ -100,10 +120,13 @@ const createNewGithubIssue = async ( { diffWithLastUsedVersion, github, context,
 const main = async () => {
 	try
 	{
-		const qnetworkReplyErrorCodes = await fetchQNetworkReplyErrorCodeList();
+		const qnetworkReplyErrorCodes = await fetchQNetworkReplyErrorCodeListFromQt();
 		const patch = await getDiffWithLastUsedVersion( qnetworkReplyErrorCodes );
 		if ( patch ) {
 			log.log( patch );
+		}
+		else {
+			log.log( "Last used version is still up to date!" );
 		}
 	}
 	catch( reason ) {
