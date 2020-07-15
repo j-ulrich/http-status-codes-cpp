@@ -72,7 +72,7 @@ const fetchQNetworkReplyErrorCodeListFromQt = async () => {
 
 const decodeRepoContent = ( response ) => {
 	try {
-		console.log( reponse );
+		console.log( response );
 		return Buffer.from( response.content, response.encoding ).toString( 'utf-8' );
 	}
 	catch( e ) {
