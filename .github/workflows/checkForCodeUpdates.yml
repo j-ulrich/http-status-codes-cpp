@@ -28,7 +28,7 @@ jobs:
             - uses: actions/setup-node@v1
             - run: npm install
             - uses: actions/github-script@v2
-                with:
+              with:
                 script: |
                     const path = require( 'path' );
                     await require( path.resolve( './.github/checkQNetworkReplyErrorCodeUpdate.js' ) )( { github, core, context, dryRun: true } );
