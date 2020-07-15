@@ -14,7 +14,8 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 	{
 		log = core;
 
-		const { commitId, qNetworkReplyErrorCodes } = await fetchQNetworkReplyErrorCodeListFromGitHub( github );
+		const { blobId, qNetworkReplyErrorCodes } = await fetchQNetworkReplyErrorCodeListFromGitHub( github );
+		const blobIdShort = shortenId( blobId );
 		const diffWithLastUsedVersion = await getDiffWithLastUsedVersion( qNetworkReplyErrorCodes );
 		if ( !diffWithLastUsedVersion ) {
 			log.info( 'QNetworkReply error codes list is still up to date' );
@@ -22,16 +23,16 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 		}
 		log.warning( 'QNetworkReply error codes list is outdated!' );
 
-		const existingGithubIssues = await githubIssues.searchForExistingGithubIssue( { keywords: [ issueTitleBase, shortenCommitId( commitId ) ], github, context } );
+		const existingGithubIssues = await githubIssues.searchForExistingGithubIssue( { keywords: [ issueTitleBase, blobIdShort ], github, context } );
 
 		if ( existingGithubIssues.total_count === 0 ) {
-			createNewGithubIssue( { commitId, diffWithLastUsedVersion, github, context, dryRun } );
+			createNewGithubIssue( { blobId, diffWithLastUsedVersion, github, context, dryRun } );
 		}
 		else if ( existingGithubIssues.total_count === 1 ) {
 			log.info( 'An issue already exists for this update.' );
 		}
 		else {
-			log.warning( `Multiple issues exist for the QNetworkReply error codes update with id ${commitId}:\n${ JSON.stringify( existingGithubIssues, undefined, 4 ) }` );
+			log.warning( `Multiple issues exist for the QNetworkReply error codes update with id ${blobIdShort}:\n${ JSON.stringify( existingGithubIssues, undefined, 4 ) }` );
 		}
 	}
 	catch ( error ) {
@@ -40,8 +41,8 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 	}
 };
 
-const shortenCommitId = commitId => {
-	return commitId.substring( 0, 6 )
+const shortenId = id => {
+	return id.substring( 0, 8 )
 };
 
 const fetchQNetworkReplyErrorCodeListFromGitHub = async ( github ) => {
@@ -52,12 +53,12 @@ const fetchQNetworkReplyErrorCodeListFromGitHub = async ( github ) => {
 		path: 'src/network/access/qnetworkreply.h',
 		ref: 'dev'
 	} );
-	const commitId = response.data.sha;
+	const blobId = response.data.sha;
 
 	const qNetworkReplyHeaderSource = decodeRepoContent( response.data );
 	const qNetworkReplyErrorCodes = extractQNetworkReplyErrorCodes( qNetworkReplyHeaderSource );
 
-	return { commitId, qNetworkReplyErrorCodes };
+	return { blobId, qNetworkReplyErrorCodes };
 };
 
 const fetchQNetworkReplyErrorCodeListFromQt = async () => {
@@ -98,11 +99,11 @@ const getDiffWithLastUsedVersion = async ( qNetworkReplyErrorCodes ) => {
 	return patch;
 };
 
-const createNewGithubIssue = async ( { commitId, diffWithLastUsedVersion, github, context, dryRun } ) => {
-	const commitIdShort = shortenCommitId( commitId );
-	const title = `${issueTitleBase} ${commitIdShort}`;
+const createNewGithubIssue = async ( { blobId, diffWithLastUsedVersion, github, context, dryRun } ) => {
+	const blobIdShort = shortenId( blobId );
+	const title = `${issueTitleBase} ${blobIdShort}`;
 	const body = 'The `QNetworkReply::NetworkError` codes list has been updated.    \n' +
-				 `See [qnetworkreply.h@${commitIdShort}](https://code.qt.io/cgit/qt/qtbase.git/commit/src/network/access/qnetworkreply.h?id=${commitId})` + '\n\n' +
+				 'See https://code.qt.io/cgit/qt/qtbase.git/log/src/network/access/qnetworkreply.h' + '\n\n' +
 				 '## Diff ##'  + '\n' +
 				 '```diff'  + '\n' +
 				 diffWithLastUsedVersion + '\n' +
