@@ -3,6 +3,7 @@ ConnectionRefusedError=1
 RemoteHostClosedError
 HostNotFoundError
 TimeoutError
+something
 OperationCanceledError
 SslHandshakeFailedError
 TemporaryNetworkFailureError
