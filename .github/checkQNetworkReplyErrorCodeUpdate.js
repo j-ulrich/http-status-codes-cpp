@@ -45,8 +45,8 @@ const shortenCommitId = commitId => {
 };
 
 const fetchQNetworkReplyErrorCodeListFromGitHub = async ( github ) => {
-	console.log( github.repos );
-	const response = await github.repos.getContent( {
+	const getContent = github.repos.getContent || github.repos.getContents;
+	const response = await getContent( {
 		owner: 'qt',
 		repo: 'qtbase',
 		path: 'src/network/access/qnetworkreply.h',
