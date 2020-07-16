@@ -83,8 +83,8 @@ enum HttpStatus_Code
 namespace HttpStatus {
 enum class Code
 {
-	OK        = 200,
-	Forbidden = 404
+	OK       = 200,
+	NotFound = 404
 	// ...
 };
 }
@@ -95,8 +95,8 @@ enum class Code
 namespace HttpStatus {
 enum Code
 {
-	OK        = 200,
-	Forbidden = 404
+	OK       = 200,
+	NotFound = 404
 	// ...
 };
 }
