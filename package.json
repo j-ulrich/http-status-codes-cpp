@@ -1,0 +1,31 @@
+{
+  "name": "http-status-codes-cpp",
+  "version": "1.3.0",
+  "description": "HTTP Status Codes and Reason Phrases for C, C++ and Qt",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/j-ulrich/http-status-codes-cpp.git"
+  },
+  "keywords": [
+    "http",
+    "status-codes",
+    "cpp",
+    "qt",
+    "c",
+    "c-plus-plus",
+    "c++"
+  ],
+  "author": "Jochen Ulrich <jochenulrich@t-online.de>",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/j-ulrich/http-status-codes-cpp/issues"
+  },
+  "homepage": "https://github.com/j-ulrich/http-status-codes-cpp#readme",
+  "devDependencies": {
+    "diff": "^4.0.0",
+    "node-fetch": "^2.3.0"
+  }
+}
