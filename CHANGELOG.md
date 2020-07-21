@@ -1,10 +1,20 @@
-# Changelog # {#changelog}
+# Changelog #
 
-\brief The changelog of the http-status-codes library.
+The changelog of the http-status-codes library.
 
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
+
+
+---
+
+
+## Unreleased ##
+
+### Changed ###
+
+- [#12] Updated GTest to 1.8.1 to fix deprecation warnings with recent compilers.
 
 
 ---
@@ -64,6 +74,7 @@ Initial (actually unversioned) release.
 ---
 
 
+[1.3.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.3.0
 [1.2.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.2.0
 [1.1.1]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.1.1
 [1.1.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.1.0
