@@ -3,10 +3,22 @@ cmake_minimum_required(VERSION 3.0)
 # Package Management using Hunter
 include("cmake/HunterGate.cmake")
 
-HunterGate(
-	URL "https://github.com/cpp-pm/hunter/archive/v0.23.224.tar.gz"
-	SHA1 "18e57a43efc435f2e1dae1291e82e42afbf940be"
-)
+if ( WIN32 AND ( MSVC_TOOLSET_VERSION LESS 140 ) )
+	# Visual Studio < 2015
+	# GTest 1.8.0
+	HunterGate(
+		URL "https://github.com/cpp-pm/hunter/archive/v0.23.222.tar.gz"
+		SHA1 "0b88baaa2a9a35b8ce632c57ade66be8dd918afd"
+	)
+	set( GTEST_MAIN GTest::main )
+else()
+	# GTest 1.8.1
+	HunterGate(
+		URL "https://github.com/cpp-pm/hunter/archive/v0.23.224.tar.gz"
+		SHA1 "18e57a43efc435f2e1dae1291e82e42afbf940be"
+	)
+	set( GTEST_MAIN GTest::gtest_main )
+endif()
 
 project(HttpStatusCodesTests)
 
@@ -20,7 +32,7 @@ enable_testing()
 include_directories(${PROJECT_SOURCE_DIR}/..)
 
 add_executable(CVariantTest CVariantTest.cpp)
-target_link_libraries(CVariantTest GTest::gtest_main)
+target_link_libraries(CVariantTest ${GTEST_MAIN})
 add_test(NAME CVariantTest COMMAND CVariantTest)
 
 add_executable(CVariantCompileTest CVariantCompileTest.c)
@@ -32,7 +44,7 @@ set_target_properties(CVariantCompileTest PROPERTIES
 )
 
 add_executable(C++VariantTest C++VariantTest.cpp)
-target_link_libraries(C++VariantTest GTest::gtest_main)
+target_link_libraries(C++VariantTest ${GTEST_MAIN})
 add_test(NAME C++VariantTest COMMAND C++VariantTest)
 set_target_properties(C++VariantTest PROPERTIES
 	CXX_STANDARD 98
@@ -49,7 +61,7 @@ endif()
 
 if(CXX_SUPPORTS_STRONG_ENUMS)
 	add_executable(C++11VariantTest C++11VariantTest.cpp)
-	target_link_libraries(C++11VariantTest GTest::gtest_main)
+	target_link_libraries(C++11VariantTest ${GTEST_MAIN})
 	add_test(NAME C++11VariantTest COMMAND C++11VariantTest)
 	set_target_properties(C++11VariantTest PROPERTIES
 		CXX_STANDARD 11
@@ -88,7 +100,7 @@ endif()
 
 if (QTCORE_LIB)
 	add_executable(QtVariantTest QtVariantTest.cpp "${PROJECT_SOURCE_DIR}/../HttpStatusCodes_Qt.h")
-	target_link_libraries(QtVariantTest GTest::gtest_main ${QTCORE_LIB} ${QTNETWORK_LIB})
+	target_link_libraries(QtVariantTest ${GTEST_MAIN} ${QTCORE_LIB} ${QTNETWORK_LIB})
 	add_test(NAME QtVariantTest COMMAND QtVariantTest)
 	if (WIN32)
 		set_tests_properties( QtVariantTest PROPERTIES ENVIRONMENT "PATH=$<TARGET_FILE_DIR:${QTCORE_LIB}>;$ENV{PATH}" )
