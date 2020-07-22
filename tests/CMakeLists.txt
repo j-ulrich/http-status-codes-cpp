@@ -2,23 +2,11 @@ cmake_minimum_required(VERSION 3.0)
 
 # Package Management using Hunter
 include("cmake/HunterGate.cmake")
-
-if ( WIN32 AND ( MSVC_TOOLSET_VERSION LESS 140 ) )
-	# Visual Studio < 2015
-	# GTest 1.8.0
-	HunterGate(
-		URL "https://github.com/cpp-pm/hunter/archive/v0.23.222.tar.gz"
-		SHA1 "0b88baaa2a9a35b8ce632c57ade66be8dd918afd"
-	)
-	set( GTEST_MAIN GTest::main )
-else()
-	# GTest 1.8.1
-	HunterGate(
-		URL "https://github.com/cpp-pm/hunter/archive/v0.23.224.tar.gz"
-		SHA1 "18e57a43efc435f2e1dae1291e82e42afbf940be"
-	)
-	set( GTEST_MAIN GTest::gtest_main )
-endif()
+HunterGate(
+	URL "https://github.com/cpp-pm/hunter/archive/v0.23.224.tar.gz"
+	SHA1 "18e57a43efc435f2e1dae1291e82e42afbf940be"
+	LOCAL
+)
 
 project(HttpStatusCodesTests)
 
@@ -26,6 +14,12 @@ set (CMAKE_CXX_STANDARD 11)
 
 hunter_add_package(GTest)
 find_package(GTest CONFIG REQUIRED)
+message( "GTest_VERSION: ${GTest_VERSION}" )
+if( GTest_VERSION VERSION_LESS "1.9.0" )
+	set( GTEST_MAIN GTest::main )
+else()
+	set( GTEST_MAIN GTest::gtest_main )
+endif()
 
 enable_testing()
 
