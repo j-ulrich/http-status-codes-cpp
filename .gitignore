@@ -3,6 +3,7 @@
 !.appveyor.yml
 !.travis.yml
 !.github/
+!.release-it.json
 build/
 .build/
 _build/

@@ -25,7 +25,9 @@
   },
   "homepage": "https://github.com/j-ulrich/http-status-codes-cpp#readme",
   "devDependencies": {
+    "@j-ulrich/release-it-regex-bumper": "^3.0.1",
     "diff": "^4.0.0",
-    "node-fetch": "^2.3.0"
+    "node-fetch": "^2.3.0",
+    "release-it": "^14.11.6"
   }
 }
