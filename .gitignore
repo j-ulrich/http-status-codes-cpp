@@ -7,6 +7,6 @@ build/
 .build/
 _build/
 build_*/
-CMakeLists.txt.user
+CMakeLists.txt.user*
 package-lock.json
 node_modules/
