@@ -6,6 +6,10 @@
 			"git checkout develop"
 		]
 	},
+	"git": {
+		"tag": false,
+		"push": false
+	},
 	"github": {
 		"release": true,
 		"web": true,
