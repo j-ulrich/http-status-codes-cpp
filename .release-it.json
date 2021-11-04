@@ -6,6 +6,11 @@
 			"git checkout develop"
 		]
 	},
+	"github": {
+		"release": true,
+		"web": true,
+		"releaseName": "${version}"
+	},
 	"npm": {
 		"publish": false
 	},
@@ -18,7 +23,7 @@
 				"HttpStatusCodes_Qt.h",
 				{
 					"file": ".appveyor.yml",
-					"search": "version: \"(.*)+{build}\"",
+					"search": "version: \".*\\+{build}\"",
 					"replace": "version: \"{{version}}+{build}\""
 				},
 				{
