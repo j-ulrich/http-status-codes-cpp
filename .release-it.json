@@ -1,4 +1,11 @@
 {
+	"hooks": {
+		"before:git:beforeBump": "git flow release start ${version}",
+		"after:git:afterRelease": [
+			"npx git-flow-silent-release ${version}",
+			"git checkout develop"
+		]
+	},
 	"npm": {
 		"publish": false
 	},
@@ -17,7 +24,7 @@
 				{
 					"file": "CHANGELOG.md",
 					"search": "Unreleased",
-					"replace": "[{{version}}] - {{now:YYYY-MM-DD}}"
+					"replace": "[{{version}}] - {{now:yyyy-MM-dd}}"
 				},
 				{
 					"file": "CHANGELOG.md",
