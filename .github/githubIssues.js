@@ -1,6 +1,6 @@
 
 const searchForExistingGithubIssue = async ( { keywords, github, context } ) => {
-	const query = keywords.concat( [ 'in:title', `repo:${context.repo.repo}`, 'type:issue' ] ).join( '+' );
+	const query = keywords.concat( [ 'in:title', `repo:${context.repo.owner}/${context.repo.repo}`, 'type:issue' ] ).join( '+' );
 	const searchResponse = await github.search.issuesAndPullRequests( {
 		q: query,
 	} );
