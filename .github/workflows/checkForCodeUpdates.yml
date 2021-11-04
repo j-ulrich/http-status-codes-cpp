@@ -13,7 +13,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
             - run: npm install
-            - uses: actions/github-script@v2
+            - uses: actions/github-script@v4
               with:
                 script: |
                     const path = require( 'path' );
@@ -26,7 +26,7 @@ jobs:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v1
             - run: npm install
-            - uses: actions/github-script@v2
+            - uses: actions/github-script@v4
               with:
                 script: |
                     const path = require( 'path' );
