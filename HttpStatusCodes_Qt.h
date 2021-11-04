@@ -4,7 +4,7 @@
  *
  * https://github.com/j-ulrich/http-status-codes-cpp
  *
- * \version 1.3.0
+ * \version 1.4.0
  * \author Jochen Ulrich <jochenulrich@t-online.de>
  * \copyright Licensed under Creative Commons CC0 (http://creativecommons.org/publicdomain/zero/1.0/)
  */
@@ -88,15 +88,19 @@ enum Code
 	Gone                        = 410, //!< Indicates that access to the target resource is no longer available at the origin server and that this condition is likely to be permanent.
 	LengthRequired              = 411, //!< Indicates that the server refuses to accept the request without a defined Content-Length.
 	PreconditionFailed          = 412, //!< Indicates that one or more preconditions given in the request header fields evaluated to false when tested on the server.
-	PayloadTooLarge             = 413, //!< Indicates that the server is refusing to process a request because the request payload is larger than the server is willing or able to process.
+	ContentTooLarge             = 413, //!< Indicates that the server is refusing to process a request because the request payload is larger than the server is willing or able to process.
+	PayloadTooLarge             = 413, //!< Alias for ContentTooLarge for backward compatibility.
 	URITooLong                  = 414, //!< Indicates that the server is refusing to service the request because the request-target is longer than the server is willing to interpret.
 	UnsupportedMediaType        = 415, //!< Indicates that the origin server is refusing to service the request because the payload is in a format not supported by the target resource for this method.
 	RangeNotSatisfiable         = 416, //!< Indicates that none of the ranges in the request's Range header field overlap the current extent of the selected resource or that the set of ranges requested has been rejected due to invalid ranges or an excessive request of small or overlapping ranges.
 	ExpectationFailed           = 417, //!< Indicates that the expectation given in the request's Expect header field could not be met by at least one of the inbound servers.
 	ImATeapot                   = 418, //!< Any attempt to brew coffee with a teapot should result in the error code 418 I'm a teapot.
-	UnprocessableEntity         = 422, //!< Means the server understands the content type of the request entity (hence a 415(Unsupported Media Type) status code is inappropriate), and the syntax of the request entity is correct (thus a 400 (Bad Request) status code is inappropriate) but was unable to process the contained instructions.
+	MisdirectedRequest          = 421, //!< Indicates that the request was directed at a server that is unable or unwilling to produce an authoritative response for the target URI.
+	UnprocessableContent        = 422, //!< Means the server understands the content type of the request entity (hence a 415(Unsupported Media Type) status code is inappropriate), and the syntax of the request entity is correct (thus a 400 (Bad Request) status code is inappropriate) but was unable to process the contained instructions.
+	UnprocessableEntity         = 422, //!< Alias for UnprocessableContent for backward compatibility.
 	Locked                      = 423, //!< Means the source or destination resource of a method is locked.
 	FailedDependency            = 424, //!< Means that the method could not be performed on the resource because the requested action depended on another action and that action failed.
+	TooEarly                    = 425, //!< Indicates that the server is unwilling to risk processing a request that might be replayed.
 	UpgradeRequired             = 426, //!< Indicates that the server refuses to perform the request using the current protocol but might be willing to do so after the client upgrades to a different protocol.
 	PreconditionRequired        = 428, //!< Indicates that the origin server requires the request to be conditional.
 	TooManyRequests             = 429, //!< Indicates that the user has sent too many requests in a given amount of time (\"rate limiting\").
@@ -185,15 +189,17 @@ inline QString reasonPhrase(int code)
 	case 410: return QStringLiteral("Gone");
 	case 411: return QStringLiteral("Length Required");
 	case 412: return QStringLiteral("Precondition Failed");
-	case 413: return QStringLiteral("Payload Too Large");
+	case 413: return QStringLiteral("Content Too Large");
 	case 414: return QStringLiteral("URI Too Long");
 	case 415: return QStringLiteral("Unsupported Media Type");
 	case 416: return QStringLiteral("Range Not Satisfiable");
 	case 417: return QStringLiteral("Expectation Failed");
 	case 418: return QStringLiteral("I'm a teapot");
-	case 422: return QStringLiteral("Unprocessable Entity");
+	case 421: return QStringLiteral("Misdirected Request");
+	case 422: return QStringLiteral("Unprocessable Content");
 	case 423: return QStringLiteral("Locked");
 	case 424: return QStringLiteral("Failed Dependency");
+	case 425: return QStringLiteral("Too Early");
 	case 426: return QStringLiteral("Upgrade Required");
 	case 428: return QStringLiteral("Precondition Required");
 	case 429: return QStringLiteral("Too Many Requests");
@@ -205,7 +211,7 @@ inline QString reasonPhrase(int code)
 	case 501: return QStringLiteral("Not Implemented");
 	case 502: return QStringLiteral("Bad Gateway");
 	case 503: return QStringLiteral("Service Unavailable");
-	case 504: return QStringLiteral("Gateway Time-out");
+	case 504: return QStringLiteral("Gateway Timeout");
 	case 505: return QStringLiteral("HTTP Version Not Supported");
 	case 506: return QStringLiteral("Variant Also Negotiates");
 	case 507: return QStringLiteral("Insufficient Storage");

@@ -1,0 +1,46 @@
+{
+	"hooks": {
+		"before:git:beforeBump": "git flow release start ${version}",
+		"after:git:afterRelease": [
+			"npx git-flow-silent-release ${version}",
+			"git checkout develop"
+		]
+	},
+	"git": {
+		"tag": false,
+		"push": false
+	},
+	"github": {
+		"release": true,
+		"web": true,
+		"releaseName": "${version}"
+	},
+	"npm": {
+		"publish": false
+	},
+	"plugins": {
+		"@j-ulrich/release-it-regex-bumper": {
+			"out": [
+				"HttpStatusCodes_C.h",
+				"HttpStatusCodes_C++.h",
+				"HttpStatusCodes_C++11.h",
+				"HttpStatusCodes_Qt.h",
+				{
+					"file": ".appveyor.yml",
+					"search": "version: \".*\\+{build}\"",
+					"replace": "version: \"{{version}}+{build}\""
+				},
+				{
+					"file": "CHANGELOG.md",
+					"search": "Unreleased",
+					"replace": "[{{version}}] - {{now:yyyy-MM-dd}}"
+				},
+				{
+					"file": "CHANGELOG.md",
+					"search": "(\\[\\d+\\.\\d+\\.\\d+\\]: http)",
+					"replace": "[{{version}}]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/{{version}}\n$1"
+				}
+			]
+		}
+	}
+}

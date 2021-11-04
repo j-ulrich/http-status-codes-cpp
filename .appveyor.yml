@@ -1,4 +1,4 @@
-version: "{build}"
+version: "1.4.0+{build}"
 
 environment:
     CTEST_OUTPUT_ON_FAILURE: '1'
