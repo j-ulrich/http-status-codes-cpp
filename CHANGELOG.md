@@ -10,7 +10,7 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 ---
 
 
-## Unreleased ##
+## [1.4.0] - 2021-11-05 ##
 Updates and adds missing status codes from the IANA registry.
 
 ### Added ###
@@ -83,6 +83,7 @@ Initial (actually unversioned) release.
 ---
 
 
+[1.4.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.4.0
 [1.3.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.3.0
 [1.2.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.2.0
 [1.1.1]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.1.1
