@@ -11,10 +11,19 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 
 
 ## Unreleased ##
+Updates and adds missing status codes from the IANA registry.
+
+### Added ###
+- [#17] Added codes `MisdirectedRequest` (421), `TooEarly` (425), `ContentTooLarge` (413) and `UnprocessableContent` (422).
+  The existing codes `PayloadTooLarge` (413) and `UnprocessableEntity` (422) are kept for backward compatibility.
 
 ### Changed ###
-
 - [#12] Updated GTest to 1.8.1 to fix deprecation warnings with recent compilers.
+- [#17] Updated the reason phrases for `PayloadTooLarge` (413), `UnprocessableEntity` (422) and `GatewayTimeout` (504).
+
+### Fixed ###
+- {C++11} Added missing `Code::xxx_max` enumerator.
+
 
 
 ---
@@ -50,7 +59,7 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 Adds missing status codes from the IANA registry.
 
 ### Added ###
-- Status codes 103 Early Hints, 208 Already Reported, 508 Loop Detected and 510 Not Extended
+- Status codes `EarlyHints` (103), `AlreadyReported` (208), `LoopDetected` (508) and `NotExtended` (510).
 
 
 ### Fixed ###

@@ -72,15 +72,19 @@ enum HttpStatus_Code
 	HttpStatus_Gone                        = 410, /*!< Indicates that access to the target resource is no longer available at the origin server and that this condition is likely to be permanent. */
 	HttpStatus_LengthRequired              = 411, /*!< Indicates that the server refuses to accept the request without a defined Content-Length. */
 	HttpStatus_PreconditionFailed          = 412, /*!< Indicates that one or more preconditions given in the request header fields evaluated to false when tested on the server. */
-	HttpStatus_PayloadTooLarge             = 413, /*!< Indicates that the server is refusing to process a request because the request payload is larger than the server is willing or able to process. */
+	HttpStatus_ContentTooLarge             = 413, /*!< Indicates that the server is refusing to process a request because the request payload is larger than the server is willing or able to process. */
+	HttpStatus_PayloadTooLarge             = 413, /*!< Alias for HttpStatus_ContentTooLarge for backward compatibility. */
 	HttpStatus_URITooLong                  = 414, /*!< Indicates that the server is refusing to service the request because the request-target is longer than the server is willing to interpret. */
 	HttpStatus_UnsupportedMediaType        = 415, /*!< Indicates that the origin server is refusing to service the request because the payload is in a format not supported by the target resource for this method. */
 	HttpStatus_RangeNotSatisfiable         = 416, /*!< Indicates that none of the ranges in the request's Range header field overlap the current extent of the selected resource or that the set of ranges requested has been rejected due to invalid ranges or an excessive request of small or overlapping ranges. */
 	HttpStatus_ExpectationFailed           = 417, /*!< Indicates that the expectation given in the request's Expect header field could not be met by at least one of the inbound servers. */
 	HttpStatus_ImATeapot                   = 418, /*!< Any attempt to brew coffee with a teapot should result in the error code 418 I'm a teapot. */
-	HttpStatus_UnprocessableEntity         = 422, /*!< Means the server understands the content type of the request entity (hence a 415(Unsupported Media Type) status code is inappropriate), and the syntax of the request entity is correct (thus a 400 (Bad Request) status code is inappropriate) but was unable to process the contained instructions. */
+	HttpStatus_MisdirectedRequest          = 421, /*!< Indicates that the request was directed at a server that is unable or unwilling to produce an authoritative response for the target URI. */
+	HttpStatus_UnprocessableContent        = 422, /*!< Means the server understands the content type of the request entity (hence a 415(Unsupported Media Type) status code is inappropriate), and the syntax of the request entity is correct (thus a 400 (Bad Request) status code is inappropriate) but was unable to process the contained instructions. */
+	HttpStatus_UnprocessableEntity         = 422, /*!< Alias for HttpStatus_UnprocessableContent for backward compatibility. */
 	HttpStatus_Locked                      = 423, /*!< Means the source or destination resource of a method is locked. */
 	HttpStatus_FailedDependency            = 424, /*!< Means that the method could not be performed on the resource because the requested action depended on another action and that action failed. */
+	HttpStatus_TooEarly                    = 425, /*!< Indicates that the server is unwilling to risk processing a request that might be replayed. */
 	HttpStatus_UpgradeRequired             = 426, /*!< Indicates that the server refuses to perform the request using the current protocol but might be willing to do so after the client upgrades to a different protocol. */
 	HttpStatus_PreconditionRequired        = 428, /*!< Indicates that the origin server requires the request to be conditional. */
 	HttpStatus_TooManyRequests             = 429, /*!< Indicates that the user has sent too many requests in a given amount of time (\"rate limiting\"). */
@@ -165,15 +169,17 @@ static const char* HttpStatus_reasonPhrase(int code)
 	case 410: return "Gone";
 	case 411: return "Length Required";
 	case 412: return "Precondition Failed";
-	case 413: return "Payload Too Large";
+	case 413: return "Content Too Large";
 	case 414: return "URI Too Long";
 	case 415: return "Unsupported Media Type";
 	case 416: return "Range Not Satisfiable";
 	case 417: return "Expectation Failed";
 	case 418: return "I'm a teapot";
-	case 422: return "Unprocessable Entity";
+	case 421: return "Misdirected Request";
+	case 422: return "Unprocessable Content";
 	case 423: return "Locked";
 	case 424: return "Failed Dependency";
+	case 425: return "Too Early";
 	case 426: return "Upgrade Required";
 	case 428: return "Precondition Required";
 	case 429: return "Too Many Requests";
@@ -185,7 +191,7 @@ static const char* HttpStatus_reasonPhrase(int code)
 	case 501: return "Not Implemented";
 	case 502: return "Bad Gateway";
 	case 503: return "Service Unavailable";
-	case 504: return "Gateway Time-out";
+	case 504: return "Gateway Timeout";
 	case 505: return "HTTP Version Not Supported";
 	case 506: return "Variant Also Negotiates";
 	case 507: return "Insufficient Storage";
