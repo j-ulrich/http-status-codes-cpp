@@ -25,7 +25,6 @@ Updates and adds missing status codes from the IANA registry.
 - {C++11} Added missing `Code::xxx_max` enumerator.
 
 
-
 ---
 
 
