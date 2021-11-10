@@ -1,6 +1,6 @@
 # HTTP Status Codes and Reason Phrases for C, C++ and Qt #
 
-[![Linux build status](https://travis-ci.com/j-ulrich/http-status-codes-cpp.svg?branch=main)](https://app.travis-ci.com/github/j-ulrich/http-status-codes-cpp)
+[![Linux build status](https://github.com/j-ulrich/http-status-codes-cpp/actions/workflows/ci.yml/badge.svg)](https://github.com/j-ulrich/http-status-codes-cpp/actions/workflows/ci.yml)
 [![Windows build status](https://ci.appveyor.com/api/projects/status/ijp196mjo0vsover/branch/main?svg=true)](https://ci.appveyor.com/project/j-ulrich/http-status-codes-cpp/branch/main)
 
 
