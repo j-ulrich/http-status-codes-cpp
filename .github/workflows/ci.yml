@@ -3,7 +3,7 @@ name: CI
 on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
-    build and test:
+    build_and_test:
         name: Build & Test
         runs-on: ubuntu-latest
         steps:
