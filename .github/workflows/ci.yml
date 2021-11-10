@@ -22,5 +22,5 @@ jobs:
                 && cd _build
                 && cmake -DCMAKE_BUILD_TYPE=Release ..
                 && make all
-                && ctest --ouput-on-failure
+                && ctest --output-on-failure
                 "
