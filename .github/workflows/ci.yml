@@ -1,0 +1,26 @@
+name: CI
+
+on: [ push, pull_request, workflow_dispatch ]
+
+jobs:
+    build_and_test:
+        name: Build & Test
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Build and run tests
+              run: >
+                docker run --rm
+                -v "${GITHUB_WORKSPACE}:/workspace"
+                julrich/docker_qt:latest
+                /bin/bash -c "
+                cd /workspace
+                && g++ --version
+                && qmake --version
+                && cd tests
+                && mkdir _build
+                && cd _build
+                && cmake -DCMAKE_BUILD_TYPE=Release ..
+                && make all
+                && ctest --output-on-failure
+                "
