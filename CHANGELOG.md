@@ -10,7 +10,7 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 ---
 
 
-## Unreleased ##
+## [1.5.0] - 2022-01-03 ##
 
 ### Changed ###
 - [#21] Code `NotExtended` (510) is marked as obsoleted.
@@ -91,6 +91,7 @@ Initial (actually unversioned) release.
 ---
 
 
+[1.5.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.5.0
 [1.4.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.4.0
 [1.3.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.3.0
 [1.2.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.2.0
