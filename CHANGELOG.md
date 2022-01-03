@@ -10,6 +10,15 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 ---
 
 
+## Unreleased ##
+
+### Changed ###
+- [#21] Code `NotExtended` (510) is marked as obsoleted.
+
+
+---
+
+
 ## [1.4.0] - 2021-11-05 ##
 Updates and adds missing status codes from the IANA registry.
 
