@@ -2,6 +2,12 @@
   "name": "http-status-codes-cpp",
   "version": "1.5.0",
   "description": "HTTP Status Codes and Reason Phrases for C, C++ and Qt",
+  "scripts": {
+    "check-http-status-codes-update": "node .github/checkForHttpStatusCodesUpdate.js",
+    "update-http-status-codes": "node .github/updateHttpStatusCodes.js",
+    "check-qnetworkreply-error-codes-update": "node .github/checkQNetworkReplyErrorCodeUpdate.js",
+    "update-qnetworkreply-error-codes": "node .github/updateQNetworkReplyErrorCodes.js"
+  },
   "directories": {
     "test": "tests"
   },

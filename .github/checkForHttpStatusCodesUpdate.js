@@ -1,12 +1,14 @@
-const fetch = require( 'node-fetch' );
 const diff = require( 'diff' );
 const fs = require( 'fs' ).promises;
-const path = require( 'path' );
-const githubIssues = require( './githubIssues.js' );
+const githubIssues = require( './githubIssues' );
+const {
+	fetchHttpStatusCodesList,
+	httpStatusCodesFileName,
+	httpStatusCodesFilePath
+} = require( './httpStatusCodes' );
 
 let log = console;
 
-const httpStatusCodesUrl = 'https://www.iana.org/assignments/http-status-codes/http-status-codes.txt';
 const issueTitleBase = 'IANA HTTP Status Code Update';
 
 const checkForUpdate = async ( { github, core, context, dryRun } ) => {
@@ -41,28 +43,12 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 	}
 };
 
-const fetchHttpStatusCodesList = async () => {
-	const response = await fetch( httpStatusCodesUrl );
-	if ( !response.ok ) {
-		throw Error( `Error fetching HTTP status codes list: ${response.status} ${response.statusText}` );
-	}
-	const httpStatusCodesList = await response.text();
-
-	const match = /Last Updated\s+(\d{4}-\d{2}-\d{2})/.exec( httpStatusCodesList );
-	if ( !match ) {
-		throw Error( 'Could not find "Last Updated" date in HTTP status list' );
-	}
-	const lastUpdated = match[ 1 ];
-	return { lastUpdated, httpStatusCodesList };
-};
-
 const getDiffWithLastUsedVersion = async ( httpStatusCodeList ) => {
-	const pathToLastUsedVersion = path.resolve( './.github/http-status-codes.txt' );
-	const lastUsedVersion = await fs.readFile( pathToLastUsedVersion, { encoding: 'utf-8' } );
+	const lastUsedVersion = await fs.readFile( httpStatusCodesFilePath, { encoding: 'utf-8' } );
 	if ( lastUsedVersion === httpStatusCodeList ) {
 		return null;
 	}
-	const patch = diff.createPatch( 'http-status-codes.txt', lastUsedVersion, httpStatusCodeList );
+	const patch = diff.createPatch( httpStatusCodesFileName, lastUsedVersion, httpStatusCodeList );
 	return patch;
 };
 
@@ -74,7 +60,7 @@ const createNewGithubIssue = async ( { lastUpdatedDate, diffWithLastUsedVersion,
 				 '```diff'  + '\n' +
 				 diffWithLastUsedVersion + '\n' +
 				 '```';
-	
+
 	 if ( dryRun ) {
 		log.info( `Would create issue:\n${ JSON.stringify( { title, body }, null, 4 ) }` );
 	}
