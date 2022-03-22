@@ -1,3 +1,5 @@
+   Internet Assigned Numbers Authority
+
                                                Hypertext Transfer Protocol (HTTP) Status Code Registry
 
    Last Updated
@@ -11,7 +13,7 @@
 
    Registry included below
 
-     * HTTP Status Codes
+     * HTTP Status Codes
 
 HTTP Status Codes
 
@@ -110,3 +112,5 @@ HTTP Status Codes
      510   Not Extended (OBSOLETED)        [RFC2774][status-change-http-experiments-to-historic]
      511   Network Authentication Required [RFC6585]
    512-599 Unassigned
+
+   Licensing Terms
