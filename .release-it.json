@@ -29,18 +29,13 @@
 					"file": ".appveyor.yml",
 					"search": "version: \".*\\+{build}\"",
 					"replace": "version: \"{{version}}+{build}\""
-				},
-				{
-					"file": "CHANGELOG.md",
-					"search": "Unreleased",
-					"replace": "[{{version}}] - {{now:yyyy-MM-dd}}"
-				},
-				{
-					"file": "CHANGELOG.md",
-					"search": "(\\[\\d+\\.\\d+\\.\\d+\\]: http)",
-					"replace": "[{{version}}]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/{{version}}\n$1"
 				}
 			]
+		},
+		"@release-it/keep-a-changelog": {
+			"head": "develop",
+			"addVersionUrl": true,
+			"versionUrl": "{repositoryUrl}/releases/tag/{tagName}"
 		}
 	}
 }
