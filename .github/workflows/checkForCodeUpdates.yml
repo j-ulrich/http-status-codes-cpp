@@ -10,7 +10,9 @@ jobs:
         name: Check for HTTP Status Codes Update
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
+              with:
+                ref: develop
             - uses: actions/setup-node@v1
             - run: npm install
             - uses: actions/github-script@v4
@@ -23,7 +25,9 @@ jobs:
         name: Check for QNetworkReply Error Codes Update
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
+              with:
+                ref: develop
             - uses: actions/setup-node@v1
             - run: npm install
             - uses: actions/github-script@v4
