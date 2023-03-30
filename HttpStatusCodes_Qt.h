@@ -220,7 +220,7 @@ inline QString reasonPhrase(int code)
 	case 510: return QStringLiteral("Not Extended");
 	case 511: return QStringLiteral("Network Authentication Required");
 
-	default: return QString();
+	default: return QStringLiteral("Unknown HTTP Status Code");
 	}
 }
 

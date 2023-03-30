@@ -207,7 +207,7 @@ inline std::string reasonPhrase(int code)
 	case 510: return "Not Extended";
 	case 511: return "Network Authentication Required";
 
-	default: return std::string();
+	default: return "Unknown HTTP Status Code";
 	}
 }
 

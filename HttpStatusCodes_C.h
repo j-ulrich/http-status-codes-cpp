@@ -200,7 +200,7 @@ static const char* HttpStatus_reasonPhrase(int code)
 	case 510: return "Not Extended";
 	case 511: return "Network Authentication Required";
 
-	default: return 0;
+	default: return "Unknown HTTP Status Code";
 	}
 
 }
