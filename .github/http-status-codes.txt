@@ -13,7 +13,7 @@
 
    Registry included below
 
-     * HTTP Status Codes
+     * HTTP Status Codes
 
 HTTP Status Codes
 
