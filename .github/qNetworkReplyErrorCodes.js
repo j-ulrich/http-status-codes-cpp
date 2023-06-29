@@ -6,7 +6,7 @@ const qNetworkReplyErrorCodesFileName = 'QNetworkReplyErrorCodes.txt';
 const qNetworkReplyErrorCodesFilePath = path.join( __dirname, qNetworkReplyErrorCodesFileName );
 
 const fetchQNetworkReplyErrorCodeListFromGitHub = async ( github ) => {
-	const getContent = github.repos.getContent || github.repos.getContents;
+	const getContent = github.rest.repos.getContent || github.rest.repos.getContents;
 	const response = await getContent( {
 		owner: 'qt',
 		repo: 'qtbase',
