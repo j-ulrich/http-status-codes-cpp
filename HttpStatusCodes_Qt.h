@@ -31,7 +31,7 @@ namespace HttpStatus
 
 /*! Enum for the HTTP status codes.
  */
-enum Code
+enum class Code
 {
 	/*####### 1xx - Informational #######*/
 	/* Indicates an interim response for communicating connection status
@@ -123,19 +123,19 @@ enum Code
 	NotExtended                   = 510, //!< \deprecated \parblock Obsoleted as the experiment has ended and there is no evidence of widespread use. \endparblock
 	                                     //!< The policy for accessing the resource has not been met in the request. [RFC 2774]
 	NetworkAuthenticationRequired = 511, //!< Indicates that the client needs to authenticate to gain network access.
-
+    NetworkConnectTimeoutError    = 599, //!< An error used by some HTTP proxies to signal a network connect timeout behind the proxy to a client in front of the proxy.
 	xxx_max = 1023
 };
 #if (QT_VERSION >= QT_VERSION_CHECK(5,8,0))
 Q_ENUM_NS(Code)
 #endif // Qt >= 5.8.0
 
-inline bool isInformational(int code) { return (code >= 100 && code < 200); } //!< \returns \c true if the given \p code is an informational code.
-inline bool isSuccessful(int code)    { return (code >= 200 && code < 300); } //!< \returns \c true if the given \p code is a successful code.
-inline bool isRedirection(int code)   { return (code >= 300 && code < 400); } //!< \returns \c true if the given \p code is a redirectional code.
-inline bool isClientError(int code)   { return (code >= 400 && code < 500); } //!< \returns \c true if the given \p code is a client error code.
-inline bool isServerError(int code)   { return (code >= 500 && code < 600); } //!< \returns \c true if the given \p code is a server error code.
-inline bool isError(int code)         { return (code >= 400); }               //!< \returns \c true if the given \p code is any type of error code.
+inline bool isInformational(Code code) { return (code >= Code::Continue && code < Code::OK); }                                      //!< \returns \c true if the given \p code is an informational code.
+inline bool isSuccessful(Code code)    { return (code >= Code::OK && code < Code::MultipleChoices); }                               //!< \returns \c true if the given \p code is a successful code.
+inline bool isRedirection(Code code)   { return (code >= Code::MultipleChoices && code < Code::BadRequest); }                       //!< \returns \c true if the given \p code is a redirectional code.
+inline bool isClientError(Code code)   { return (code >= Code::BadRequest && code < Code::InternalServerError); }                   //!< \returns \c true if the given \p code is a client error code.
+inline bool isServerError(Code code)   { return (code >= Code::InternalServerError && code <= Code::NetworkConnectTimeoutError); }  //!< \returns \c true if the given \p code is a server error code.
+inline bool isError(Code code)         { return (code >= Code::BadRequest); }                                                       //!< \returns \c true if the given \p code is any type of error code.
 
 
 /*! Returns the standard HTTP reason phrase for a HTTP status code.
@@ -143,82 +143,83 @@ inline bool isError(int code)         { return (code >= 400); }               //
  * \return The standard HTTP reason phrase for the given \p code or a null \c QString()
  * if no standard phrase for the given \p code is known.
  */
-inline QString reasonPhrase(int code)
+inline QString reasonPhrase(Code code)
 {
 	switch (code)
 	{
 
 	//####### 1xx - Informational #######
-	case 100: return QStringLiteral("Continue");
-	case 101: return QStringLiteral("Switching Protocols");
-	case 102: return QStringLiteral("Processing");
-	case 103: return QStringLiteral("Early Hints");
+	case Code::Continue: return QStringLiteral("Continue");
+	case Code::SwitchingProtocols: return QStringLiteral("Switching Protocols");
+	case Code::Processing: return QStringLiteral("Processing");
+	case Code::EarlyHints: return QStringLiteral("Early Hints");
 
 	//####### 2xx - Successful #######
-	case 200: return QStringLiteral("OK");
-	case 201: return QStringLiteral("Created");
-	case 202: return QStringLiteral("Accepted");
-	case 203: return QStringLiteral("Non-Authoritative Information");
-	case 204: return QStringLiteral("No Content");
-	case 205: return QStringLiteral("Reset Content");
-	case 206: return QStringLiteral("Partial Content");
-	case 207: return QStringLiteral("Multi-Status");
-	case 208: return QStringLiteral("Already Reported");
-	case 226: return QStringLiteral("IM Used");
+	case Code::OK: return QStringLiteral("OK");
+	case Code::Created: return QStringLiteral("Created");
+	case Code::Accepted: return QStringLiteral("Accepted");
+	case Code::NonAuthoritativeInformation: return QStringLiteral("Non-Authoritative Information");
+	case Code::NoContent: return QStringLiteral("No Content");
+	case Code::ResetContent: return QStringLiteral("Reset Content");
+	case Code::PartialContent: return QStringLiteral("Partial Content");
+	case Code::MultiStatus: return QStringLiteral("Multi-Status");
+	case Code::AlreadyReported: return QStringLiteral("Already Reported");
+	case Code::IMUsed: return QStringLiteral("IM Used");
 
 	//####### 3xx - Redirection #######
-	case 300: return QStringLiteral("Multiple Choices");
-	case 301: return QStringLiteral("Moved Permanently");
-	case 302: return QStringLiteral("Found");
-	case 303: return QStringLiteral("See Other");
-	case 304: return QStringLiteral("Not Modified");
-	case 305: return QStringLiteral("Use Proxy");
-	case 307: return QStringLiteral("Temporary Redirect");
-	case 308: return QStringLiteral("Permanent Redirect");
+	case Code::MultipleChoices: return QStringLiteral("Multiple Choices");
+	case Code::MovedPermanently: return QStringLiteral("Moved Permanently");
+	case Code::Found: return QStringLiteral("Found");
+	case Code::SeeOther: return QStringLiteral("See Other");
+	case Code::NotModified: return QStringLiteral("Not Modified");
+	case Code::UseProxy: return QStringLiteral("Use Proxy");
+	case Code::TemporaryRedirect: return QStringLiteral("Temporary Redirect");
+	case Code::PermanentRedirect: return QStringLiteral("Permanent Redirect");
 
 	//####### 4xx - Client Error #######
-	case 400: return QStringLiteral("Bad Request");
-	case 401: return QStringLiteral("Unauthorized");
-	case 402: return QStringLiteral("Payment Required");
-	case 403: return QStringLiteral("Forbidden");
-	case 404: return QStringLiteral("Not Found");
-	case 405: return QStringLiteral("Method Not Allowed");
-	case 406: return QStringLiteral("Not Acceptable");
-	case 407: return QStringLiteral("Proxy Authentication Required");
-	case 408: return QStringLiteral("Request Timeout");
-	case 409: return QStringLiteral("Conflict");
-	case 410: return QStringLiteral("Gone");
-	case 411: return QStringLiteral("Length Required");
-	case 412: return QStringLiteral("Precondition Failed");
-	case 413: return QStringLiteral("Content Too Large");
-	case 414: return QStringLiteral("URI Too Long");
-	case 415: return QStringLiteral("Unsupported Media Type");
-	case 416: return QStringLiteral("Range Not Satisfiable");
-	case 417: return QStringLiteral("Expectation Failed");
-	case 418: return QStringLiteral("I'm a teapot");
-	case 421: return QStringLiteral("Misdirected Request");
-	case 422: return QStringLiteral("Unprocessable Content");
-	case 423: return QStringLiteral("Locked");
-	case 424: return QStringLiteral("Failed Dependency");
-	case 425: return QStringLiteral("Too Early");
-	case 426: return QStringLiteral("Upgrade Required");
-	case 428: return QStringLiteral("Precondition Required");
-	case 429: return QStringLiteral("Too Many Requests");
-	case 431: return QStringLiteral("Request Header Fields Too Large");
-	case 451: return QStringLiteral("Unavailable For Legal Reasons");
+	case Code::BadRequest: return QStringLiteral("Bad Request");
+	case Code::Unauthorized: return QStringLiteral("Unauthorized");
+	case Code::PaymentRequired: return QStringLiteral("Payment Required");
+	case Code::Forbidden: return QStringLiteral("Forbidden");
+	case Code::NotFound: return QStringLiteral("Not Found");
+	case Code::MethodNotAllowed: return QStringLiteral("Method Not Allowed");
+	case Code::NotAcceptable: return QStringLiteral("Not Acceptable");
+	case Code::ProxyAuthenticationRequired: return QStringLiteral("Proxy Authentication Required");
+	case Code::RequestTimeout: return QStringLiteral("Request Timeout");
+	case Code::Conflict: return QStringLiteral("Conflict");
+	case Code::Gone: return QStringLiteral("Gone");
+	case Code::LengthRequired: return QStringLiteral("Length Required");
+	case Code::PreconditionFailed: return QStringLiteral("Precondition Failed");
+	case Code::ContentTooLarge: return QStringLiteral("Content Too Large");
+	case Code::URITooLong: return QStringLiteral("URI Too Long");
+	case Code::UnsupportedMediaType: return QStringLiteral("Unsupported Media Type");
+	case Code::RangeNotSatisfiable: return QStringLiteral("Range Not Satisfiable");
+	case Code::ExpectationFailed: return QStringLiteral("Expectation Failed");
+	case Code::ImATeapot: return QStringLiteral("I'm a teapot");
+	case Code::MisdirectedRequest: return QStringLiteral("Misdirected Request");
+	case Code::UnprocessableContent: return QStringLiteral("Unprocessable Content");
+	case Code::Locked: return QStringLiteral("Locked");
+	case Code::FailedDependency: return QStringLiteral("Failed Dependency");
+	case Code::TooEarly: return QStringLiteral("Too Early");
+	case Code::UpgradeRequired: return QStringLiteral("Upgrade Required");
+	case Code::PreconditionRequired: return QStringLiteral("Precondition Required");
+	case Code::TooManyRequests: return QStringLiteral("Too Many Requests");
+	case Code::RequestHeaderFieldsTooLarge: return QStringLiteral("Request Header Fields Too Large");
+	case Code::UnavailableForLegalReasons: return QStringLiteral("Unavailable For Legal Reasons");
 
 	//####### 5xx - Server Error #######
-	case 500: return QStringLiteral("Internal Server Error");
-	case 501: return QStringLiteral("Not Implemented");
-	case 502: return QStringLiteral("Bad Gateway");
-	case 503: return QStringLiteral("Service Unavailable");
-	case 504: return QStringLiteral("Gateway Timeout");
-	case 505: return QStringLiteral("HTTP Version Not Supported");
-	case 506: return QStringLiteral("Variant Also Negotiates");
-	case 507: return QStringLiteral("Insufficient Storage");
-	case 508: return QStringLiteral("Loop Detected");
-	case 510: return QStringLiteral("Not Extended");
-	case 511: return QStringLiteral("Network Authentication Required");
+	case Code::InternalServerError: return QStringLiteral("Internal Server Error");
+	case Code::NotImplemented: return QStringLiteral("Not Implemented");
+	case Code::BadGateway: return QStringLiteral("Bad Gateway");
+	case Code::ServiceUnavailable: return QStringLiteral("Service Unavailable");
+	case Code::GatewayTimeout: return QStringLiteral("Gateway Timeout");
+	case Code::HTTPVersionNotSupported: return QStringLiteral("HTTP Version Not Supported");
+	case Code::VariantAlsoNegotiates: return QStringLiteral("Variant Also Negotiates");
+	case Code::InsufficientStorage: return QStringLiteral("Insufficient Storage");
+	case Code::LoopDetected: return QStringLiteral("Loop Detected");
+	case Code::NotExtended: return QStringLiteral("Not Extended");
+	case Code::NetworkAuthenticationRequired: return QStringLiteral("Network Authentication Required");
+    case Code::NetworkConnectTimeoutError: return QStringLiteral("Network Connection Timeout");
 
 	default: return QString();
 	}
@@ -237,37 +238,38 @@ inline QString reasonPhrase(int code)
  *
  * \sa [statusCodeFromHttp() in qhttpthreaddelegate.cpp](http://code.qt.io/cgit/qt/qtbase.git/tree/src/network/access/qhttpthreaddelegate.cpp#n57)
  */
-inline int networkErrorToStatusCode(QNetworkReply::NetworkError error)
+inline Code networkErrorToStatusCode(QNetworkReply::NetworkError error)
 {
 	switch (error)
 	{
 	// Exact matches
-	case QNetworkReply::AuthenticationRequiredError:       return Unauthorized;                // 401
-	case QNetworkReply::ContentAccessDenied:               return Forbidden;                   // 403
-	case QNetworkReply::ContentNotFoundError:              return NotFound;                    // 404
-	case QNetworkReply::ContentOperationNotPermittedError: return MethodNotAllowed;            // 405
-	case QNetworkReply::ProxyAuthenticationRequiredError:  return ProxyAuthenticationRequired; // 407
+	case QNetworkReply::AuthenticationRequiredError:       return Code::Unauthorized;                // 401
+	case QNetworkReply::ContentAccessDenied:               return Code::Forbidden;                   // 403
+	case QNetworkReply::ContentNotFoundError:              return Code::NotFound;                    // 404
+	case QNetworkReply::ContentOperationNotPermittedError: return Code::MethodNotAllowed;            // 405
+	case QNetworkReply::ProxyAuthenticationRequiredError:  return Code::ProxyAuthenticationRequired; // 407
 #if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
-	case QNetworkReply::ContentConflictError:              return Conflict;                    // 409
-	case QNetworkReply::ContentGoneError:                  return Gone;                        // 410
-	case QNetworkReply::InternalServerError:               return InternalServerError;         // 500
-	case QNetworkReply::OperationNotImplementedError:      return NotImplemented;              // 501
-	case QNetworkReply::ServiceUnavailableError:           return ServiceUnavailable;          // 503
+    case QNetworkReply::TimeoutError:                      return Code::RequestTimeout;              // 408
+	case QNetworkReply::ContentConflictError:              return Code::Conflict;                    // 409
+	case QNetworkReply::ContentGoneError:                  return Code::Gone;                        // 410
+	case QNetworkReply::InternalServerError:               return Code::InternalServerError;         // 500
+	case QNetworkReply::OperationNotImplementedError:      return Code::NotImplemented;              // 501
+	case QNetworkReply::ServiceUnavailableError:           return Code::ServiceUnavailable;          // 503
 #endif // Qt >= 5.3.0
 
 	// Mapping error codes matching multiple HTTP status codes to a best matching "base" code
-	case QNetworkReply::NoError:                           return OK;                          // 200
-	case QNetworkReply::ProtocolInvalidOperationError:     return BadRequest;                  // 400
-	case QNetworkReply::UnknownContentError:               return BadRequest;                  // 400
+	case QNetworkReply::NoError:                           return Code::OK;                          // 200
+	case QNetworkReply::ProtocolInvalidOperationError:     return Code::BadRequest;                  // 400
+	case QNetworkReply::UnknownContentError:               return Code::BadRequest;                  // 400
 #if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
-	case QNetworkReply::UnknownServerError:                return InternalServerError;         // 500
+	case QNetworkReply::UnknownServerError:                return Code::InternalServerError;         // 500
 #endif // Qt >= 5.3.0
 
 	/* Other errors do not match any HTTP status code.
 	 * Therefore, we return an invalid code.
 	 */
 	default:
-		return -1;
+		return static_cast<Code>(-1);
 	}
 }
 
@@ -285,7 +287,7 @@ inline int networkErrorToStatusCode(QNetworkReply::NetworkError error)
  *
  * \sa [statusCodeFromHttp() in qhttpthreaddelegate.cpp](http://code.qt.io/cgit/qt/qtbase.git/tree/src/network/access/qhttpthreaddelegate.cpp#n57)
  */
-inline QNetworkReply::NetworkError statusCodeToNetworkError(int code)
+inline QNetworkReply::NetworkError statusCodeToNetworkError(Code code)
 {
 	// below 400
 	if (!isError(code))
@@ -294,21 +296,22 @@ inline QNetworkReply::NetworkError statusCodeToNetworkError(int code)
 	// Specific error status codes
 	switch (code)
 	{
-	case BadRequest:                  return QNetworkReply::ProtocolInvalidOperationError;     // 400
-	case Unauthorized:                return QNetworkReply::AuthenticationRequiredError;       // 401
-	case Forbidden:                   return QNetworkReply::ContentAccessDenied;               // 403
-	case NotFound:                    return QNetworkReply::ContentNotFoundError;              // 404
-	case MethodNotAllowed:            return QNetworkReply::ContentOperationNotPermittedError; // 405
-	case ProxyAuthenticationRequired: return QNetworkReply::ProxyAuthenticationRequiredError;  // 407
+	case Code::BadRequest:                  return QNetworkReply::ProtocolInvalidOperationError;     // 400
+	case Code::Unauthorized:                return QNetworkReply::AuthenticationRequiredError;       // 401
+	case Code::Forbidden:                   return QNetworkReply::ContentAccessDenied;               // 403
+	case Code::NotFound:                    return QNetworkReply::ContentNotFoundError;              // 404
+	case Code::MethodNotAllowed:            return QNetworkReply::ContentOperationNotPermittedError; // 405
+	case Code::ProxyAuthenticationRequired: return QNetworkReply::ProxyAuthenticationRequiredError;  // 407
 #if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
-	case Conflict:                    return QNetworkReply::ContentConflictError;              // 409
-	case Gone:                        return QNetworkReply::ContentGoneError;                  // 410
+    case Code::RequestTimeout:              return QNetworkReply::TimeoutError;
+	case Code::Conflict:                    return QNetworkReply::ContentConflictError;              // 409
+	case Code::Gone:                        return QNetworkReply::ContentGoneError;                  // 410
 #endif // Qt >= 5.3.0
-	case ImATeapot:                   return QNetworkReply::ProtocolInvalidOperationError;     // 418
+	case Code::ImATeapot:                   return QNetworkReply::ProtocolInvalidOperationError;     // 418
 #if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
-	case InternalServerError:         return QNetworkReply::InternalServerError;               // 500
-	case NotImplemented:              return QNetworkReply::OperationNotImplementedError;      // 501
-	case ServiceUnavailable:          return QNetworkReply::ServiceUnavailableError;           // 503
+	case Code::InternalServerError:         return QNetworkReply::InternalServerError;               // 500
+	case Code::NotImplemented:              return QNetworkReply::OperationNotImplementedError;      // 501
+	case Code::ServiceUnavailable:          return QNetworkReply::ServiceUnavailableError;           // 503
 #endif // Qt >= 5.3.0
 
 	default:
