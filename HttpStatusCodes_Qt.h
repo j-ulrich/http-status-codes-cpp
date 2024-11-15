@@ -33,6 +33,7 @@ namespace HttpStatus
  */
 enum class Code
 {
+    Invalid = -1,
 	/*####### 1xx - Informational #######*/
 	/* Indicates an interim response for communicating connection status
 	 * or request progress prior to completing the requested action and
