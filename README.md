@@ -27,12 +27,13 @@ Initially, the data was taken from [for-GET/know-your-http-well](https://github.
 
 ## Variants ##
 
-| Variant                          | Name Scoping           | Status Codes Type                                                                              | Reason Phrases Type |
-|----------------------------------|------------------------|------------------------------------------------------------------------------------------------|---------------------|
-| [C](HttpStatusCodes_C.h)         | Prefix `HttpStatus_`   | `enum HttpStatus_Code`                                                                         | `const char*`       |
-| [C++](HttpStatusCodes_C++.h)     | Namespace `HttpStatus` | `enum Code`                                                                                    | `std::string`       |
-| [C++11](HttpStatusCodes_C++11.h) | Namespace `HttpStatus` | `enum class Code`                                                                              | `std::string`       |
-| [Qt](HttpStatusCodes_Qt.h)       | Namespace `HttpStatus` | `enum Code`<br>When using Qt 5.8 or later: registered in meta type system using `Q_ENUM_NS()`  | `QString`           |
+| Variant                                | Name Scoping           | Status Codes Type                                                                                   | Reason Phrases Type |
+|----------------------------------------|------------------------|-----------------------------------------------------------------------------------------------------|---------------------|
+| [C](HttpStatusCodes_C.h)               | Prefix `HttpStatus_`   | `enum HttpStatus_Code`                                                                              | `const char*`       |
+| [C++](HttpStatusCodes_C++.h)           | Namespace `HttpStatus` | `enum Code`                                                                                         | `std::string`       |
+| [C++11](HttpStatusCodes_C++11.h)       | Namespace `HttpStatus` | `enum class Code`                                                                                   | `std::string`       |
+| [Qt](HttpStatusCodes_Qt.h)             | Namespace `HttpStatus` | `enum Code`<br>When using Qt 5.8 or later: registered in meta type system using `Q_ENUM_NS()`       | `QString`           |
+| [Qt C++11](HttpStatusCodes_Qt_C++11.h) | Namespace `HttpStatus` | `enum class Code`<br>When using Qt 5.8 or later: registered in meta type system using `Q_ENUM_NS()` | `QString`           |
 
 
 > Note regarding Qt variant: Oldest tested Qt version was Qt 5.2.0 with MinGW 4.8. However, should be working with any Qt 5.x version.
@@ -72,6 +73,7 @@ might be undefined behavior.
 ```c
 enum HttpStatus_Code
 {
+	HttpStatus_Invalid  = -1,
 	HttpStatus_OK       = 200,
 	HttpStatus_NotFound = 404
 	// ...
@@ -83,6 +85,7 @@ enum HttpStatus_Code
 namespace HttpStatus {
 enum class Code
 {
+	Invalid  = -1,
 	OK       = 200,
 	NotFound = 404
 	// ...
@@ -95,6 +98,7 @@ enum class Code
 namespace HttpStatus {
 enum Code
 {
+	Invalid  = -1,
 	OK       = 200,
 	NotFound = 404
 	// ...
@@ -124,14 +128,18 @@ Non-standard error codes are status codes with a value of 600 or higher.
 Returns `0` otherwise.
 
 ##### Other Variants #####
-> **Note:** The C++11 variant also provides overloads for `HttpStatus::Code`. So there is no need to cast.
-
 ```c++
 bool HttpStatus::isInformational( int code );
 bool HttpStatus::isSuccessful( int code );
 bool HttpStatus::isRedirection( int code );
 bool HttpStatus::isClientError( int code );
 bool HttpStatus::isServerError( int code );
+
+bool HttpStatus::isInformational( Code code ); // C++11 variants only
+bool HttpStatus::isSuccessful( Code code );    // C++11 variants only
+bool HttpStatus::isRedirection( Code code );   // C++11 variants only
+bool HttpStatus::isClientError( Code code );   // C++11 variants only
+bool HttpStatus::isServerError( Code code );   // C++11 variants only
 ```
 Return `true` if the given _code_ belongs to the corresponding class of status codes (see [RFC7231](https://tools.ietf.org/html/rfc7231#section-6)).
 Return `false` otherwise.
@@ -140,6 +148,7 @@ Return `false` otherwise.
 
 ```c++
 bool HttpStatus::isError( int code );
+bool HttpStatus::isError( Code code ); // C++11 variants only
 ```
 Returns `true` if the given _code_ is either a client error, a server error or any non-standard error code.
 Non-standard error codes are status codes with a value of 600 or higher.
@@ -155,37 +164,39 @@ const char* HttpStatus_reasonPhrase( int code );
 Returns the HTTP reason phrase string corresponding to the given _code_.
 
 ##### C++/C++11 Variants #####
-> **Note:** The C++11 variant also provides an overload for `HttpStatus::Code`. So there is no need to cast.
 ```c++
 std::string HttpStatus::reasonPhrase( int code );
+std::string HttpStatus::reasonPhrase( Code code ); // C++11 variants only
 ```
 Returns the HTTP reason phrase string corresponding to the given _code_.
 
-##### Qt Variant #####
+##### Qt Variants #####
 ```c++
 QString HttpStatus::reasonPhrase( int code );
+QString HttpStatus::reasonPhrase( Code code ); // C++11 variant only
 ```
 Returns the HTTP reason phrase string corresponding to the given _code_.
 
 
 ### Conversion Functions ###
 
-##### C++11 Variant #####
+##### C++11 Variants #####
 ```c++
 int HttpStatus::toInt( HttpStatus::Code code );
 ```
 Returns the integer value corresponding to a given a _code_.
 This is a convenience function as replacement for a `static_cast<int>()`.
 
-##### Qt Variant #####
+##### Qt Variants #####
 ```c++
-int HttpStatus::networkErrorToStatusCode( QNetworkReply::NetworkError error );
+Code HttpStatus::networkErrorToStatusCode( QNetworkReply::NetworkError error );
 ```
 Returns the HTTP status code corresponding to the given _error_ if there is one.
-Otherwise, `-1` is returned.
+Otherwise, `Code::Invalid` (`-1`) is returned.
 
 ```c++
 QNetworkReply::NetworkError HttpStatus::statusCodeToNetworkError( int code );
+QNetworkReply::NetworkError HttpStatus::statusCodeToNetworkError( Code code ); // C++11 variant only
 ```
 Returns the `QNetworkReply::NetworkError` corresponding to the given _code_ if there is one.
 For codes where there is no exact match, the best matching "catch all" code (`QNetworkReply::NoError`,

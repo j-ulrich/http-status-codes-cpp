@@ -11,6 +11,13 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 
 ## [Unreleased]
 
+### Added ###
+- [#28] Added code `Invalid` (-1).
+- [#28]{Qt C++11} Qt C++11 variant with uses `enum class` for the codes.
+
+### Changed ###
+- {Qt} `networkErrorToStatusCode()` now returns a `Code` instead of `int`.
+
 
 ---
 

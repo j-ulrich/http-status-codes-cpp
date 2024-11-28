@@ -13,6 +13,7 @@ namespace QtVariantTests
 //####### Enum Test #######
 TEST(EnumTest, testEnumValues)
 {
+	ASSERT_EQ(static_cast<int>(HttpStatus::Invalid),             -1);
 	ASSERT_EQ(static_cast<int>(HttpStatus::OK),                  200);
 	ASSERT_EQ(static_cast<int>(HttpStatus::NotFound),            404);
 	ASSERT_EQ(static_cast<int>(HttpStatus::InternalServerError), 500);
@@ -32,6 +33,7 @@ TEST(MetaEnumTest, testKeyToValue)
 //####### Reason Phrase Test #######
 TEST(ReasonPhraseTest, testEnumParameter)
 {
+	ASSERT_EQ(HttpStatus::reasonPhrase(HttpStatus::Invalid),             QString());
 	ASSERT_EQ(HttpStatus::reasonPhrase(HttpStatus::OK),                  QString("OK"));
 	ASSERT_EQ(HttpStatus::reasonPhrase(HttpStatus::NotFound),            QString("Not Found"));
 	ASSERT_EQ(HttpStatus::reasonPhrase(HttpStatus::InternalServerError), QString("Internal Server Error"));
@@ -39,6 +41,7 @@ TEST(ReasonPhraseTest, testEnumParameter)
 
 TEST(ReasonPhraseTest, testIntegerParameter)
 {
+	ASSERT_EQ(HttpStatus::reasonPhrase(static_cast<int>(HttpStatus::Invalid)),        QString());
 	ASSERT_EQ(HttpStatus::reasonPhrase(static_cast<int>(HttpStatus::Created)),        QString("Created"));
 	ASSERT_EQ(HttpStatus::reasonPhrase(static_cast<int>(HttpStatus::Unauthorized)),   QString("Unauthorized"));
 	ASSERT_EQ(HttpStatus::reasonPhrase(static_cast<int>(HttpStatus::GatewayTimeout)), QString("Gateway Timeout"));
@@ -48,6 +51,7 @@ TEST(ReasonPhraseTest, testIntegerParameter)
 //####### Category Tester Test #######
 INSTANTIATE_TEST_CASE_P(DefaultInstance, CategoryTesterTest, ::testing::Values(
 //                   // code                          // info // success // redir // clientErr // serverErr // error
+CategoryTesterParams(HttpStatus::Invalid,             false,  false,     false,   false,       false,       false),
 CategoryTesterParams(HttpStatus::SwitchingProtocols,  true,   false,     false,   false,       false,       false),
 CategoryTesterParams(HttpStatus::NoContent,           false,  true,      false,   false,       false,       false),
 CategoryTesterParams(HttpStatus::SeeOther,            false,  false,     true,    false,       false,       false),
@@ -72,6 +76,7 @@ TEST(NetworkErrorMappingTest, testNetworkErrorToStatusCode)
 TEST(NetworkErrorMappingTest, testStatusCodeToNetworkError)
 {
 	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(HttpStatus::Unauthorized),        QNetworkReply::AuthenticationRequiredError);
+	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(HttpStatus::Invalid),             QNetworkReply::NoError);
 	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(HttpStatus::OK),                  QNetworkReply::NoError);
 	ASSERT_EQ(HttpStatus::statusCodeToNetworkError(HttpStatus::URITooLong),          QNetworkReply::UnknownContentError);
 #if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
