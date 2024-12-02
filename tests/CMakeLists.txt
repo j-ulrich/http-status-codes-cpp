@@ -1,25 +1,18 @@
 cmake_minimum_required(VERSION 3.5)
 
-# Package Management using Hunter
-include("cmake/HunterGate.cmake")
-HunterGate(
-    URL "https://github.com/cpp-pm/hunter/archive/v0.23.297.tar.gz"
-    SHA1 "3319fe6a3b08090df7df98dee75134d68e2ef5a3"
-	LOCAL
-)
+# Package Management using CPM
+include(cmake/get_cpm.cmake)
 
 project(HttpStatusCodesTests)
 
 set (CMAKE_CXX_STANDARD 11)
 
-hunter_add_package(GTest)
-find_package(GTest CONFIG REQUIRED)
-message( "GTest_VERSION: ${GTest_VERSION}" )
-if( GTest_VERSION VERSION_LESS "1.9.0" )
-	set( GTEST_MAIN GTest::main )
-else()
-	set( GTEST_MAIN GTest::gtest_main )
-endif()
+CPMAddPackage(
+	NAME GTest
+	GITHUB_REPOSITORY "google/googletest"
+	GIT_TAG "v1.15.2"
+	OPTIONS "INSTALL_GTEST OFF" "gtest_force_shared_crt" )
+set( GTEST_MAIN GTest::gtest_main )
 
 enable_testing()
 
