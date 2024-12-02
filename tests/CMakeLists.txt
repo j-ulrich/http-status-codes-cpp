@@ -9,8 +9,8 @@ set (CMAKE_CXX_STANDARD 11)
 
 CPMAddPackage(
 	NAME GTest
-	URL "https://github.com/google/googletest/releases/download/v1.15.2/googletest-1.15.2.tar.gz"
 	VERSION "1.15.2"
+	URL "https://github.com/google/googletest/archive/refs/tags/v1.15.2.tar.gz"
 	OPTIONS "INSTALL_GTEST OFF" "gtest_force_shared_crt" )
 set( GTEST_MAIN GTest::gtest_main )
 
