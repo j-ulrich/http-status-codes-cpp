@@ -1,25 +1,30 @@
-cmake_minimum_required( VERSION 3.5 )
-
-# Package Management using CPM
-include( cmake/get_cpm.cmake )
+cmake_minimum_required( VERSION 3.14 )
+if( CMAKE_VERSION GREATER_EQUAL 3.24 )
+	cmake_policy( SET CMP0135 NEW )
+endif()
 
 project( HttpStatusCodesTests )
 
-set ( CMAKE_CXX_STANDARD 11 )
+set( CMAKE_CXX_STANDARD 17 )
 
-CPMAddPackage(
-	NAME GTest
-	VERSION "1.15.2"
-	URL "https://github.com/google/googletest/releases/download/v1.15.2/googletest-1.15.2.tar.gz"
-	OPTIONS "INSTALL_GTEST OFF" "gtest_force_shared_crt"
+include( FetchContent )
+FetchContent_Declare(
+  googletest
+  URL "https://github.com/google/googletest/releases/download/v1.15.2/googletest-1.15.2.tar.gz"
 )
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set( gtest_force_shared_crt ON CACHE BOOL "" FORCE )
+set( BUILD_GMOCK OFF CACHE BOOL "" FORCE )
+FetchContent_MakeAvailable( googletest )
+get_target_property( GOOGLETEST_VERSION gtest VERSION )
+message( "Google Test Version: ${GOOGLETEST_VERSION}" )
 
 enable_testing()
 
 include_directories( ${PROJECT_SOURCE_DIR}/.. )
 
 add_executable( CVariantTest CVariantTest.cpp )
-target_link_libraries( CVariantTest GTest::gtest GTest::gtest_main )
+target_link_libraries( CVariantTest gtest_main )
 add_test( NAME CVariantTest COMMAND CVariantTest )
 
 add_executable( CVariantCompileTest CVariantCompileTest.c )
@@ -31,7 +36,7 @@ set_target_properties( CVariantCompileTest PROPERTIES
 )
 
 add_executable( C++VariantTest C++VariantTest.cpp )
-target_link_libraries( C++VariantTest GTest::gtest GTest::gtest_main )
+target_link_libraries( C++VariantTest gtest_main )
 add_test( NAME C++VariantTest COMMAND C++VariantTest )
 set_target_properties( C++VariantTest PROPERTIES
 	CXX_STANDARD 98
@@ -48,7 +53,7 @@ endif()
 
 if( CXX_SUPPORTS_STRONG_ENUMS )
 	add_executable( C++11VariantTest C++11VariantTest.cpp )
-	target_link_libraries( C++11VariantTest GTest::gtest GTest::gtest_main )
+	target_link_libraries( C++11VariantTest gtest_main )
 	add_test( NAME C++11VariantTest COMMAND C++11VariantTest )
 	set_target_properties( C++11VariantTest PROPERTIES
 		CXX_STANDARD 11
@@ -96,14 +101,14 @@ endif()
 
 if ( QTCORE_LIB )
 	add_executable( QtVariantTest QtVariantTest.cpp "${PROJECT_SOURCE_DIR}/../HttpStatusCodes_Qt.h" )
-	target_link_libraries( QtVariantTest GTest::gtest GTest::gtest_main ${QTCORE_LIB} ${QTNETWORK_LIB} )
+	target_link_libraries( QtVariantTest gtest_main ${QTCORE_LIB} ${QTNETWORK_LIB} )
 	add_test( NAME QtVariantTest COMMAND QtVariantTest )
 	if ( WIN32 )
 		set_tests_properties( QtVariantTest PROPERTIES ENVIRONMENT "PATH=$<TARGET_FILE_DIR:${QTCORE_LIB}>;$ENV{PATH}" )
 	endif()
 
 	add_executable( QtC++11VariantTest QtC++11VariantTest.cpp "${PROJECT_SOURCE_DIR}/../HttpStatusCodes_Qt_C++11.h" )
-	target_link_libraries( QtC++11VariantTest GTest::gtest GTest::gtest_main ${QTCORE_LIB} ${QTNETWORK_LIB} )
+	target_link_libraries( QtC++11VariantTest gtest_main ${QTCORE_LIB} ${QTNETWORK_LIB} )
 	add_test( NAME QtC++11VariantTest COMMAND QtVariantTest )
 	if ( WIN32 )
 		set_tests_properties( QtC++11VariantTest PROPERTIES ENVIRONMENT "PATH=$<TARGET_FILE_DIR:${QTCORE_LIB}>;$ENV{PATH}" )
