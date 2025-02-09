@@ -1,6 +1,6 @@
 {
   "name": "http-status-codes-cpp",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "HTTP Status Codes and Reason Phrases for C, C++ and Qt",
   "scripts": {
     "check-http-status-codes-update": "node .github/checkForHttpStatusCodesUpdate.js",
