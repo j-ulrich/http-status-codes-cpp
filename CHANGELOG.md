@@ -9,6 +9,16 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 
 ---
 
+
+## [1.6.1] - 2025-02-09
+
+### Fixed ###
+- Mistake during released of version 1.6.0.
+
+
+---
+
+
 ## [1.6.0] - 2025-02-09
 
 ### Added ###
@@ -106,6 +116,7 @@ Initial (actually unversioned) release.
 ---
 
 
+[1.6.1]: https://github.com/j-ulrich/http-status-codes-cpp/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/j-ulrich/http-status-codes-cpp/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.5.0
 [1.4.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.4.0
@@ -114,4 +125,4 @@ Initial (actually unversioned) release.
 [1.1.1]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.1.1
 [1.1.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.1.0
 
-[unreleased]: https://github.com/j-ulrich/http-status-codes-cpp/compare/1.6.0...develop
+[unreleased]: https://github.com/j-ulrich/http-status-codes-cpp/compare/1.6.1...develop
