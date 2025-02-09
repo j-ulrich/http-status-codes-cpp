@@ -10,7 +10,7 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 ---
 
 
-## [Unreleased]
+## [1.6.2] - 2025-02-09
 ### Fixed ###
 - Error in release configuration.
 
@@ -124,6 +124,7 @@ Initial (actually unversioned) release.
 ---
 
 
+[1.6.2]: https://github.com/j-ulrich/http-status-codes-cpp/compare/1.6.1...1.6.2
 [1.6.1]: https://github.com/j-ulrich/http-status-codes-cpp/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/j-ulrich/http-status-codes-cpp/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.5.0
@@ -133,4 +134,4 @@ Initial (actually unversioned) release.
 [1.1.1]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.1.1
 [1.1.0]: https://github.com/j-ulrich/http-status-codes-cpp/releases/tag/1.1.0
 
-[unreleased]: https://github.com/j-ulrich/http-status-codes-cpp/compare/1.6.1...develop
+[unreleased]: https://github.com/j-ulrich/http-status-codes-cpp/compare/1.6.2...develop
