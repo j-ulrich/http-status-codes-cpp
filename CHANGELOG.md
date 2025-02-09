@@ -10,10 +10,18 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 ---
 
 
+## [Unreleased]
+### Fixed ###
+- Error in release configuration.
+
+
+---
+
+
 ## [1.6.1] - 2025-02-09
 
 ### Fixed ###
-- Mistake during released of version 1.6.0.
+- Mistake during release of version 1.6.0.
 
 
 ---
