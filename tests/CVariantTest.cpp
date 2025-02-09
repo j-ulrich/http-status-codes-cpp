@@ -8,6 +8,7 @@ namespace CVariantTests
 //####### Enum Test #######
 TEST(EnumTest, testEnumValues)
 {
+	ASSERT_EQ(static_cast<int>(HttpStatus_Invalid),             -1);
 	ASSERT_EQ(static_cast<int>(HttpStatus_OK),                  200);
 	ASSERT_EQ(static_cast<int>(HttpStatus_NotFound),            404);
 	ASSERT_EQ(static_cast<int>(HttpStatus_InternalServerError), 500);
@@ -17,6 +18,7 @@ TEST(EnumTest, testEnumValues)
 //####### Reason Phrase Test #######
 TEST(ReasonPhraseTest, testReasonPhrase)
 {
+	ASSERT_STREQ(HttpStatus_reasonPhrase(HttpStatus_Invalid),             0);
 	ASSERT_STREQ(HttpStatus_reasonPhrase(HttpStatus_OK),                  "OK");
 	ASSERT_STREQ(HttpStatus_reasonPhrase(HttpStatus_NotFound),            "Not Found");
 	ASSERT_STREQ(HttpStatus_reasonPhrase(HttpStatus_InternalServerError), "Internal Server Error");
@@ -54,11 +56,12 @@ TEST_P(CategoryTesterTest, test)
 
 INSTANTIATE_TEST_CASE_P(DefaultInstance, CategoryTesterTest, ::testing::Values(
 //                   // code                         // info // success // redir // clientErr // serverErr // error
-CategoryTesterParams{HttpStatus_Continue,               1,      0,         0,       0,           0,           0},
-CategoryTesterParams{HttpStatus_OK,                     0,      1,         0,       0,           0,           0},
-CategoryTesterParams{HttpStatus_MovedPermanently,       0,      0,         1,       0,           0,           0},
-CategoryTesterParams{HttpStatus_NotFound,               0,      0,         0,       1,           0,           1},
-CategoryTesterParams{HttpStatus_InternalServerError,    0,      0,         0,       0,           1,           1}
+CategoryTesterParams{HttpStatus_Invalid,             0,      0,         0,       0,           0,           0},
+CategoryTesterParams{HttpStatus_Continue,            1,      0,         0,       0,           0,           0},
+CategoryTesterParams{HttpStatus_OK,                  0,      1,         0,       0,           0,           0},
+CategoryTesterParams{HttpStatus_MovedPermanently,    0,      0,         1,       0,           0,           0},
+CategoryTesterParams{HttpStatus_NotFound,            0,      0,         0,       1,           0,           1},
+CategoryTesterParams{HttpStatus_InternalServerError, 0,      0,         0,       0,           1,           1}
 ));
 
 

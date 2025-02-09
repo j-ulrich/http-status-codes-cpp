@@ -17,6 +17,8 @@
  */
 enum HttpStatus_Code
 {
+	HttpStatus_Invalid = -1, //!< An invalid status code.
+
 	/*####### 1xx - Informational #######*/
 	/* Indicates an interim response for communicating connection status
 	 * or request progress prior to completing the requested action and

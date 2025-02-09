@@ -9,8 +9,8 @@
  * \copyright Licensed under Creative Commons CC0 (http://creativecommons.org/publicdomain/zero/1.0/)
  */
 
-#ifndef HTTPSTATUSCODES_QT5_H_
-#define HTTPSTATUSCODES_QT5_H_
+#ifndef HTTPSTATUSCODES_QT_H_
+#define HTTPSTATUSCODES_QT_H_
 
 #include <QString>
 #include <QObject>
@@ -33,6 +33,8 @@ namespace HttpStatus
  */
 enum Code
 {
+	Invalid = -1, //!< An invalid status code.
+
 	/*####### 1xx - Informational #######*/
 	/* Indicates an interim response for communicating connection status
 	 * or request progress prior to completing the requested action and
@@ -232,12 +234,12 @@ inline QString reasonPhrase(int code)
  * \return The HTTP status code corresponding to the given \p error if there is one.\n
  * If there is no exact matching status code, the first code from the best matching status
  * code class is returned (`200`, `400` or `500`).\n
- * If no matching status code exists, an invalid status code (`-1`) is returned.
+ * If no matching status code exists, Invalid (`-1`) is returned.
  * This is typically the case for errors concerning the OSI layers below HTTP.
  *
  * \sa [statusCodeFromHttp() in qhttpthreaddelegate.cpp](http://code.qt.io/cgit/qt/qtbase.git/tree/src/network/access/qhttpthreaddelegate.cpp#n57)
  */
-inline int networkErrorToStatusCode(QNetworkReply::NetworkError error)
+inline Code networkErrorToStatusCode(QNetworkReply::NetworkError error)
 {
 	switch (error)
 	{
@@ -267,7 +269,7 @@ inline int networkErrorToStatusCode(QNetworkReply::NetworkError error)
 	 * Therefore, we return an invalid code.
 	 */
 	default:
-		return -1;
+		return Invalid;
 	}
 }
 
@@ -342,4 +344,4 @@ class DummyQGadget
 
 
 
-#endif /* HTTPSTATUSCODES_QT5_8_H_ */
+#endif /* HTTPSTATUSCODES_QT_H_ */
