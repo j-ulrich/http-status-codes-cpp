@@ -25,6 +25,7 @@
 				"HttpStatusCodes_C++.h",
 				"HttpStatusCodes_C++11.h",
 				"HttpStatusCodes_Qt.h",
+				"HttpStatusCodes_Qt_C++11.h",
 				{
 					"file": ".appveyor.yml",
 					"search": "version: \".*\\+{build}\"",
