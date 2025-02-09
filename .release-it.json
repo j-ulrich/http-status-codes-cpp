@@ -3,6 +3,7 @@
 		"before:git:beforeBump": "git flow release start ${version}",
 		"after:git:afterRelease": [
 			"npx git-flow-silent-release ${version}",
+			"git checkout main",
 			"git push",
 			"git checkout develop",
 			"git push"
