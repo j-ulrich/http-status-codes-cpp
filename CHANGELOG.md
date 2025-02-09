@@ -9,6 +9,16 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 
 ---
 
+
+## [Unreleased]
+
+### Fixed ###
+- Mistake during released of version 1.6.0.
+
+
+---
+
+
 ## [1.6.0] - 2025-02-09
 
 ### Added ###
