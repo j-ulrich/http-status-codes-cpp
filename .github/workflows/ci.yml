@@ -7,7 +7,7 @@ jobs:
         name: Build & Test
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v3
             - name: Build and run tests
               run: >
                 docker run --rm
@@ -16,7 +16,7 @@ jobs:
                 /bin/bash -c "
                 cd /workspace
                 && g++ --version
-                && qmake --version
+                && qmake6 --version
                 && cd tests
                 && mkdir _build
                 && cd _build

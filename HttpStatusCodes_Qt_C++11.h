@@ -9,8 +9,8 @@
  * \copyright Licensed under Creative Commons CC0 (http://creativecommons.org/publicdomain/zero/1.0/)
  */
 
-#ifndef HTTPSTATUSCODES_QT_H_
-#define HTTPSTATUSCODES_QT_H_
+#ifndef HTTPSTATUSCODES_QT_CPP11_H_
+#define HTTPSTATUSCODES_QT_CPP11_H_
 
 #include <QString>
 #include <QObject>
@@ -31,7 +31,7 @@ namespace HttpStatus
 
 /*! Enum for the HTTP status codes.
  */
-enum Code
+enum class Code
 {
 	Invalid = -1, //!< An invalid status code.
 
@@ -128,6 +128,17 @@ enum Code
 
 	xxx_max = 1023
 };
+
+/*! Converts a Code to its corresponding integer value.
+ * \param code The code to be converted.
+ * \return The numeric value of \p code.
+ * \since 1.2.0
+ */
+inline int toInt(Code code)
+{
+	return static_cast<int>(code);
+}
+
 #if (QT_VERSION >= QT_VERSION_CHECK(5,8,0))
 Q_ENUM_NS(Code)
 #endif // Qt >= 5.8.0
@@ -138,6 +149,13 @@ inline bool isRedirection(int code)   { return (code >= 300 && code < 400); } //
 inline bool isClientError(int code)   { return (code >= 400 && code < 500); } //!< \returns \c true if the given \p code is a client error code.
 inline bool isServerError(int code)   { return (code >= 500 && code < 600); } //!< \returns \c true if the given \p code is a server error code.
 inline bool isError(int code)         { return (code >= 400); }               //!< \returns \c true if the given \p code is any type of error code.
+
+inline bool isInformational(Code code) { return isInformational(static_cast<int>(code)); } //!< \overload
+inline bool isSuccessful(Code code)    { return isSuccessful(static_cast<int>(code)); }    //!< \overload
+inline bool isRedirection(Code code)   { return isRedirection(static_cast<int>(code)); }   //!< \overload
+inline bool isClientError(Code code)   { return isClientError(static_cast<int>(code)); }   //!< \overload
+inline bool isServerError(Code code)   { return isServerError(static_cast<int>(code)); }   //!< \overload
+inline bool isError(Code code)         { return isError(static_cast<int>(code)); }         //!< \overload
 
 
 /*! Returns the standard HTTP reason phrase for a HTTP status code.
@@ -226,6 +244,17 @@ inline QString reasonPhrase(int code)
 	}
 }
 
+/*! \overload
+ *
+ * \param code An HttpStatus::Code.
+ * \return The standard HTTP reason phrase for the given \p code or an empty \c std::string()
+ * if no standard phrase for the given \p code is known.
+ */
+inline QString reasonPhrase(Code code)
+{
+	return reasonPhrase(static_cast<int>(code));
+}
+
 #ifdef QT_NETWORK_LIB
 
 /*! Returns a Code corresponding to a given NetworkError.
@@ -234,7 +263,7 @@ inline QString reasonPhrase(int code)
  * \return The HTTP status code corresponding to the given \p error if there is one.\n
  * If there is no exact matching status code, the first code from the best matching status
  * code class is returned (`200`, `400` or `500`).\n
- * If no matching status code exists, Invalid (`-1`) is returned.
+ * If no matching status code exists, Code::Invalid is returned.
  * This is typically the case for errors concerning the OSI layers below HTTP.
  *
  * \sa [statusCodeFromHttp() in qhttpthreaddelegate.cpp](http://code.qt.io/cgit/qt/qtbase.git/tree/src/network/access/qhttpthreaddelegate.cpp#n57)
@@ -244,32 +273,32 @@ inline Code networkErrorToStatusCode(QNetworkReply::NetworkError error)
 	switch (error)
 	{
 	// Exact matches
-	case QNetworkReply::AuthenticationRequiredError:       return Unauthorized;                // 401
-	case QNetworkReply::ContentAccessDenied:               return Forbidden;                   // 403
-	case QNetworkReply::ContentNotFoundError:              return NotFound;                    // 404
-	case QNetworkReply::ContentOperationNotPermittedError: return MethodNotAllowed;            // 405
-	case QNetworkReply::ProxyAuthenticationRequiredError:  return ProxyAuthenticationRequired; // 407
+	case QNetworkReply::AuthenticationRequiredError:       return Code::Unauthorized;                // 401
+	case QNetworkReply::ContentAccessDenied:               return Code::Forbidden;                   // 403
+	case QNetworkReply::ContentNotFoundError:              return Code::NotFound;                    // 404
+	case QNetworkReply::ContentOperationNotPermittedError: return Code::MethodNotAllowed;            // 405
+	case QNetworkReply::ProxyAuthenticationRequiredError:  return Code::ProxyAuthenticationRequired; // 407
 #if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
-	case QNetworkReply::ContentConflictError:              return Conflict;                    // 409
-	case QNetworkReply::ContentGoneError:                  return Gone;                        // 410
-	case QNetworkReply::InternalServerError:               return InternalServerError;         // 500
-	case QNetworkReply::OperationNotImplementedError:      return NotImplemented;              // 501
-	case QNetworkReply::ServiceUnavailableError:           return ServiceUnavailable;          // 503
+	case QNetworkReply::ContentConflictError:              return Code::Conflict;                    // 409
+	case QNetworkReply::ContentGoneError:                  return Code::Gone;                        // 410
+	case QNetworkReply::InternalServerError:               return Code::InternalServerError;         // 500
+	case QNetworkReply::OperationNotImplementedError:      return Code::NotImplemented;              // 501
+	case QNetworkReply::ServiceUnavailableError:           return Code::ServiceUnavailable;          // 503
 #endif // Qt >= 5.3.0
 
 	// Mapping error codes matching multiple HTTP status codes to a best matching "base" code
-	case QNetworkReply::NoError:                           return OK;                          // 200
-	case QNetworkReply::ProtocolInvalidOperationError:     return BadRequest;                  // 400
-	case QNetworkReply::UnknownContentError:               return BadRequest;                  // 400
+	case QNetworkReply::NoError:                           return Code::OK;                          // 200
+	case QNetworkReply::ProtocolInvalidOperationError:     return Code::BadRequest;                  // 400
+	case QNetworkReply::UnknownContentError:               return Code::BadRequest;                  // 400
 #if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
-	case QNetworkReply::UnknownServerError:                return InternalServerError;         // 500
+	case QNetworkReply::UnknownServerError:                return Code::InternalServerError;         // 500
 #endif // Qt >= 5.3.0
 
 	/* Other errors do not match any HTTP status code.
 	 * Therefore, we return an invalid code.
 	 */
 	default:
-		return Invalid;
+		return Code::Invalid;
 	}
 }
 
@@ -287,30 +316,35 @@ inline Code networkErrorToStatusCode(QNetworkReply::NetworkError error)
  *
  * \sa [statusCodeFromHttp() in qhttpthreaddelegate.cpp](http://code.qt.io/cgit/qt/qtbase.git/tree/src/network/access/qhttpthreaddelegate.cpp#n57)
  */
-inline QNetworkReply::NetworkError statusCodeToNetworkError(int code)
+inline QNetworkReply::NetworkError statusCodeToNetworkError(int intCode)
 {
 	// below 400
-	if (!isError(code))
+	if (!isError(intCode))
 		return QNetworkReply::NoError;
+
+	if (intCode > toInt(Code::xxx_max))
+		return QNetworkReply::ProtocolFailure; // same as 600 or above
+
+	Code code = static_cast<Code>(intCode);
 
 	// Specific error status codes
 	switch (code)
 	{
-	case BadRequest:                  return QNetworkReply::ProtocolInvalidOperationError;     // 400
-	case Unauthorized:                return QNetworkReply::AuthenticationRequiredError;       // 401
-	case Forbidden:                   return QNetworkReply::ContentAccessDenied;               // 403
-	case NotFound:                    return QNetworkReply::ContentNotFoundError;              // 404
-	case MethodNotAllowed:            return QNetworkReply::ContentOperationNotPermittedError; // 405
-	case ProxyAuthenticationRequired: return QNetworkReply::ProxyAuthenticationRequiredError;  // 407
+	case Code::BadRequest:                  return QNetworkReply::ProtocolInvalidOperationError;     // 400
+	case Code::Unauthorized:                return QNetworkReply::AuthenticationRequiredError;       // 401
+	case Code::Forbidden:                   return QNetworkReply::ContentAccessDenied;               // 403
+	case Code::NotFound:                    return QNetworkReply::ContentNotFoundError;              // 404
+	case Code::MethodNotAllowed:            return QNetworkReply::ContentOperationNotPermittedError; // 405
+	case Code::ProxyAuthenticationRequired: return QNetworkReply::ProxyAuthenticationRequiredError;  // 407
 #if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
-	case Conflict:                    return QNetworkReply::ContentConflictError;              // 409
-	case Gone:                        return QNetworkReply::ContentGoneError;                  // 410
+	case Code::Conflict:                    return QNetworkReply::ContentConflictError;              // 409
+	case Code::Gone:                        return QNetworkReply::ContentGoneError;                  // 410
 #endif // Qt >= 5.3.0
-	case ImATeapot:                   return QNetworkReply::ProtocolInvalidOperationError;     // 418
+	case Code::ImATeapot:                   return QNetworkReply::ProtocolInvalidOperationError;     // 418
 #if QT_VERSION >= QT_VERSION_CHECK(5,3,0)
-	case InternalServerError:         return QNetworkReply::InternalServerError;               // 500
-	case NotImplemented:              return QNetworkReply::OperationNotImplementedError;      // 501
-	case ServiceUnavailable:          return QNetworkReply::ServiceUnavailableError;           // 503
+	case Code::InternalServerError:         return QNetworkReply::InternalServerError;               // 500
+	case Code::NotImplemented:              return QNetworkReply::OperationNotImplementedError;      // 501
+	case Code::ServiceUnavailable:          return QNetworkReply::ServiceUnavailableError;           // 503
 #endif // Qt >= 5.3.0
 
 	default:
@@ -326,6 +360,16 @@ inline QNetworkReply::NetworkError statusCodeToNetworkError(int code)
 
 	// 600 or above
 	return QNetworkReply::ProtocolFailure;
+}
+
+/*!
+ * \overload
+ *
+ * \param code The HttpStatus::Code whose NetworkError should be returned.
+ */
+inline QNetworkReply::NetworkError statusCodeToNetworkError(Code code)
+{
+	return statusCodeToNetworkError(static_cast<int>(code));
 }
 
 #endif // QT_NETWORK_LIB
@@ -344,4 +388,4 @@ class DummyQGadget
 
 
 
-#endif /* HTTPSTATUSCODES_QT_H_ */
+#endif /* HTTPSTATUSCODES_QT_CPP11_H_ */

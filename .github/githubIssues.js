@@ -1,7 +1,7 @@
 
 const searchForExistingGithubIssue = async ( { keywords, github, context } ) => {
 	const query = keywords.concat( [ 'in:title', `repo:${context.repo.owner}/${context.repo.repo}`, 'type:issue' ] ).join( '+' );
-	const searchResponse = await github.search.issuesAndPullRequests( {
+	const searchResponse = await github.rest.search.issuesAndPullRequests( {
 		q: query,
 	} );
 	return searchResponse.data;
@@ -16,7 +16,7 @@ const createNewGithubIssue = async ( { title, body, github, context } ) => {
 		body
 	};
 
-	const issueResponse = await github.issues.create( newIssue );
+	const issueResponse = await github.rest.issues.create( newIssue );
 	return issueResponse.data;
 };
 

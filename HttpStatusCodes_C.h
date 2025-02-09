@@ -4,7 +4,7 @@
  *
  * https://github.com/j-ulrich/http-status-codes-cpp
  *
- * \version 1.5.0
+ * \version 1.6.0
  * \author Jochen Ulrich <jochenulrich@t-online.de>
  * \copyright Licensed under Creative Commons CC0 (http://creativecommons.org/publicdomain/zero/1.0/)
  */
@@ -17,6 +17,8 @@
  */
 enum HttpStatus_Code
 {
+	HttpStatus_Invalid = -1, //!< An invalid status code.
+
 	/*####### 1xx - Informational #######*/
 	/* Indicates an interim response for communicating connection status
 	 * or request progress prior to completing the requested action and
