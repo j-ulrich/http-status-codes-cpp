@@ -18,6 +18,9 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 ### Changed ###
 - {Qt} `networkErrorToStatusCode()` now returns a `Code` instead of `int`.
 
+### Removed ###
+- Testing with Visual Studio 2013 because of outdated CMake.
+
 
 ---
 
