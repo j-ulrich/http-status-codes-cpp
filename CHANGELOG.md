@@ -28,6 +28,9 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 
 ## [1.6.1] - 2025-02-09
 
+> ⚠️ **Note:** There was a mistake in the release process. Therefore this tag does not point to the correct commit.
+> Use version 1.6.2 instead.
+
 ### Fixed ###
 - Mistake during release of version 1.6.0.
 
@@ -36,6 +39,9 @@ This changelog follows the [Keep a Changelog](http://keepachangelog.com) format.
 
 
 ## [1.6.0] - 2025-02-09
+
+> ⚠️ **Note:** There was a mistake in the release process. Therefore this tag does not point to the correct commit.
+> Use version 1.6.2 instead.
 
 ### Added ###
 - [#28] Added code `Invalid` (-1).
