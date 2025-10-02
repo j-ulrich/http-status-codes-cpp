@@ -15,7 +15,7 @@ jobs:
                 ref: develop
             - uses: actions/setup-node@v3
               with:
-                node-version: 16
+                node-version: 20
             - run: npm install
             - uses: actions/github-script@v6
               with:
@@ -32,7 +32,7 @@ jobs:
                 ref: develop
             - uses: actions/setup-node@v3
               with:
-                node-version: 16
+                node-version: 20
             - run: npm install
             - uses: actions/github-script@v6
               with:
