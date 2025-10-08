@@ -24,6 +24,7 @@ const checkForUpdate = async ( { github, core, context, dryRun } ) => {
 			return;
 		}
 		log.warning( 'HTTP status codes list is outdated!' );
+		log.debug( 'Diff with last used version:\n' + diffWithLastUsedVersion + '\n' );
 
 		const existingGithubIssues = await githubIssues.searchForExistingGithubIssue( { keywords: [ issueTitleBase, lastUpdatedDate ], github, context } );
 
